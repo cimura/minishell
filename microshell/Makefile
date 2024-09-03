@@ -1,20 +1,26 @@
 NAME		=	microshell
 
-CMD_SRCS	=	ls.c
+CMD_SRCS	=	cat.c \
+				cd.c \
+				echo.c \
+				env.c \
+				ls.c \
+				pwd.c
+
 CMD_OBJS	=	$(CMD_SRCS:%.c=$(OBJ_DIR)%.o)
-CMD_DIR		=	command/
+CMD_DIR		=	srcs/command/
 
 MAIN_SRCS	=	main.c
 MAIN_OBJS	=	$(MAIN_SRCS:%.c=$(OBJ_DIR)%.o)
 MAIN_DIR	=	./
 
-OBJ_DIR		=	objs/
+OBJ_DIR		=	srcs/objs/
 
 HEADER		=	include/
 
 OBJS		=	$(SRCS:%.c=$(OBJ_DIR)%.o)
 
-LIBFT_DIR	=	libft
+LIBFT_DIR	=	srcs/libft
 LIBFT		=	$(LIBFT_DIR)/libft.a
 
 CC			=	cc
