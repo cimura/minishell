@@ -6,7 +6,7 @@
 #    By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/01 16:27:09 by sshimura          #+#    #+#              #
-#    Updated: 2024/08/13 16:11:01 by cimy             ###   ########.fr        #
+#    Updated: 2024/09/05 01:10:49 by cimy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,13 +30,13 @@ OBJS = $(SOURCES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-		@ar rcs $(NAME) $(OBJS)
+	@ar rcs $(NAME) $(OBJS)
 
 clean:
-		rm -f $(OBJS) $(BONUS_OBJS)
+	@rm -f $(OBJS) $(BONUS_OBJS)
 
 fclean: clean
-		rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: all clean
 

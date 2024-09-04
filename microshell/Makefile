@@ -18,8 +18,6 @@ OBJ_DIR		=	srcs/objs/
 
 HEADER		=	include/
 
-OBJS		=	$(SRCS:%.c=$(OBJ_DIR)%.o)
-
 LIBFT_DIR	=	srcs/libft
 LIBFT		=	$(LIBFT_DIR)/libft.a
 
@@ -30,29 +28,29 @@ LDFLAGS		=	-lreadline
 OBJS		+=	$(CMD_OBJS) $(MAIN_OBJS)
 
 $(NAME): $(OBJ_DIR) $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LDFLAGS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LDFLAGS)
 
 $(LIBFT):
-	@echo "$(CYAN)$(BOLD)\nBuilding libft...$(RESET)"
+	@echo "$(CYAN)$(BOLD)Building libft...$(RESET)"
 	@$(MAKE) -C $(LIBFT_DIR)
 
 $(OBJ_DIR)%.o: $(CMD_DIR)%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR)%.o: $(MAIN_DIR)%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 
 all:	$(NAME)
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@rm -rf $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
