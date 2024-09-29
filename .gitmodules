@@ -1,0 +1,3 @@
+[submodule "pipex"]
+	path = pipex
+	url = https://github.com/cimura/pipex.git
