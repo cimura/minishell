@@ -28,8 +28,8 @@ void  judge_command(char **command, char **envp)
 {
   if (strcmp(command[0], "cat") == 0)
     cat(command, envp);
-  else if (strcmp(command[0], "cd") == 0)
-    cd(command, envp);
+  else if ((strcmp(command[0], "cd") == 0) && command[1])
+    cd(command[1]);
   else if (strcmp(command[0], "echo") == 0)
     echo(command, envp);
   else if (strcmp(command[0], "env") == 0)

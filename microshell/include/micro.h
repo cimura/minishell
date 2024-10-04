@@ -11,7 +11,7 @@
 
 // *** command ***
 void  cat(char **command, char **envp);
-void  cd(char **command, char **envp);
+void  cd(char *path);
 void  echo(char **command, char **envp);
 void  env(char **command, char **envp);
 void  ls(char **command, char **envp);
