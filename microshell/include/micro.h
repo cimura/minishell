@@ -15,7 +15,7 @@ void  cd(char *path);
 void  echo(char **command, char **envp);
 void  env(char **command, char **envp);
 void  ls(char **command, char **envp);
-void  pwd(char **command, char **envp);
+void  pwd(void);
 
 // *** main ***
 void  judge_command(char **command, char **envp);

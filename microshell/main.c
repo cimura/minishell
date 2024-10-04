@@ -37,7 +37,7 @@ void  judge_command(char **command, char **envp)
   else if (strcmp(command[0], "ls") == 0)
     ls(command, envp);
   else if (strcmp(command[0], "pwd") == 0)
-    pwd(command, envp);
+    pwd();
   else
     printf("input is '%s'\n", command[0]);
 }
