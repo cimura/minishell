@@ -1,3 +1,6 @@
+#ifndef MICRO_H
+#define MICRO_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +9,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include "../srcs/libft/libft.h"
+#include "../srcs/libft/include/libft.h"
 
 
 // *** command ***
@@ -19,3 +22,5 @@ void  pwd(void);
 
 // *** main ***
 void  judge_command(char **command, char **envp);
+
+#endif

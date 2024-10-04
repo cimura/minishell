@@ -1,57 +1,56 @@
-NAME		=	microshell
+NAME		:=	microshell
 
-CMD_SRCS	=	cat.c \
-				cd.c \
-				echo.c \
-				env.c \
-				ls.c \
-				pwd.c
+LIST_SRCS	:=	main.c cat.c cd.c echo.c \
+				env.c ls.c pwd.c
 
-CMD_OBJS	=	$(CMD_SRCS:%.c=$(OBJ_DIR)%.o)
-CMD_DIR		=	srcs/command/
+DIR_SRCS	:=	srcs
+DIR_OBJS	:=	objs
+DIR_INC		:=	include/
 
-MAIN_SRCS	=	main.c
-MAIN_OBJS	=	$(MAIN_SRCS:%.c=$(OBJ_DIR)%.o)
-MAIN_DIR	=	./
+SRCS		:=	$(addprefix $(DIR_SRCS)/,$(LIST_SRCS))
+OBJS		:=	$(addprefix $(DIR_OBJS)/,$(LIST_SRCS:.c=.o))
 
-OBJ_DIR		=	srcs/objs/
+INCS		:=	$(addprefix $(DIR_INCS)/,$(LIST_SRCS:.c=.h))
 
-HEADER		=	include/
+LIBFT_DIR	:=	srcs/libft
+LIBFT		:=	$(LIBFT_DIR)/libft.a
 
-LIBFT_DIR	=	srcs/libft
-LIBFT		=	$(LIBFT_DIR)/libft.a
+CC			:=	cc
+CFLAGS		:=	-Wall -Wextra -Werror
+DEBUG_FLAGS	:=	-g -fsanitize=address
+LDFLAGS		:=	-lreadline
 
-CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -I $(HEADER)
-LDFLAGS		=	-lreadline
+ERASE		:=	\033[2K\r
+PINK		:=	\033[35m
+BLUE		:=	\033[34m
+GREEN		:=	\033[32m
+END			:=	\033[0m
 
-OBJS		+=	$(CMD_OBJS) $(MAIN_OBJS)
+all: $(NAME)
 
-$(NAME): $(OBJ_DIR) $(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(LDFLAGS)
+$(DIR_OBJS)/%.o: $(DIR_SRCS)/%.c
+	@$(CC) $(CFLAGS) -I $(DIR_INC) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
+
+$(DIR_OBJS):
+	@mkdir -p $(DIR_OBJS)
 
 $(LIBFT):
-	@echo "$(CYAN)$(BOLD)Building libft...$(RESET)"
 	@$(MAKE) -C $(LIBFT_DIR)
 
-$(OBJ_DIR)%.o: $(CMD_DIR)%.c
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR)%.o: $(MAIN_DIR)%.c
-	@$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR)
-
-all:	$(NAME)
+$(NAME): $(LIBFT) $(DIR_OBJS) $(OBJS)
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(LDFLAGS) -I $(DIR_INC) -o $(NAME) $(OBJS) $(LIBFT)
+	@printf "$(ERASE)$(GREEN)$@ made\n$(END)"
 
 clean:
-	@rm -rf $(OBJ_DIR)
+	@rm -rf $(DIR_OBJS)
 	@$(MAKE) -C $(LIBFT_DIR) clean
+	@printf "$(PINK)remove obj dir\n$(END)"
 
 fclean: clean
 	@rm -f $(NAME)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(LIBFT_DIR) fclean	
+	@printf "$(PINK)remove lib.a\n$(END)"
 
 re: fclean all
 
