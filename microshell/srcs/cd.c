@@ -8,4 +8,5 @@ void  cd(char *path)
 	
 	if (chdir(path) != 0)
 		perror("chdir failed");
+	// free(path);
 }

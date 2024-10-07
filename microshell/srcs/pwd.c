@@ -12,4 +12,5 @@ void  pwd(void)
 		return ;
 	}
 	printf("%s\n", cwd);
+	free(cwd);
 }

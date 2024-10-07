@@ -17,7 +17,7 @@ LIBFT		:=	$(LIBFT_DIR)/libft.a
 
 CC			:=	cc
 CFLAGS		:=	-Wall -Wextra -Werror
-#DEBUG_FLAGS	:=	-g -fsanitize=address
+DEBUG_FLAGS	:=	-g -fsanitize=address
 LDFLAGS		:=	-lreadline
 
 ERASE		:=	\033[2K\r

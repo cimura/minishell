@@ -1,5 +1,14 @@
 #include "micro.h"
 
+void free_command(char **command)
+{
+    for (int i = 0; command[i] != NULL; i++)
+    {
+        free(command[i]);
+    }
+    free(command);  // 最後に配列自体を解放
+}
+
 int main(int argc, char **argv, char **envp)
 {
   (void)argv;
@@ -9,14 +18,27 @@ int main(int argc, char **argv, char **envp)
     while (1)
     {
         line = readline("minishell> ");
+
+        if (!line)
+        {
+          printf("exit\n");
+          break;
+        }
+        if (strlen(line) == 0)
+        {
+          free(line);
+          continue;
+        }
         char **command = ft_split(line, ' ');
 
         if (command == NULL)
         {
+          free(line);
             printf("exit\n");
             break;
         }
         judge_command(command, envp);
+        free_command(command);
         if (strlen(line) > 0)
             add_history(line);
         free(line); // Free memory allocated by readline
@@ -41,3 +63,4 @@ void  judge_command(char **command, char **envp)
   else
     printf("input is '%s'\n", command[0]);
 }
+
