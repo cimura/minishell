@@ -37,7 +37,7 @@ int main(int argc, char **argv, char **envp)
             printf("exit\n");
             break;
         }
-        judge_command(command, envp);
+        do_command(command, envp);
         free_command(command);
         if (strlen(line) > 0)
             add_history(line);
@@ -46,21 +46,38 @@ int main(int argc, char **argv, char **envp)
     return 0;
 }
 
-void  judge_command(char **command, char **envp)
+bool	is_builtin(char **command)
 {
-  if (strcmp(command[0], "cat") == 0)
-    cat(command, envp);
-  else if ((strcmp(command[0], "cd") == 0) && command[1])
-    cd(command[1]);
-  else if (strcmp(command[0], "echo") == 0)
-    echo(command, envp);
-  else if (strcmp(command[0], "env") == 0)
-    env(command, envp);
-  else if (strcmp(command[0], "ls") == 0)
-    ls(command, envp);
-  else if (strcmp(command[0], "pwd") == 0)
-    pwd();
-  else
-    printf("input is '%s'\n", command[0]);
+
+}
+
+void	do_builtin(char **command)
+{
+
+}
+
+void	execute_command(char **command, char **envp)
+{
+	pid_t	pid;
+
+	pid = fork();
+	
+	// child process
+	if (pid == 0)
+	{
+		execve();
+		perror("execve failed");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void  do_command(char **command, char **envp)
+{
+	if (is_builtin(command))
+		do_builtin(command);
+	else
+	{
+		execute_command(command, envp);
+	}
 }
 
