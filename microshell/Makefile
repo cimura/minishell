@@ -1,7 +1,8 @@
 NAME		:=	microshell
 
 LIST_SRCS	:=	main.c cat.c cd.c echo.c \
-				env.c ls.c pwd.c
+				env.c ls.c pwd.c get_executable_path.c \
+				error.c
 
 DIR_SRCS	:=	srcs
 DIR_OBJS	:=	objs
@@ -17,7 +18,7 @@ LIBFT		:=	$(LIBFT_DIR)/libft.a
 
 CC			:=	cc
 CFLAGS		:=	-Wall -Wextra -Werror
-DEBUG_FLAGS	:=	-g -fsanitize=address
+#DEBUG_FLAGS	:=	-g -fsanitize=address
 LDFLAGS		:=	-lreadline
 
 ERASE		:=	\033[2K\r

@@ -48,26 +48,33 @@ int main(int argc, char **argv, char **envp)
 
 bool	is_builtin(char **command)
 {
-
+	(void)command;
+	return (false);
 }
 
 void	do_builtin(char **command)
 {
-
+	(void)command;
 }
 
 void	execute_command(char **command, char **envp)
 {
 	pid_t	pid;
+	char **paths = setup_paths(envp);
+	char *executable_path = get_exec_path(paths, command, envp);
 
 	pid = fork();
-	
+
 	// child process
 	if (pid == 0)
 	{
-		execve();
+		execve(executable_path, &command[0], envp);
 		perror("execve failed");
 		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		wait(NULL);
 	}
 }
 

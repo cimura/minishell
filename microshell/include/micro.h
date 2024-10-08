@@ -24,4 +24,14 @@ void  pwd(void);
 // *** main ***
 void  judge_command(char **command, char **envp);
 
+void  do_command(char **command, char **envp);
+
+char	*get_exec_path(char **paths, char **command, char **envp);
+char	**setup_paths(char *envp[]);
+
+// *** error ***
+void	specific_error(char *command);
+void	by_path(char *command);
+void	error_exit(const char *message);
+
 #endif
