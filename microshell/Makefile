@@ -1,7 +1,7 @@
 NAME		:=	microshell
 
-LIST_SRCS	:=	main.c cat.c cd.c echo.c \
-				env.c ls.c pwd.c get_executable_path.c \
+LIST_SRCS	:=	main.c cd.c \
+				pwd.c get_executable_path.c \
 				error.c
 
 DIR_SRCS	:=	srcs
