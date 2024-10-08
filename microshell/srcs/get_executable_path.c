@@ -53,14 +53,14 @@ char	**setup_paths(char *envp[])
 
 	if (!envp || !*envp)
 		return (NULL);
-	while (*envp)
-	{
-		if (!ft_strncmp(*envp, "PATH", 4))
-			break ;
-		envp++;
-	}
-	if (!*envp)
-		return (NULL);
-	paths = ft_split(*envp + 5, ':');
+//	while (*envp)
+//	{
+//		if (!ft_strncmp(*envp, "PATH", 4))
+//			break ;
+//		envp++;
+//	}
+//	if (!*envp)
+//		return (NULL);
+	paths = ft_split(getenv("PATH"), ':');
 	return (paths);
 }
