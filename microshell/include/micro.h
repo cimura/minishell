@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -14,16 +15,16 @@
 
 
 // *** command ***
-void  cat(char **command, char **envp);
 void  cd(char *path);
-void  echo(char **command, char **envp);
-void  env(char **command, char **envp);
-void  ls(char **command, char **envp);
 void  pwd(void);
 
 // *** main ***
 void  judge_command(char **command, char **envp);
 
+// *** execute_command ***
+bool	is_builtin(char **command);
+void	do_builtin(char **command);
+void	execute_command(char **command, char **envp);
 void  do_command(char **command, char **envp);
 
 char	*get_exec_path(char **paths, char **command, char **envp);
@@ -33,5 +34,9 @@ char	**setup_paths(char *envp[]);
 void	specific_error(char *command);
 void	by_path(char *command);
 void	error_exit(const char *message);
+
+
+// *** redirect ***
+void	redirect(char *line, char **envp);
 
 #endif

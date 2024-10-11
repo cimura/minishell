@@ -7,16 +7,18 @@ static void	error_check(char **paths, char **command, char **envp)
 		specific_error("");
 		exit(127);
 	}
-	if (command[0][0] == '/' || command[0][0] == '.')
-	{
+	(void)envp;
+	// if (command[0][0] == '/' || command[0][0] == '.')
+	// {
 		if (execve(command[0], command, NULL) != -1)
-			exit (EXIT_SUCCESS);
-		// ./pipex infile cat ./cat cat outこれがうまくいかない
-		if (execve(command[0], command, envp) != -1)
-			exit (EXIT_SUCCESS);
-		perror(command[0]);
-		exit(127);
-	}
+		{
+			return ;
+		}
+	// 	if (execve(command[0], command, envp) != -1)
+	// 		exit (EXIT_SUCCESS);
+	// 	perror(command[0]);
+	// 	exit(127);
+	// }
 	if (paths == NULL)
 	{
 		ft_putstr_fd(command[0], 2);

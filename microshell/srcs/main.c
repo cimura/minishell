@@ -9,6 +9,20 @@ void free_command(char **command)
     free(command);  // 最後に配列自体を解放
 }
 
+bool  include_redirect(char *line)
+{
+	char **lists = ft_split(line, ' ');
+	
+	int i = 0;
+	while (lists[i] != NULL)
+	{
+		if (strcmp(lists[i], "<") == 0)
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 int main(int argc, char **argv, char **envp)
 {
   (void)argv;
@@ -29,6 +43,9 @@ int main(int argc, char **argv, char **envp)
           free(line);
           continue;
         }
+        	// <command> <redirect> <command>の実行
+        if (include_redirect(line))
+	        redirect(line, envp);
         char **command = ft_split(line, ' ');
 
         if (command == NULL)
@@ -45,46 +62,3 @@ int main(int argc, char **argv, char **envp)
     }
     return 0;
 }
-
-bool	is_builtin(char **command)
-{
-	(void)command;
-	return (false);
-}
-
-void	do_builtin(char **command)
-{
-	(void)command;
-}
-
-void	execute_command(char **command, char **envp)
-{
-	pid_t	pid;
-	char **paths = setup_paths(envp);
-	char *executable_path = get_exec_path(paths, command, envp);
-
-	pid = fork();
-
-	// child process
-	if (pid == 0)
-	{
-		execve(executable_path, &command[0], envp);
-		perror("execve failed");
-		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		wait(NULL);
-	}
-}
-
-void  do_command(char **command, char **envp)
-{
-	if (is_builtin(command))
-		do_builtin(command);
-	else
-	{
-		execute_command(command, envp);
-	}
-}
-
