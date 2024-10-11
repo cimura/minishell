@@ -5,10 +5,12 @@
 
 int main() {
 	char *buf = malloc(500);
-	int fd1 = open("tmp.txt", O_WRONLY);
-	int fd2 = open("ls.c", O_RDONLY);
-	
-	ssize_t bytes = read(fd2, buf, 500);
+	int fd = open("tmp.txt", O_WRONLY);	
+
+	ssize_t bytes = read(0, buf, 500);
+	dup2(fd, 1);
+
+	printf("from printf\n");
 //	printf("buf =>\n%s", buf);
-	write(fd1, buf, bytes); 
+	//write(fd, buf, bytes); 
 }
