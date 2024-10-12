@@ -1,8 +1,8 @@
 NAME		:=	microshell
 
-LIST_SRCS	:=	main.c cat.c cd.c echo.c \
-				env.c ls.c pwd.c get_executable_path.c \
-				error.c
+LIST_SRCS	:=	main.c cd.c \
+				pwd.c get_executable_path.c \
+				error.c execute_command.c redirect.c
 
 DIR_SRCS	:=	srcs
 DIR_OBJS	:=	objs
