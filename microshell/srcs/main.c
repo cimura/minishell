@@ -16,7 +16,7 @@ bool  include_redirect(char *line)
 	int i = 0;
 	while (lists[i] != NULL)
 	{
-		if (strcmp(lists[i], "<") == 0)
+		if (strcmp(lists[i], ">") == 0)
 			return (true);
 		i++;
 	}
@@ -46,16 +46,19 @@ int main(int argc, char **argv, char **envp)
         	// <command> <redirect> <command>の実行
         if (include_redirect(line))
 	        redirect(line, envp);
-        char **command = ft_split(line, ' ');
-
-        if (command == NULL)
+        else
         {
-          free(line);
-            printf("exit\n");
-            break;
+          char **command = ft_split(line, ' ');
+
+          if (command == NULL)
+          {
+            free(line);
+              printf("exit\n");
+              break;
+          }
+          do_command(command, envp);
+          free_command(command);
         }
-        do_command(command, envp);
-        free_command(command);
         if (strlen(line) > 0)
             add_history(line);
         free(line); // Free memory allocated by readline
