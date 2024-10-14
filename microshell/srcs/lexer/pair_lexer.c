@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:40:57 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/14 17:02:11 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/14 18:17:45 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,41 @@ typedef	struct s_token
 // ex
 // cat infile | grep "in">outfile
 
+void	_ft_lstclear(t_token **lst, void (*del)(char **))
+{
+	t_token	*current;
+	t_token	*next;
+
+	if (lst == NULL || del == NULL)
+		return ;
+	current = *lst;
+	while (current != NULL)
+	{
+		next = current->next;
+		del(current->command_line);
+		free(current);
+		current = next;
+	}
+	*lst = NULL;
+}
+
+void	_ft_lstadd_back(t_token **lst, t_token *new)
+{
+	t_token	*last;
+
+	last = *lst;
+	if (*lst == NULL)
+	{
+		*lst = new;
+		return ;
+	}
+	while (last->next != NULL)
+	{
+		last = last->next;
+	}
+	last->next = new;
+}
+
 void	ft_free_commands(char **commands)
 {
 	int	i;
@@ -35,6 +70,17 @@ void	ft_free_commands(char **commands)
 		i++;
 	}
 	free(commands);
+}
+
+void	ft_print_commands(char **commands)
+{
+	int	i;
+
+	i = 0;
+	while (commands[i])
+	{
+		printf("%s\n", commands[i++]);
+	}
 }
 
 int	count_meta_char(char *line, char *meta_char)
@@ -83,6 +129,8 @@ char	*create_new_line(char *line, char *meta_char)
 			result[ri++] = line[li++];
 			result[ri++] = ' ';
 		}
+		else if (line[li] == '\t')
+			line[li++] = ' ';
 		else
 			result[ri++] = line[li++];
 	}
@@ -90,7 +138,7 @@ char	*create_new_line(char *line, char *meta_char)
 	return (result);
 }
 
-char	**ft_lexer(char *command_line)
+char	**ft_split_pipe(char *command_line)
 {
 	char	*meta_char;
 	char	**split_pipe;
@@ -114,24 +162,60 @@ char	**ft_lexer(char *command_line)
 	return (split_pipe);
 }
 
+t_token	*ft_lexer(char *command_line)
+{
+	t_token	*new;
+	t_token	*head;
+	char	**split_pipe;
+	int		i;
+
+	split_pipe = ft_split_pipe(command_line);
+	ft_print_commands(split_pipe);
+	if (!split_pipe)
+		return (NULL);
+	head = NULL;
+	i = 0;
+	while (split_pipe[i] != NULL)
+	{
+		new = malloc(sizeof(t_token));
+		if (!new)
+			return (ft_free_commands(split_pipe), NULL);
+		new->command_line = ft_split(split_pipe[i], ' ');
+		if (!new->command_line)
+			return (ft_free_commands(split_pipe), _ft_lstclear(&head, ft_free_commands), NULL);
+		new->next = NULL;
+		_ft_lstadd_back(&head, new);
+		i++;
+	}
+	ft_free_commands(split_pipe);
+	return (head);
+}
+
+
+
 int	main(int argc, char **argv)
 {
+	t_token	*token;
+	t_token	*head;
 	char	**commands;
-	char	*meta_char = "|&;()<>";
+	// char	*meta_char = "|&;()<>";
 	int		i;
 
 	if (argc != 2)
 		return (1);
 
-	commands = ft_lexer(argv[1]);
-	if (commands == NULL)
+	token = ft_lexer(argv[1]);
+	if (token == NULL)
 		return (1);
+	head = token;
 	i = 0;
-	while (commands[i])
+	while (token != NULL)
 	{
-		printf("%s\n", commands[i]);
-		i++;
+		ft_print_commands(token->command_line);
+		printf("|\n");
+		token = token->next;
 	}
-	ft_free_commands(commands);
+	_ft_lstclear(&head, ft_free_commands);
+	// ft_free_commands(commands);
 	return (0);
 }
