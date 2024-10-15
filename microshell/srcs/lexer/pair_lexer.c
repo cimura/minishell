@@ -111,7 +111,6 @@ char	*create_new_line(char *line, char *meta_char)
 	int		li;
 
 	n_meta = count_meta_char(line, meta_char);
-	// printf("count_meta: %d\n", n_meta);
 
 	// ">" ---> " > "　三倍になる + '\0'
 	result = malloc(strlen(line) + n_meta * 3 + 1);
@@ -170,7 +169,6 @@ t_token	*ft_lexer(char *command_line)
 	int		i;
 
 	split_pipe = ft_split_pipe(command_line);
-	ft_print_commands(split_pipe);
 	if (!split_pipe)
 		return (NULL);
 	head = NULL;
@@ -182,7 +180,8 @@ t_token	*ft_lexer(char *command_line)
 			return (ft_free_commands(split_pipe), NULL);
 		new->command_line = ft_split(split_pipe[i], ' ');
 		if (!new->command_line)
-			return (ft_free_commands(split_pipe), _ft_lstclear(&head, ft_free_commands), NULL);
+			return (ft_free_commands(split_pipe), free(new), new = NULL,
+					_ft_lstclear(&head, ft_free_commands), NULL);
 		new->next = NULL;
 		_ft_lstadd_back(&head, new);
 		i++;
@@ -198,12 +197,12 @@ int	main(int argc, char **argv)
 	t_token	*token;
 	t_token	*head;
 	char	**commands;
-	// char	*meta_char = "|&;()<>";
 	int		i;
 
 	if (argc != 2)
 		return (1);
 
+	printf("command: %s\n", argv[1]);
 	token = ft_lexer(argv[1]);
 	if (token == NULL)
 		return (1);
@@ -216,6 +215,5 @@ int	main(int argc, char **argv)
 		token = token->next;
 	}
 	_ft_lstclear(&head, ft_free_commands);
-	// ft_free_commands(commands);
 	return (0);
 }
