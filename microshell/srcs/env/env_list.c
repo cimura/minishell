@@ -6,22 +6,13 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/16 16:32:54 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/16 18:13:02 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "env.h"
 
-typedef    struct s_env
-{
-    char    *key;
-    char    *value;
-    struct s_env    *next;
-}    t_env;
-
-void	_ft_lstclear(t_env **lst, void (*del)(t_env *))
+void	ft_env_lstclear(t_env **lst, void (*del)(t_env *))
 {
 	t_env	*current;
 	t_env	*next;
@@ -39,7 +30,7 @@ void	_ft_lstclear(t_env **lst, void (*del)(t_env *))
 	*lst = NULL;
 }
 
-void	_ft_lstadd_back(t_env **lst, t_env *new)
+void	ft_env_lstadd_back(t_env **lst, t_env *new)
 {
 	t_env	*last;
 
@@ -70,9 +61,9 @@ int    set_key_value(t_env *new, char *line)
 	int		klen;
 	int		vlen;
 
-    len = strlen(line);
+    len = ft_strlen(line);
 	// PATH=/usr/bin -> "/usr/bin" (vlen)
-	vlen = strlen(strchr(line, '=') + 1);
+	vlen = ft_strlen(ft_strchr(line, '=') + 1);
 	// PATH=の"="を除く
 	klen = len - vlen - 1;
     new->key = malloc(klen + 1);
@@ -83,10 +74,10 @@ int    set_key_value(t_env *new, char *line)
 	if (!new->value)
 		return (free(new->key), new->key = NULL, 0);
 	
-	new->key = memmove(new->key, line, klen);
+	new->key = ft_memmove(new->key, line, klen);
 	new->key[klen] = '\0';
 
-	new->value = memmove(new->value, &line[klen + 1], vlen);
+	new->value = ft_memmove(new->value, &line[klen + 1], vlen);
 	new->value[vlen] = '\0';
 	return (1);
 }
@@ -106,9 +97,9 @@ t_env    *ft_env_list(char *envp[])
         if (!new)
             return (NULL);
         if (!set_key_value(new, envp[i]))
-			return (_ft_lstclear(&head, ft_free_env_node), free(new), new = NULL, NULL);
+			return (ft_env_lstclear(&head, ft_free_env_node), free(new), new = NULL, NULL);
 		new->next = NULL;
-		_ft_lstadd_back(&head, new);
+		ft_env_lstadd_back(&head, new);
         i++;
     }
 	return (head);
@@ -130,5 +121,5 @@ int    main(int argc, char *argv[], char *envp[])
 		printf("%s=%s\n", env_lst->key, env_lst->value);
 		env_lst = env_lst->next;
 	}
-	_ft_lstclear(&head, ft_free_env_node);
+	ft_env_lstclear(&head, ft_free_env_node);
 }
