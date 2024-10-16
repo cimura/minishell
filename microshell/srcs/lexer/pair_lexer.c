@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:40:57 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/14 18:17:45 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/16 14:13:48 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,6 @@ t_token	*ft_lexer(char *command_line)
 	ft_free_commands(split_pipe);
 	return (head);
 }
-
-
 
 int	main(int argc, char **argv)
 {
