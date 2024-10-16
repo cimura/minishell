@@ -1,6 +1,6 @@
 all:
 	$(MAKE) -C ../libft
-	cc -g pair_lexer.c ../libft/libft.a -o lexer
+	cc -Wall -Wextra -Werror -g lexer.c lexer_utils.c ../libft/libft.a -o lexer
 clean:
 	$(MAKE) -C ../libft fclean
 	rm lexer

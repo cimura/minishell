@@ -6,20 +6,11 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/16 16:32:54 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/16 16:44:16 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-typedef    struct s_env
-{
-    char    *key;
-    char    *value;
-    struct s_env    *next;
-}    t_env;
+#include "env.h"
 
 void	_ft_lstclear(t_env **lst, void (*del)(t_env *))
 {
