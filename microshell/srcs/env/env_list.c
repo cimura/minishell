@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   copy.c                                             :+:      :+:    :+:   */
+/*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/16 16:21:54 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/16 16:32:54 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,7 @@ int    main(int argc, char *argv[], char *envp[])
 	while (env_lst != NULL)
 	{
 		printf("%s=%s\n", env_lst->key, env_lst->value);
-		// printf("----\n");
-		// printf("key: %s\n", env_lst->key);
-		// printf("value: %s\n", env_lst->value);
 		env_lst = env_lst->next;
 	}
 	_ft_lstclear(&head, ft_free_env_node);
-    // char *str = "hello, world";
-    // printf("%s\n", strchr(str, ','));
 }
