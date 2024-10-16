@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:40:57 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/16 17:56:38 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/16 18:17:28 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	count_meta_char(char *line, char *meta_char)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (strchr(meta_char, line[i]))
+		if (ft_strchr(meta_char, line[i]))
 		{
 			if (line[i + 1] == line[i])
 				i++;
@@ -44,7 +44,7 @@ void	write_result(char *result, char *line, char *meta_char)
 	li = 0;
 	while (line[li] != '\0')
 	{
-		if (strchr(meta_char, line[li]))
+		if (ft_strchr(meta_char, line[li]))
 		{
 			result[ri++] = ' ';
 			if (line[li + 1] == line[li])
@@ -67,7 +67,7 @@ char	*cover_metachar_by_space(char *line, char *meta_char)
 	int		n_meta;
 
 	n_meta = count_meta_char(line, meta_char);
-	result = malloc(strlen(line) + n_meta * 3 + 1);
+	result = malloc(ft_strlen(line) + n_meta * 3 + 1);
 	if (!result)
 		return (NULL);
 	write_result(result, line, meta_char);
