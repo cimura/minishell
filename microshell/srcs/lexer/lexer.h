@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.h                                              :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/17 17:14:24 by ttakino          ###   ########.fr       */
+/*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
+/*   Updated: 2024/10/16 17:33:22 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_H
+#ifndef LEXER_H
 
-# define ENV_H
+# define LEXER_H
 
-# include <stdio.h>
 # include <string.h>
 # include <stdlib.h>
+# include <stdio.h>
 # include "../libft/include/libft.h"
 
-typedef struct s_env
+typedef struct s_token
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
+	char			**command_line;
+	struct s_token	*next;
+}	t_token;
+
+void	ft_token_lst_clear(t_token **lst, void (*del)(char **));
+void	ft_token_lstadd_back(t_token **lst, t_token *new);
+
+void	ft_free_commands(char **commands);
+void	ft_print_commands(char **commands);
 
 #endif
