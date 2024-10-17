@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/17 17:14:24 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/17 18:12:49 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,8 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 }	t_env;
+
+void	ft_free_env_node(t_env *node);
+void	ft_env_lstadd_back(t_env **lst, t_env *new);
 
 #endif
