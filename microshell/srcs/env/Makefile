@@ -4,3 +4,5 @@ all:
 clean:
 	$(MAKE) -C ../libft fclean
 	rm env
+env:
+	cc env.c ../libft/libft.a
