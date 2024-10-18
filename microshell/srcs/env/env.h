@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/18 14:52:11 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/18 17:43:18 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_free_env_node(t_env *node);
 void	ft_env_lstadd_back(t_env **lst, t_env *new);
 void	ft_env_lstclear(t_env **lst, void (*del)(t_env *));
 
-t_env	*ft_env_list(char *envp[]);
+t_env	*ft_env_lst(char *envp[]);
 
 void	env(t_env *env_lst);
 int		export(char *command, t_env *env_lst);

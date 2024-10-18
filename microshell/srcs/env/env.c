@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 17:32:43 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/18 14:59:57 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/18 18:01:40 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,30 +111,30 @@ void	env(t_env *env_lst)
 	}
 }
 
-int    main(int argc, char *argv[], char *envp[])
-{
-	int	i;
-	t_env	*head;
-	t_env	*env_lst;
+// int    main(int argc, char *argv[], char *envp[])
+// {
+// 	int	i;
+// 	t_env	*head;
+// 	t_env	*env_lst;
 
-	env_lst = ft_env_list(envp);
-	if (!env_lst)
-		return (1);
-	head = env_lst;
-	i = 0;
+// 	env_lst = ft_env_lst(envp);
+// 	if (!env_lst)
+// 		return (1);
+// 	head = env_lst;
+// 	i = 0;
 
-	env(env_lst);
-//   if (argc == 1)
-//     env_with_arg(NULL, NULL, env_lst, envp);
-//   else if (argc == 2)
-//     env_with_arg(argv[1], NULL, env_lst, envp);
-//   else if (argc == 3)
-//     env_with_arg(argv[1], argv[2], env_lst, envp);
+// 	env(env_lst);
+// //   if (argc == 1)
+// //     env_with_arg(NULL, NULL, env_lst, envp);
+// //   else if (argc == 2)
+// //     env_with_arg(argv[1], NULL, env_lst, envp);
+// //   else if (argc == 3)
+// //     env_with_arg(argv[1], argv[2], env_lst, envp);
 
-	// while (env_lst != NULL)
-	// {
-	// 	printf("%s=%s\n", env_lst->key, env_lst->value);
-	// 	env_lst = env_lst->next;
-	// }
-	ft_env_lstclear(&head, ft_free_env_node);
-}
+// 	// while (env_lst != NULL)
+// 	// {
+// 	// 	printf("%s=%s\n", env_lst->key, env_lst->value);
+// 	// 	env_lst = env_lst->next;
+// 	// }
+// 	ft_env_lstclear(&head, ft_free_env_node);
+// }
