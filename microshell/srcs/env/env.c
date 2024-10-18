@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 17:32:43 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/18 10:38:18 by cimy             ###   ########.fr       */
+/*   Updated: 2024/10/18 14:59:57 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,93 +14,6 @@
 
 // *******************************************************************************************
 // util
-void	ft_env_lstclear(t_env **lst, void (*del)(t_env *))
-{
-	t_env	*current;
-	t_env	*next;
-
-	if (lst == NULL || del == NULL)
-		return ;
-	current = *lst;
-	while (current != NULL)
-	{
-		next = current->next;
-		del(current);
-		free(current);
-		current = next;
-	}
-	*lst = NULL;
-}
-
-int	set_key_value(t_env *new, char *line)
-{
-	int	len;
-	int	klen;
-	int	vlen;
-
-	len = ft_strlen(line);
-	vlen = ft_strlen(ft_strchr(line, '=') + 1);
-	klen = len - vlen - 1;
-	new->key = malloc(klen + 1);
-	if (!new->key)
-		return (0);
-	new->value = malloc(vlen + 1);
-	if (!new->value)
-		return (free(new->key), new->key = NULL, 0);
-	new->key = ft_memmove(new->key, line, klen);
-	new->key[klen] = '\0';
-	new->value = ft_memmove(new->value, &line[klen + 1], vlen);
-	new->value[vlen] = '\0';
-	return (1);
-}
-
-t_env	*ft_env_list(char *envp[])
-{
-	int		i;
-	t_env	*head;
-	t_env	*new;
-
-	head = NULL;
-	i = 0;
-	while (envp[i])
-	{
-		new = malloc(sizeof(t_env));
-		if (!new)
-			return (NULL);
-		if (!set_key_value(new, envp[i]))
-			return (free(new), new = NULL,
-				ft_env_lstclear(&head, ft_free_env_node), NULL);
-		new->next = NULL;
-		ft_env_lstadd_back(&head, new);
-		i++;
-	}
-	return (head);
-}
-
-void	ft_env_lstadd_back(t_env **lst, t_env *new)
-{
-	t_env	*last;
-
-	last = *lst;
-	if (*lst == NULL)
-	{
-		*lst = new;
-		return ;
-	}
-	while (last->next != NULL)
-	{
-		last = last->next;
-	}
-	last->next = new;
-}
-
-void	ft_free_env_node(t_env *node)
-{
-	free(node->key);
-	node->key = NULL;
-	free(node->value);
-	node->value = NULL;
-}
 
 char	*get_exec_path(char **paths, char **command, char **envp)
 {
@@ -136,20 +49,6 @@ char	**setup_paths(char *envp[])
 
 // *******************************************************************************************
 
-
-
-// 引数なしでいいと思う
-void	env(t_env *env_lst)
-{
-	int	i;
-
-	i = 0;
-	while (env_lst != NULL)
-	{
-		printf("%s=%s\n", env_lst->key, env_lst->value);
-		env_lst = env_lst->next;
-	}
-}
 
 void	env_with_arg(char *first_arg, char *second_arg, t_env *env_lst, char **envp)
 {
@@ -199,6 +98,19 @@ void	env_with_arg(char *first_arg, char *second_arg, t_env *env_lst, char **envp
   }
 }
 
+// 引数なしでいいと思う
+void	env(t_env *env_lst)
+{
+	int	i;
+
+	i = 0;
+	while (env_lst != NULL)
+	{
+		printf("%s=%s\n", env_lst->key, env_lst->value);
+		env_lst = env_lst->next;
+	}
+}
+
 int    main(int argc, char *argv[], char *envp[])
 {
 	int	i;
@@ -210,12 +122,14 @@ int    main(int argc, char *argv[], char *envp[])
 		return (1);
 	head = env_lst;
 	i = 0;
-  if (argc == 1)
-    env_with_arg(NULL, NULL, env_lst, envp);
-  else if (argc == 2)
-    env_with_arg(argv[1], NULL, env_lst, envp);
-  else if (argc == 3)
-    env_with_arg(argv[1], argv[2], env_lst, envp);
+
+	env(env_lst);
+//   if (argc == 1)
+//     env_with_arg(NULL, NULL, env_lst, envp);
+//   else if (argc == 2)
+//     env_with_arg(argv[1], NULL, env_lst, envp);
+//   else if (argc == 3)
+//     env_with_arg(argv[1], argv[2], env_lst, envp);
 
 	// while (env_lst != NULL)
 	// {
