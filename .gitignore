@@ -3,3 +3,5 @@ a.out
 mini.sh
 microshell/srcs/env/env_list
 microshell/srcs/env/my_env_list
+env
+export
