@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/20 16:06:15 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/20 18:35:47 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_env	*ft_env_lst(char *envp[]);
 void	env(t_env *env_lst);
 int		export(char *command, t_env *env_lst);
 void	unset(t_env *env_lst, char *key);
+void    echo(char **arg);
 
 void	env_with_arg(char *first_arg, char *second_arg, t_env *env_lst, char **envp);
 

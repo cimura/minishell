@@ -6,14 +6,11 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:26:27 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/18 18:08:39 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/20 18:35:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "../libft/include/libft.h"
+#include "builtin.h"
 
 void    echo(char **arg)
 {
@@ -46,17 +43,17 @@ void    echo(char **arg)
     }
 }
 
-int    main(int argc, char *argv[]) {
-    // char    *haystack = "d?=HOGE";
-    // char    *needle = "|&;<>()$' ?\t\n";
-
-    // int    ret = ft_strstr(haystack, needle);
-    // if (ret == 0)
-    //     printf("found\n");
-    // if (ret == 1)
-    //     printf("not found\n");
-
-    // echo(&argv[1]);
-    char **s = &argv[1];
-    echo(s);
-}
+//int    main(int argc, char *argv[]) {
+//    // char    *haystack = "d?=HOGE";
+//    // char    *needle = "|&;<>()$' ?\t\n";
+//
+//    // int    ret = ft_strstr(haystack, needle);
+//    // if (ret == 0)
+//    //     printf("found\n");
+//    // if (ret == 1)
+//    //     printf("not found\n");
+//
+//    // echo(&argv[1]);
+//    char **s = &argv[1];
+//    echo(s);
+//}

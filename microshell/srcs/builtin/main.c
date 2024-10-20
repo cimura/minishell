@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 15:05:29 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/20 17:49:12 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/20 18:42:28 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ int	do_command(char **command, t_env *env_lst)
 			export(command[++i], env_lst);
 		else if (strcmp(command[i], "unset") == 0)
 			unset(env_lst, command[++i]);
+		else if (strcmp(command[i], "echo") == 0)
+		{
+			echo(&command[++i]);
+			while (command[i + 1] != NULL)
+				i++;
+		}
 		else
 			return (printf("%s: command not found\n", command[i]), 1);
 		i++;
