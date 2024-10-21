@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/21 17:45:57 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/21 18:05:23 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,17 +163,44 @@ t_expand_lst	*create_expand_lst(char *line)
 	return (head);
 }
 
+// TODO
+// 文字列でOUT, IN_DOUBLEの状態のものを展開する
+// ft_until_charとかを使ってjoinする
+char	*expand(char *lst_line)
+{
+	int	i;
+
+	i = 0;
+	while (lst_line[i])
+	{
+		
+		i++;
+	}
+}
+
+void	handle_doller(t_expand_lst *expand_lst)
+{
+	while (expand_lst != NULL)
+	{
+		if (expand_lst->status != IN_SINGLE)
+		{
+			expand_lst->str = expand(expand_lst->str);
+		}
+		expand_lst = expand_lst->next;
+	}
+}
+
 int	main()
 {
 	t_expand_lst	*result;
-	char	*line = "\'echo \'hello\'\' world";
+	char	*line = "\'echo \'$hello world";
 
 	result = create_expand_lst(line);
 	if (!result)
 		return (1);
 	while (result != NULL)
 	{
-		printf("status: %d\n", result->status);
+		// printf("status: %d\n", result->status);
 		printf("str: %s\n", result->str);
 		result = result->next;
 	}
