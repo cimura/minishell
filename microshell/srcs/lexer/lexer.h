@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/16 17:33:22 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:45:47 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ void	ft_token_lstadd_back(t_token **lst, t_token *new);
 
 void	ft_free_commands(char **commands);
 void	ft_print_commands(char **commands);
+int	count_meta_char(char *line, char *meta_char);
 
 #endif
