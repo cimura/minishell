@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 15:05:29 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/20 18:42:28 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/21 12:50:48 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ int	do_command(char **command, t_env *env_lst)
 			while (command[i + 1] != NULL)
 				i++;
 		}
+		else if (strcmp(command[i], "cd") == 0)
+		{
+			cd(command[1]);
+			break ;
+		}
+		else if (strcmp(command[i], "pwd") == 0)
+			pwd();
 		else
 			return (printf("%s: command not found\n", command[i]), 1);
 		i++;
