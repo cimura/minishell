@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/21 12:54:16 by sshimura         ###   ########.fr       */
+/*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
+/*   Updated: 2024/10/21 12:55:18 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "builtin.h"
+#include "builtin.h"
 
-void	cd(char *path)
+void	_exit(int status)
 {
-	//int ret = chdir(path);
-	//printf("return value is %d\n", ret);
-	// success -> 0, fail -> -1;
-	
-	if (chdir(path) != 0)
-		perror("chdir failed");
-	// free(path);
+	exit(status);
 }

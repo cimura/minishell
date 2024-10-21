@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/21 12:47:09 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/21 12:55:23 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	unset(t_env *env_lst, char *key);
 void	echo(char **arg);
 void	cd(char *path);
 void	pwd(void);
+void	_exit(int status);
 
 void	env_with_arg(char *first_arg, char *second_arg, t_env *env_lst, char **envp);
 

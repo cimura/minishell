@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/21 12:43:06 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/21 12:59:04 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_env	*set_key_value_registered(t_env *new, char *arg)
 int	export(char *arg, t_env *env_lst)
 {
 	t_env	*new;
-
+	// 空文字が入っているときの処理
 	if (!arg || *arg == '\0')
 		return (0);
 	// 引数が key=value の形になっていなかっらはじく
