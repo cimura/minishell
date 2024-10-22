@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_expand.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/21 18:05:23 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/22 23:37:09 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ t_expand_lst	*create_expand_lst(char *line)
 	while (line[i])
 	{
 		new = malloc(sizeof(t_expand_lst));
+    if (!new)
+      return (NULL);
 		if (line[i] == '\'')
 		{
 			i++;
@@ -166,25 +168,59 @@ t_expand_lst	*create_expand_lst(char *line)
 // TODO
 // 文字列でOUT, IN_DOUBLEの状態のものを展開する
 // ft_until_charとかを使ってjoinする
+// *lst_line = "hello$SHELL world"
 char	*expand(char *lst_line)
 {
 	int	i;
+  char  *to_expand;
+  char  *tmp;
+  int len = 0;
+  char  *env_value = NULL;
+  char  *new = malloc(1);
 
+  new[0] = '\0';
 	i = 0;
 	while (lst_line[i])
 	{
-		
-		i++;
+		if (lst_line[i] == '$')
+    {
+      i++;
+      // ホワイトスペースとかまで数える
+      to_expand = ft_strndup(&lst_line[i], ft_count_until_char(&lst_line[i], " \t\n*"));
+      
+      // 今はgetenvを使ってるけど，env_listを確認してvalueを取り出すように変える
+      env_value = getenv(to_expand);
+      if (!env_value)
+        env_value = "";
+      free(to_expand);
+      tmp = ft_strjoin(new, env_value);
+      free(new);
+      new = tmp;
+      i += ft_count_until_char(&lst_line[i], " \t\n*");
+    }
+    else
+    {
+      len = strlen(new);
+      new[len] = lst_line[i];
+      new[len + 1] = '\0';
+      i++;
+    }
 	}
+  new[len + 1] = '\0';
+  return (new);
 }
 
 void	handle_doller(t_expand_lst *expand_lst)
 {
+  char  *old;
 	while (expand_lst != NULL)
 	{
+    // must expand
 		if (expand_lst->status != IN_SINGLE)
 		{
+      old = expand_lst->str;
 			expand_lst->str = expand(expand_lst->str);
+      free(old);
 		}
 		expand_lst = expand_lst->next;
 	}
@@ -193,11 +229,12 @@ void	handle_doller(t_expand_lst *expand_lst)
 int	main()
 {
 	t_expand_lst	*result;
-	char	*line = "\'echo \'$hello world";
+	char	*line = "\'echo \'hello$hello world";
 
 	result = create_expand_lst(line);
 	if (!result)
 		return (1);
+  handle_doller(result);
 	while (result != NULL)
 	{
 		// printf("status: %d\n", result->status);
@@ -205,4 +242,11 @@ int	main()
 		result = result->next;
 	}
 	ft_expand_lstclear(&result, ft_free_expand_node);
+  // expected -> hello world
 }
+
+// リークがまだあるのと，コードが汚い
+// __attribute__((destructor))
+// static void destructor() {
+// 	system("leaks -q expand");
+// }
