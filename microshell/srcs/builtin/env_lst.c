@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_list.c                                         :+:      :+:    :+:   */
+/*   env_lst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/17 17:14:11 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/20 15:06:27 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "env.h"
+#include "builtin.h"
 
 void	ft_env_lstclear(t_env **lst, void (*del)(t_env *))
 {
@@ -79,7 +79,7 @@ int	set_key_value(t_env *new, char *line)
 	return (1);
 }
 
-t_env	*ft_env_list(char *envp[])
+t_env	*ft_env_lst(char *envp[])
 {
 	int		i;
 	t_env	*head;
