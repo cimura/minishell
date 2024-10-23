@@ -1,4 +1,6 @@
 a.out
 .vscode
 mini.sh
+env_list
+my_env_list
 env
