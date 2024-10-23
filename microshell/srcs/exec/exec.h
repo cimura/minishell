@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/23 16:49:51 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/18 17:11:34 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef EXEC_H
 
-# include <string.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include "../libft/include/libft.h"
+# define EXEC_H
 
-typedef struct s_token
-{
-	char			**command_line;
-	struct s_token	*next;
-}	t_token;
+# include "../lexer/lexer.h"
 
-// *** lexer.c ***
-void	token_lst_clear(t_token **lst, void (*del)(char **));
-void	token_lstadd_back(t_token **lst, t_token *new);
-
-void	free_commands(char **commands);
-void	print_commands(char **commands);
+t_token	*ft_lexer(char *command_line);
 
 #endif

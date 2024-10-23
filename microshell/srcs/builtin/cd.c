@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.h                                              :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/17 17:14:24 by ttakino          ###   ########.fr       */
+/*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
+/*   Updated: 2024/10/23 19:26:55 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENV_H
+#include "builtin.h"
 
-# define ENV_H
-
-# include <stdio.h>
-# include <string.h>
-# include <stdlib.h>
-# include "../libft/include/libft.h"
-
-typedef struct s_env
+void	cd(char *path)
 {
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
-
-#endif
+	if (chdir(path) != 0)
+		perror("chdir failed");
+}

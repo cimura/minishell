@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:24:44 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/16 17:29:40 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/23 16:25:53 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-void	ft_token_lst_clear(t_token **lst, void (*del)(char **))
+void	token_lst_clear(t_token **lst, void (*del)(char **))
 {
 	t_token	*current;
 	t_token	*next;
@@ -30,7 +30,7 @@ void	ft_token_lst_clear(t_token **lst, void (*del)(char **))
 	*lst = NULL;
 }
 
-void	ft_token_lstadd_back(t_token **lst, t_token *new)
+void	token_lstadd_back(t_token **lst, t_token *new)
 {
 	t_token	*last;
 
@@ -47,7 +47,7 @@ void	ft_token_lstadd_back(t_token **lst, t_token *new)
 	last->next = new;
 }
 
-void	ft_free_commands(char **commands)
+void	free_commands(char **commands)
 {
 	int	i;
 
@@ -60,13 +60,13 @@ void	ft_free_commands(char **commands)
 	free(commands);
 }
 
-void	ft_print_commands(char **commands)
-{
-	int	i;
+// void	ft_print_commands(char **commands)
+// {
+// 	int	i;
 
-	i = 0;
-	while (commands[i])
-	{
-		printf("%s\n", commands[i++]);
-	}
-}
+// 	i = 0;
+// 	while (commands[i])
+// 	{
+// 		printf("%s\n", commands[i++]);
+// 	}
+// }
