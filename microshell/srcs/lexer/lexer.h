@@ -6,12 +6,11 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/21 15:45:47 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/23 16:49:51 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
-
 # define LEXER_H
 
 # include <string.h>
@@ -25,11 +24,11 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-void	ft_token_lst_clear(t_token **lst, void (*del)(char **));
-void	ft_token_lstadd_back(t_token **lst, t_token *new);
+// *** lexer.c ***
+void	token_lst_clear(t_token **lst, void (*del)(char **));
+void	token_lstadd_back(t_token **lst, t_token *new);
 
-void	ft_free_commands(char **commands);
-void	ft_print_commands(char **commands);
-int	count_meta_char(char *line, char *meta_char);
+void	free_commands(char **commands);
+void	print_commands(char **commands);
 
 #endif
