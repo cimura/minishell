@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 19:24:06 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/23 19:29:56 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include "../libft/include/libft.h"
-# include "../builtin/builtin.h"
+# include "../env/env_lst.h"
 
 enum	e_status
 {

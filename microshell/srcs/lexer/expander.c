@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 19:27:42 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/23 19:43:15 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ char	*expander(t_env *env_lst, char *line)
 // 	(void)argc;
 // 	(void)argv;
 // 	char	*line = "hello \'wo\'$PATH world\"!!!\"";
-// 	t_env	*env_lst = ft_env_lst(envp);
+// 	t_env	*env_lst = create_env_lst(envp);
 
 // 	char *result_line = expander(env_lst, line);
 // 	printf("%s\n", result_line);
-// 	ft_env_lstclear(&env_lst, ft_free_env_node);
+// 	env_lstclear(&env_lst, free_env_node);
 // 	free(result_line);
 // }
