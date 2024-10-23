@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_expand.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 15:03:23 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/23 15:12:12 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ char	*expand(char *lst_line)
 	int	i;
 	char  *to_expand;
 	char  *tmp;
-	int len = 0;
+	int		len = 0;
 	char  *env_value = NULL;
 	char  *new = malloc(1);
 
