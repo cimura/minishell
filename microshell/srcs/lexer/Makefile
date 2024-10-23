@@ -4,4 +4,5 @@ all:
 	cc -Wall -Wextra -Werror -g lexer.c list_expand.c lexer_utils.c ../libft/libft.a -o expand
 clean:
 	$(MAKE) -C ../libft fclean
-	rm lexer
+#	rm lexer
+	rm expand

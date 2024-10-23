@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 10:24:50 by cimy             ###   ########.fr       */
+/*   Updated: 2024/10/23 15:03:23 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,13 +137,15 @@ t_expand_lst	*create_expand_lst(char *line)
 	while (line[i])
 	{
 		new = malloc(sizeof(t_expand_lst));
-		if (!new)
-			return (NULL);
+		if (new == NULL)
+			return (ft_expand_lstclear(&head, ft_free_expand_node), NULL);
 		if (line[i] == '\'')
 		{
 			i++;
 			new->status = IN_SINGLE;
 			new->str = ft_strndup(&line[i], ft_count_until_char(&line[i], "\'"));
+			if (new->str == NULL)
+				return (ft_expand_lstclear(&head, ft_free_expand_node), free(new), new = NULL, NULL);
 			i += ft_count_until_char(&line[i], "\'") + 1;
 		}
 		else if (line[i] == '\"')
@@ -151,12 +153,16 @@ t_expand_lst	*create_expand_lst(char *line)
 			i++;
 			new->status = IN_DOUBLE;
 			new->str = ft_strndup(&line[i], ft_count_until_char(&line[i], "\""));
+			if (new->str == NULL)
+				return (ft_expand_lstclear(&head, ft_free_expand_node), free(new), new = NULL, NULL);
 			i += ft_count_until_char(&line[i], "\"") + 1;
 		}
 		else
 		{
 			new->status = OUT;
 			new->str = ft_strndup(&line[i], ft_count_until_char(&line[i], "\'\""));
+			if (new->str == NULL)
+				return (ft_expand_lstclear(&head, ft_free_expand_node), free(new), new = NULL, NULL);
 			i += ft_count_until_char(&line[i], "\'\"");
 		}
 		new->next = NULL;
@@ -187,13 +193,17 @@ char	*expand(char *lst_line)
 			i++;
 			// ホワイトスペースとかまで数える
 			to_expand = ft_strndup(&lst_line[i], ft_count_until_char(&lst_line[i], " \t\n*"));
-			
+			if (to_expand == NULL)
+				return (free(new), new = NULL, NULL);	
 			// 今はgetenvを使ってるけど，env_listを確認してvalueを取り出すように変える
 			env_value = getenv(to_expand);
 			if (!env_value)
 				env_value = "";
 			free(to_expand);
+			to_expand = NULL;
 			tmp = ft_strjoin(new, env_value);
+			if (tmp == NULL)
+				return (free(new), new = NULL, NULL);
 			free(new);
 			new = tmp;
 			i += ft_count_until_char(&lst_line[i], " \t\n*");
@@ -204,6 +214,8 @@ char	*expand(char *lst_line)
 			// これは最初でmallocのbytesを決め打ちしないためにこうしてる
 			len = strlen(new);
 			tmp = ft_strjoin(new, &lst_line[i]);
+			if (tmp == NULL)
+				return (free(new), new = NULL, NULL);
 			free(new);
 			new = tmp;
 			new[len + 1] = '\0';
@@ -214,9 +226,10 @@ char	*expand(char *lst_line)
 	return (new);
 }
 
-void	handle_doller(t_expand_lst *expand_lst)
+int	handle_doller(t_expand_lst *expand_lst)
 {
 	char  *old;
+
 	while (expand_lst != NULL)
 	{
 		// must expand
@@ -224,10 +237,14 @@ void	handle_doller(t_expand_lst *expand_lst)
 		{
 			old = expand_lst->str;
 			expand_lst->str = expand(expand_lst->str);
+			if (expand_lst->str == NULL)
+				return (free(old), old = NULL, 0);
 			free(old);
+			old = NULL;
 		}
 		expand_lst = expand_lst->next;
 	}
+	return (1);
 }
 
 // hello -> wo -> world
@@ -238,10 +255,14 @@ static char	*join_lst(t_expand_lst *expand_lst)
 	char	*tmp;
 
 	result = ft_strdup(expand_lst->str);
+	if (result == NULL)
+			return (NULL);
 	expand_lst = expand_lst->next;
 	while (expand_lst != NULL)
 	{
 		tmp = ft_strjoin(result, expand_lst->str);
+		if (tmp == NULL)
+			return (NULL);
 		free(result);
 		result = tmp;
 		expand_lst = expand_lst->next;
@@ -253,12 +274,16 @@ int	main()
 {
 	t_expand_lst	*result;
 	t_expand_lst	*head;
-	char	*line = "hello \'wo\'$hoge world";
+	char	*line = "hello \'wo\'$hoge world\"!!!\"";
 
 	result = create_expand_lst(line);
 	if (!result)
 		return (1);
-	handle_doller(result);
+	if (!handle_doller(result))
+	{
+		ft_expand_lstclear(&result, ft_free_expand_node);
+		return (1);
+	}
 	// while (result != NULL)
 	// {
 	// 	printf("str: %s\n", result->str);
