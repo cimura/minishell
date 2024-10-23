@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 18:02:34 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/23 19:27:42 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ t_expand_lst	*create_quoted_lst(char *line)
 		if (new == NULL)
 			return (expand_lstclear(&head), NULL);
 		if (line[i] == '\'')
-			i += split_quoted_segment(new, head, &line[++i], SINGLE);
+			i += split_quoted_segment(new, head, &line[i], SINGLE) + 2;
 		else if (line[i] == '\"')
-			i += split_quoted_segment(new, head, &line[++i], DOUBLE);
+			i += split_quoted_segment(new, head, &line[i], DOUBLE) + 2;
 		else
 			i += split_quoted_segment(new, head, &line[i], OUT);
 		new->next = NULL;
@@ -40,7 +40,7 @@ t_expand_lst	*create_quoted_lst(char *line)
 	return (head);
 }
 
-int	handle_doller_expand(t_expand_lst *expand_lst)
+int	handle_doller_expand(t_env *env_lst, t_expand_lst *expand_lst)
 {
 	char	*old;
 
@@ -49,7 +49,7 @@ int	handle_doller_expand(t_expand_lst *expand_lst)
 		if (expand_lst->status != SINGLE)
 		{
 			old = expand_lst->str;
-			expand_lst->str = expand_env_variable(expand_lst->str);
+			expand_lst->str = expand_env_variable(env_lst, expand_lst->str);
 			if (expand_lst->str == NULL)
 				return (free(old), old = NULL, 1);
 			free(old);
@@ -84,7 +84,7 @@ static char	*join_lst(t_expand_lst *expand_lst)
 }
 
 // この関数を呼べば展開されて返ってくる
-char	*expander(char *line)
+char	*expander(t_env *env_lst, char *line)
 {
 	t_expand_lst	*expand_lst;
 	char			*result;
@@ -92,7 +92,7 @@ char	*expander(char *line)
 	expand_lst = create_quoted_lst(line);
 	if (!expand_lst)
 		return (NULL);
-	if (handle_doller_expand(expand_lst) == 1)
+	if (handle_doller_expand(env_lst, expand_lst) == 1)
 	{
 		expand_lstclear(&expand_lst);
 		return (NULL);
@@ -102,11 +102,15 @@ char	*expander(char *line)
 	return (result);
 }
 
-// int	main()
+// int	main(int argc, char **argv, char **envp)
 // {
+// 	(void)argc;
+// 	(void)argv;
 // 	char	*line = "hello \'wo\'$PATH world\"!!!\"";
+// 	t_env	*env_lst = ft_env_lst(envp);
 
-// 	char *result_line = expander(line);
+// 	char *result_line = expander(env_lst, line);
 // 	printf("%s\n", result_line);
+// 	ft_env_lstclear(&env_lst, ft_free_env_node);
 // 	free(result_line);
 // }
