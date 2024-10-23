@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 10:03:58 by cimy             ###   ########.fr       */
+/*   Updated: 2024/10/23 10:24:50 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,25 @@ void	handle_doller(t_expand_lst *expand_lst)
 	}
 }
 
+// hello -> wo -> world
+// 最初の要素だけコピーしてあとはjoin, NULLチェックは必要
+static char	*join_lst(t_expand_lst *expand_lst)
+{
+	char	*result;
+	char	*tmp;
+
+	result = ft_strdup(expand_lst->str);
+	expand_lst = expand_lst->next;
+	while (expand_lst != NULL)
+	{
+		tmp = ft_strjoin(result, expand_lst->str);
+		free(result);
+		result = tmp;
+		expand_lst = expand_lst->next;
+	}
+	return (result);
+}
+
 int	main()
 {
 	t_expand_lst	*result;
@@ -240,12 +259,14 @@ int	main()
 	if (!result)
 		return (1);
 	handle_doller(result);
-	// join_lst(result);
+	// while (result != NULL)
+	// {
+	// 	printf("str: %s\n", result->str);
+	// 	result = result->next;
+	// }
 	head = result;
-	while (result != NULL)
-	{
-		printf("str: %s\n", result->str);
-		result = result->next;
-	}
+	char *result_line = join_lst(result);
+	printf("%s\n", result_line);
+	free(result_line);
 	ft_expand_lstclear(&head, ft_free_expand_node);
 }
