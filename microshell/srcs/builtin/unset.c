@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:05:59 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/20 17:51:51 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/23 18:59:11 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	unset(t_env *env_lst, char *key)
 	prev = NULL;
 	while (env_lst != NULL)
 	{
-		// delete, getenvも使えるかも
 		if (!ft_strncmp(env_lst->key, key, ft_strlen(env_lst->key) + 1))
 		{
 			prev->next = env_lst->next;
@@ -40,7 +39,7 @@ void	unset(t_env *env_lst, char *key)
 // {
 // 	t_env	*env_lst;
 
-// 	env_lst = ft_env_lst(envp);
+// 	env_lst = create_env_lst(envp);
 // 	printf("--- Before ---\n\n");
 // 	env(env_lst);
 // 	if (argv[1])

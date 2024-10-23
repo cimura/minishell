@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:22 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/21 12:54:25 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/23 18:59:35 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "builtin.h"
+#include "builtin.h"
 
 void	pwd(void)
 {
-	char *cwd;
+	char	*cwd;
 
-	//cwd = malloc(100);
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{

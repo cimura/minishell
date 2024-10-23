@@ -6,13 +6,13 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/20 15:06:27 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/23 19:32:59 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "env_lst.h"
 
-void	ft_env_lstclear(t_env **lst, void (*del)(t_env *))
+void	env_lstclear(t_env **lst, void (*del)(t_env *))
 {
 	t_env	*current;
 	t_env	*next;
@@ -30,7 +30,7 @@ void	ft_env_lstclear(t_env **lst, void (*del)(t_env *))
 	*lst = NULL;
 }
 
-void	ft_env_lstadd_back(t_env **lst, t_env *new)
+void	env_lstadd_back(t_env **lst, t_env *new)
 {
 	t_env	*last;
 
@@ -47,7 +47,7 @@ void	ft_env_lstadd_back(t_env **lst, t_env *new)
 	last->next = new;
 }
 
-void	ft_free_env_node(t_env *node)
+void	free_env_node(t_env *node)
 {
 	free(node->key);
 	node->key = NULL;
@@ -57,7 +57,7 @@ void	ft_free_env_node(t_env *node)
 
 // PATH=/usr/bin -> "PATH"		(key)	
 // PATH=/usr/bin -> "/usr/bin"	(value)
-int	set_key_value(t_env *new, char *line)
+static int	set_key_value(t_env *new, char *line)
 {
 	int	len;
 	int	klen;
@@ -79,7 +79,7 @@ int	set_key_value(t_env *new, char *line)
 	return (1);
 }
 
-t_env	*ft_env_lst(char *envp[])
+t_env	*create_env_lst(char *envp[])
 {
 	int		i;
 	t_env	*head;
@@ -94,9 +94,9 @@ t_env	*ft_env_lst(char *envp[])
 			return (NULL);
 		if (!set_key_value(new, envp[i]))
 			return (free(new), new = NULL,
-				ft_env_lstclear(&head, ft_free_env_node), NULL);
+				env_lstclear(&head, free_env_node), NULL);
 		new->next = NULL;
-		ft_env_lstadd_back(&head, new);
+		env_lstadd_back(&head, new);
 		i++;
 	}
 	return (head);
@@ -108,7 +108,7 @@ t_env	*ft_env_lst(char *envp[])
 // 	t_env	*head;
 // 	t_env	*env_lst;
 
-// 	env_lst = ft_env_list(envp);
+// 	env_lst = create_env_lst(envp);
 // 	if (!env_lst)
 // 		return (1);
 // 	head = env_lst;
@@ -118,5 +118,5 @@ t_env	*ft_env_lst(char *envp[])
 // 		printf("%s=%s\n", env_lst->key, env_lst->value);
 // 		env_lst = env_lst->next;
 // 	}
-// 	ft_env_lstclear(&head, ft_free_env_node);
+// 	env_lstclear(&head, free_env_node);
 // }
