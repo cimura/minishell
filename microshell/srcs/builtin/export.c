@@ -29,21 +29,23 @@
 //     return (1);
 // }
 
-int	is_special_char_in_key(char *arg)
+int	check_keyname(char *arg)
 {
-	char	*special_char;
 	int		i;
 
-	// TODO
-	special_char = "|&;()<> \t\n*";
+	if (!(arg[0] >= 'A' && arg[0] <= 'Z') && arg[0] != '_'
+		&& !(arg[0] >= 'a' && arg[0] <= 'z'))
+		return (0);
 	i = 0;
 	while (arg[i] != '\0' && arg[i] != '=')
 	{
-		if (ft_strchr(special_char, arg[i]) != NULL)
-			return (1);
+		if (!(arg[i] >= 'A' && arg[i] <= 'Z') && arg[i] != '_'
+			&& !(arg[i] >= 'a' && arg[i] <= 'z')
+			&& !(arg[i] >= '0' && arg[i] <= '9'))
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
@@ -85,7 +87,7 @@ int	export(char *arg, t_env *env_lst)
 		return (0);
 	if (!ft_strchr(arg, '='))
 		return (0);
-	if (is_special_char_in_key(arg))
+	if (!check_keyname(arg))
 		return (0);
 	new = get_node_having_same_key(arg, env_lst);
 	if (new)
