@@ -12,6 +12,35 @@
 
 #include "expander.h"
 
+int	split_quoted_segment(t_expand_lst *new, t_expand_lst *head,
+							char *line_ptr, int flag)
+{
+	new->status = flag;
+	if (flag == SINGLE)
+	{
+		line_ptr++;
+		new->str = ft_strndup(line_ptr, count_until_char(line_ptr, "\'"));
+		if (new->str == NULL)
+			return (expand_lstclear(&head), free(new), new = NULL, -1);
+		return (count_until_char(line_ptr, "\'"));
+	}
+	else if (flag == DOUBLE)
+	{
+		line_ptr++;
+		new->str = ft_strndup(line_ptr, count_until_char(line_ptr, "\""));
+		if (new->str == NULL)
+			return (expand_lstclear(&head), free(new), new = NULL, -1);
+		return (count_until_char(line_ptr, "\""));
+	}
+	else
+	{
+		new->str = ft_strndup(line_ptr, count_until_char(line_ptr, "\'\""));
+		if (new->str == NULL)
+			return (expand_lstclear(&head), free(new), new = NULL, -1);
+		return (count_until_char(line_ptr, "\'\""));
+	}
+}
+
 t_expand_lst	*create_quoted_lst(char *line)
 {
 	int				i;
@@ -106,7 +135,7 @@ char	*expander(t_env *env_lst, char *line)
 // {
 // 	(void)argc;
 // 	(void)argv;
-// 	char	*line = "hello \'wo\'$PATH world\"!!!\"";
+// 	char	*line = "hello \'wo\'$ world\"$PATH!!!\"";
 // 	t_env	*env_lst = create_env_lst(envp);
 
 // 	char *result_line = expander(env_lst, line);

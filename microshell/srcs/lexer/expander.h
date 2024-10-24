@@ -44,8 +44,8 @@ int				count_until_char(char *line, char *needle);
 char			*env_query(t_env *env_lst, char *new, char *line_ptr);
 char			*non_expandble_str(char *new, char *line_ptr);
 char			*expand_env_variable(t_env *env_lst, char *lst_line);
-int				split_quoted_segment(t_expand_lst *new, t_expand_lst *head,
-					char *line_ptr, int flag);
+//int				split_quoted_segment(t_expand_lst *new, t_expand_lst *head,
+//					char *line_ptr, int flag);
 t_expand_lst	*create_quoted_lst(char *line);
 
 #endif
