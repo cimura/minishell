@@ -12,80 +12,6 @@
 
 #include "expander.h"
 
-//int	split_quoted_segment(t_expand_lst *new, t_expand_lst *head,
-//							char *line_ptr, int flag)
-//{
-//	new->status = flag;
-//	if (flag == SINGLE)
-//	{
-//		line_ptr++;
-//		new->str = ft_strndup(line_ptr, count_until_char(line_ptr, "\'"));
-//		if (new->str == NULL)
-//			return (expand_lstclear(&head), free(new), new = NULL, -1);
-//		return (count_until_char(line_ptr, "\'"));
-//	}
-//	else if (flag == DOUBLE)
-//	{
-//		line_ptr++;
-//		new->str = ft_strndup(line_ptr, count_until_char(line_ptr, "\""));
-//		if (new->str == NULL)
-//			return (expand_lstclear(&head), free(new), new = NULL, -1);
-//		return (count_until_char(line_ptr, "\""));
-//	}
-//	else
-//	{
-//		new->str = ft_strndup(line_ptr, count_until_char(line_ptr, "\'\""));
-//		if (new->str == NULL)
-//			return (expand_lstclear(&head), free(new), new = NULL, -1);
-//		return (count_until_char(line_ptr, "\'\""));
-//	}
-//}
-
-//t_expand_lst	*create_quoted_lst(char *line)
-//{
-//	int				i;
-//	t_expand_lst	*new;
-//	t_expand_lst	*head;
-//	int				non_quotes_size;
-
-//	if (str_count(line, "\'") % 2 != 0
-//		|| str_count(line, "\"") % 2 != 0)
-//		return (NULL);
-//	head = NULL;
-//	i = 0;
-//	printf("line: %s\n", line);
-//	while (line[i])
-//	{
-//		new = malloc(sizeof(t_expand_lst));
-//		if (new == NULL)
-//			return (expand_lstclear(&head), NULL);
-//		if (line[i] == '\'')
-//		{
-//			non_quotes_size = split_quoted_segment(new, head, &line[i], SINGLE);
-//			if (non_quotes_size == -1)
-//				return (NULL);
-//			i += non_quotes_size + 2;
-//		}
-//		else if (line[i] == '\"')
-//		{
-//			non_quotes_size = split_quoted_segment(new, head, &line[i], DOUBLE);
-//			if (non_quotes_size == -1)
-//				return (NULL);
-//			i += non_quotes_size + 2;
-//		}
-//		else
-//		{
-//			non_quotes_size = split_quoted_segment(new, head, &line[i], OUT);
-//			if (non_quotes_size == -1)
-//				return (NULL);
-//			i += non_quotes_size;
-//		}
-//		new->next = NULL;
-//		expand_lstadd_back(&head, new);
-//	}
-//	return (head);
-//}
-
 static t_expand_lst	*create_quoted_node(char *line)
 {
 	t_expand_lst	*new;
@@ -207,7 +133,8 @@ char	*expander(t_env *env_lst, char *line)
 // 	(void)argc;
 // 	(void)argv;
 // 	//char	*line = "hello \'wo\'$ world\"$PATH!!!\"";
-//	char	*line = "value = \"$HOME!?$SHELL$\"(\'$HOME\')";
+//	char	*line = "\"value = \"\"$HOME!?$SHELL$\"\'($HOME)\'";
+//	char	*com;
 // 	t_env	*env_lst = create_env_lst(envp);
 
 // 	char *result_line = expander(env_lst, line);
@@ -216,7 +143,11 @@ char	*expander(t_env *env_lst, char *line)
 //		env_lstclear(&env_lst, free_env_node);
 //		return (0);
 //	}
-// 	printf("%s\n", result_line);
+//	printf("\x1b[33m%s\x1b[0m\n", line);
+//	com = ft_strjoin("echo ", line);
+//	printf("echo\n");
+//	system(com);
+// 	printf("./expand\n%s\n", result_line);
 // 	env_lstclear(&env_lst, free_env_node);
 // 	free(result_line);
 // }
