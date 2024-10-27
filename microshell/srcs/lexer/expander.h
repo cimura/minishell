@@ -6,14 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 19:29:56 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/27 15:59:51 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANDER_H
 # define EXPANDER_H
 
-# include <string.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include "../libft/include/libft.h"
@@ -41,11 +40,6 @@ char			*ft_strndup(const char *str, size_t n);
 int				count_until_char(char *line, char *needle);
 
 // *** expander_helper.c ***
-//char			*env_query(t_env *env_lst, char *new, char *line_ptr);
-//char			*non_expandble_str(char *new, char *line_ptr);
 char			*expand_env_variable(t_env *env_lst, char *lst_line);
-//int				split_quoted_segment(t_expand_lst *new, t_expand_lst *head,
-//					char *line_ptr, int flag);
-//t_expand_lst	*create_quoted_lst(char *line);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:40:57 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 16:32:05 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/27 15:58:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	count_meta_char(char *line, char *meta_char)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (strchr(meta_char, line[i]))
+		if (ft_strchr(meta_char, line[i]))
 		{
 			if (line[i + 1] == line[i])
 				i++;
@@ -41,7 +41,7 @@ static void	write_result(char *result, char *line, char *meta_char)
 	li = 0;
 	while (line[li] != '\0')
 	{
-		if (strchr(meta_char, line[li]))
+		if (ft_strchr(meta_char, line[li]))
 		{
 			result[ri++] = ' ';
 			if (line[li + 1] == line[li])
@@ -64,7 +64,7 @@ static char	*cover_metachar_by_space(char *line, char *meta_char)
 	int		n_meta;
 
 	n_meta = count_meta_char(line, meta_char);
-	result = malloc(strlen(line) + n_meta * 3 + 1);
+	result = malloc(ft_strlen(line) + n_meta * 3 + 1);
 	if (!result)
 		return (NULL);
 	write_result(result, line, meta_char);
@@ -125,26 +125,26 @@ t_token	*lexer(char *command_line)
 	return (head);
 }
 
-// int	main(int argc, char **argv)
-// {
-// 	t_token	*token;
-// 	t_token	*head;
-// 	int		i;
+ //int	main(int argc, char **argv)
+ //{
+ //	t_token	*token;
+ //	t_token	*head;
+ //	int		i;
 
-// 	if (argc != 2)
-// 		return (1);
-// 	printf("command: %s\n", argv[1]);
-// 	token = lexer(argv[1]);
-// 	if (token == NULL)
-// 		return (1);
-// 	head = token;
-// 	i = 0;
-// 	while (token != NULL)
-// 	{
-// 		print_commands(token->command_line);
-// 		printf("|\n");
-// 		token = token->next;
-// 	}
-// 	token_lst_clear(&head, free_commands);
-// 	return (0);
-// }
+ //	if (argc != 2)
+ //		return (1);
+ //	printf("command: %s\n", argv[1]);
+ //	token = lexer(argv[1]);
+ //	if (token == NULL)
+ //		return (1);
+ //	head = token;
+ //	i = 0;
+ //	while (token != NULL)
+ //	{
+ //		print_commands(token->command_line);
+ //		printf("|\n");
+ //		token = token->next;
+ //	}
+ //	token_lst_clear(&head, free_commands);
+ //	return (0);
+ //}

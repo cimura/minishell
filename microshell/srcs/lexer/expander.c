@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 19:43:15 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/27 15:47:52 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,26 +128,26 @@ char	*expander(t_env *env_lst, char *line)
 	return (result);
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	(void)argc;
-// 	(void)argv;
-// 	//char	*line = "hello \'wo\'$ world\"$PATH!!!\"";
-//	char	*line = "\"value = \"\"$HOME!?$SHELL$\"\'($HOME)\'";
-//	char	*com;
-// 	t_env	*env_lst = create_env_lst(envp);
-
-// 	char *result_line = expander(env_lst, line);
-//	if (result_line == NULL)
-//	{
-//		env_lstclear(&env_lst, free_env_node);
-//		return (0);
-//	}
-//	printf("\x1b[33m%s\x1b[0m\n", line);
-//	com = ft_strjoin("echo ", line);
-//	printf("echo\n");
-//	system(com);
-// 	printf("./expand\n%s\n", result_line);
-// 	env_lstclear(&env_lst, free_env_node);
-// 	free(result_line);
-// }
+//int	main(int argc, char **argv, char **envp)
+//{
+//	(void)argc;
+//	(void)argv;
+//	//char	*line = "hello \'wo\'$ world\"$PATH!!!\"";
+//   char	*line = "\"value = \"\"$HOME!?$SHELL$\"\'($HOME)\'";
+//   char	*com;
+//	t_env	*env_lst = create_env_lst(envp);
+//
+//	char *result_line = expander(env_lst, line);
+//   if (result_line == NULL)
+//   {
+//   	env_lstclear(&env_lst, free_env_node);
+//   	return (0);
+//   }
+//   printf("\x1b[33m%s\x1b[0m\n", line);
+//   com = ft_strjoin("echo ", line);
+//   printf("echo\n");
+//   system(com);
+//	printf("./expand\n%s\n", result_line);
+//	env_lstclear(&env_lst, free_env_node);
+//	free(result_line);
+//}
