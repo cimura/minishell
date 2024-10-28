@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 15:40:57 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/27 15:58:01 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/28 16:42:19 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static char	*cover_metachar_by_space(char *line, char *meta_char)
 
 	n_meta = count_meta_char(line, meta_char);
 	result = malloc(ft_strlen(line) + n_meta * 3 + 1);
-	if (!result)
+	if (result == NULL)
 		return (NULL);
 	write_result(result, line, meta_char);
 	return (result);
@@ -80,13 +80,13 @@ static char	**ft_split_pipe(char *command_line)
 
 	meta_char = "|&;()<>";
 	split_pipe = ft_split(command_line, '|');
-	if (!split_pipe)
+	if (split_pipe == NULL)
 		return (NULL);
 	i = 0;
 	while (split_pipe[i] != NULL)
 	{
 		tmp = cover_metachar_by_space(split_pipe[i], meta_char);
-		if (!tmp)
+		if (tmp == NULL)
 			return (free_commands(split_pipe), NULL);
 		free(split_pipe[i]);
 		split_pipe[i] = tmp;
@@ -104,17 +104,17 @@ t_token	*lexer(char *command_line)
 	int		i;
 
 	split_pipe = ft_split_pipe(command_line);
-	if (!split_pipe)
+	if (split_pipe == NULL)
 		return (NULL);
 	head = NULL;
 	i = 0;
 	while (split_pipe[i] != NULL)
 	{
 		new = malloc(sizeof(t_token));
-		if (!new)
+		if (new == NULL)
 			return (free_commands(split_pipe), NULL);
 		new->command_line = ft_split(split_pipe[i], ' ');
-		if (!new->command_line)
+		if (new->command_line == NULL)
 			return (free_commands(split_pipe), free(new), new = NULL,
 				token_lst_clear(&head, free_commands), NULL);
 		new->next = NULL;
@@ -125,26 +125,26 @@ t_token	*lexer(char *command_line)
 	return (head);
 }
 
- //int	main(int argc, char **argv)
- //{
- //	t_token	*token;
- //	t_token	*head;
- //	int		i;
+//int	main(int argc, char **argv)
+//{
+//	t_token	*token;
+//	t_token	*head;
+//	int		i;
 
- //	if (argc != 2)
- //		return (1);
- //	printf("command: %s\n", argv[1]);
- //	token = lexer(argv[1]);
- //	if (token == NULL)
- //		return (1);
- //	head = token;
- //	i = 0;
- //	while (token != NULL)
- //	{
- //		print_commands(token->command_line);
- //		printf("|\n");
- //		token = token->next;
- //	}
- //	token_lst_clear(&head, free_commands);
- //	return (0);
- //}
+//	if (argc != 2)
+//		return (1);
+//	printf("command: %s\n", argv[1]);
+//	token = lexer(argv[1]);
+//	if (token == NULL)
+//		return (1);
+//	head = token;
+//	i = 0;
+//	while (token != NULL)
+//	{
+//		print_commands(token->command_line);
+//		printf("|\n");
+//		token = token->next;
+//	}
+//	token_lst_clear(&head, free_commands);
+//	return (0);
+//}

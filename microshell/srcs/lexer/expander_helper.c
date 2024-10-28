@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 19:24:17 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:40:33 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static char	*env_query(t_env *env_lst, char *new, char *line_ptr)
 	char	*tmp;
 
 	to_expand = ft_strndup(line_ptr, count_key_size(line_ptr));
-	if (!to_expand)
+	if (to_expand == NULL)
 		return (free(new), new = NULL, NULL);
 	if (ft_strlen(to_expand) == 0)
 		env_value = "$";
@@ -68,7 +68,7 @@ static char	*env_query(t_env *env_lst, char *new, char *line_ptr)
 	free(to_expand);
 	to_expand = NULL;
 	tmp = ft_strjoin(new, env_value);
-	if (!tmp)
+	if (tmp == NULL)
 		return (free(new), new = NULL, NULL);
 	free(new);
 	new = tmp;

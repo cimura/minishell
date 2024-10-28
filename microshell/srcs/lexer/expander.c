@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/27 15:47:52 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/28 16:37:13 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char	*expander(t_env *env_lst, char *line)
 	char			*result;
 
 	expand_lst = create_quoted_lst(line);
-	if (!expand_lst)
+	if (expand_lst == NULL)
 		return (NULL);
 	if (handle_doller_expand(env_lst, expand_lst) == 1)
 	{
