@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/23 18:57:29 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/29 14:38:20 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 // // 1 -> not found 0 -> found
 // int    ft_strstr(char *haystack, char *needle)
-// {
-//     int    i;
+// { //     int    i;
 
 //     i = 0;
 //     if (needle[i] == '\0' || !haystack || *haystack == '\0')
@@ -29,21 +28,23 @@
 //     return (1);
 // }
 
-int	is_special_char_in_key(char *arg)
+int	check_keyname(char *arg)
 {
-	char	*special_char;
 	int		i;
 
-	// TODO
-	special_char = "|&;()<> \t\n*";
+	if (!(arg[0] >= 'A' && arg[0] <= 'Z') && arg[0] != '_'
+		&& !(arg[0] >= 'a' && arg[0] <= 'z'))
+		return (0);
 	i = 0;
 	while (arg[i] != '\0' && arg[i] != '=')
 	{
-		if (ft_strchr(special_char, arg[i]) != NULL)
-			return (1);
+		if (!(arg[i] >= 'A' && arg[i] <= 'Z') && arg[i] != '_'
+			&& !(arg[i] >= 'a' && arg[i] <= 'z')
+			&& !(arg[i] >= '0' && arg[i] <= '9'))
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
@@ -57,74 +58,84 @@ t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
 	return (NULL);
 }
 
-int	set_key_value_registered(t_env *new, char *arg)
+t_env	*create_new_env_node(char *arg)
 {
-	int	klen;
-	int	vlen;
+	t_env	*new;
+	int		klen;
+	int		vlen;
 
+	new = malloc(sizeof(t_env));
+	if (new == NULL)
+		return (NULL);
 	vlen = ft_strlen(ft_strchr(arg, '=') + 1);
 	klen = ft_strlen(arg) - vlen - 1;
 	new->key = malloc(klen + 1);
 	if (!new->key)
-		return (free(new), new = NULL, 1);
+		return (free(new), new = NULL, NULL);
 	new->value = malloc(vlen + 1);
 	if (!new->value)
-		return (free(new->key), new->key = NULL, free(new), new = NULL, 1);
+		return (free(new), new = NULL, free(new->key), new->key = NULL, NULL);
 	new->key = ft_memmove(new->key, arg, klen);
 	new->key[klen] = '\0';
 	new->value = ft_memmove(new->value, (ft_strchr(arg, '=') + 1), vlen);
 	new->value[vlen] = '\0';
-	return (0);
+	new->next = NULL;
+	return (new);
 }
 
-int	export(char *arg, t_env *env_lst)
+int	export(char **arg, t_env *env_lst)
 {
-	t_env	*new;
+	t_env	*target;
+	int		i;
 
-	if (!arg || *arg == '\0')
-		return (0);
-	if (!ft_strchr(arg, '='))
-		return (0);
-	if (is_special_char_in_key(arg))
-		return (0);
-	new = get_node_having_same_key(arg, env_lst);
-	if (new)
+	i = 0;
+	while (arg[i] != NULL)
 	{
-		if (set_key_value_registered(new, arg) != 0)
-			return (1);
-	}
-	else
-	{
-		new = malloc(sizeof(t_env));
-		if (new == NULL)
-			return (1);
-		if (set_key_value_registered(new, arg) != 0)
-			return (free(new), new = NULL, 1);
-		new->next = NULL;
-		env_lstadd_back(&env_lst, new);
+		if (!arg || **arg == '\0')
+			return (0);
+		if (!ft_strchr(*arg, '='))
+			return (0);
+		if (!check_keyname(arg))
+			return (0);
+		target = get_node_having_same_key(arg[i], env_lst);
+		if (target)
+		{
+			free(target->value);
+			target->value = ft_strdup(ft_strchr(arg[i], '=') + 1);
+			if (target->value == NULL)
+				return (1);
+		}
+		else
+		{
+			target = create_new_env_node(arg[i]);
+			if (target == NULL)
+				return (1);
+			env_lstadd_back(&env_lst, target);
+		}
+		i++;
 	}
 	return (0);
 }
 
-// int    main(int argc, char *argv[], char *envp[])
-// {
-// 	int	i;
-// 	t_env	*head;
-// 	t_env	*env_lst;
+ int    main(int argc, char *argv[], char *envp[])
+ {
+ 	int	i;
+ 	t_env	*head;
+ 	t_env	*env_lst;
 
-// 	if (argc != 2)
-// 		return (1);
-// 	env_lst = create_env_lst(envp);
-// 	if (!env_lst)
-// 		return (1);
-// 	int status = export(argv[1], env_lst);
-// 	head = env_lst;
-// 	i = 0;
-// 	while (env_lst != NULL)
-// 	{
-// 		printf("%s=%s\n", env_lst->key, env_lst->value);
-// 		env_lst = env_lst->next;
-// 	}
-// 	env_lstclear(&head, free_env_node);
-// 	return (status);
-// }
+ 	if (argc != 2)
+ 		return (1);
+ 	env_lst = create_env_lst(envp);
+ 	if (!env_lst)
+ 		return (1);
+ 	int status = export(argv[1], env_lst);
+ 	head = env_lst;
+ 	i = 0;
+ 	while (env_lst != NULL)
+ 	{
+ 		printf("%s=%s\n", env_lst->key, env_lst->value);
+ 		env_lst = env_lst->next;
+ 	}
+ 	env_lstclear(&head, free_env_node);
+ 	return (status);
+ }
