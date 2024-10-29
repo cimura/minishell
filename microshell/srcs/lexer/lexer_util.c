@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:24:44 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/23 16:25:53 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/10/28 16:42:05 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ void	free_commands(char **commands)
 	free(commands);
 }
 
-// void	ft_print_commands(char **commands)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (commands[i])
-// 	{
-// 		printf("%s\n", commands[i++]);
-// 	}
-// }
+//void	print_commands(char **commands)
+//{
+//	int	i;
+//
+//	i = 0;
+//	while (commands[i])
+//	{
+//		printf("%s\n", commands[i++]);
+//	}
+//}
