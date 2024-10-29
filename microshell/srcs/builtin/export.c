@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/29 14:38:20 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/10/29 16:56:19 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,17 @@ int	export(char **arg, t_env *env_lst)
 	i = 0;
 	while (arg[i] != NULL)
 	{
-		if (!arg || **arg == '\0')
-			return (0);
-		if (!ft_strchr(*arg, '='))
-			return (0);
-		if (!check_keyname(arg))
-			return (0);
+		if (arg[i][0] == '\0' || ft_strchr(arg[i], '=') == NULL || !check_keyname(arg[i]))
+		{
+			i++;
+			continue ;
+		}
+	//	if (!arg || **arg == '\0')
+	//		return (0);
+	//	if (!ft_strchr(*arg, '='))
+	//		return (0);
+	//	if (!check_keyname(arg))
+	//		return (0);
 		target = get_node_having_same_key(arg[i], env_lst);
 		if (target)
 		{
@@ -123,12 +128,10 @@ int	export(char **arg, t_env *env_lst)
  	t_env	*head;
  	t_env	*env_lst;
 
- 	if (argc != 2)
- 		return (1);
  	env_lst = create_env_lst(envp);
  	if (!env_lst)
  		return (1);
- 	int status = export(argv[1], env_lst);
+ 	int status = export(argv, env_lst);
  	head = env_lst;
  	i = 0;
  	while (env_lst != NULL)
