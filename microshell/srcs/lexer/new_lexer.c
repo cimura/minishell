@@ -1,7 +1,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "expander.h"
+//libftのボーナスが使えなかったので違うとこから取ってきた
+#include "../../../../Libft/include/libft.h"
 
 typedef struct s_token
 {
@@ -9,114 +10,143 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_words
+int	add_node_from_storage(t_list **head, char *storage)
 {
-	char	*word;
-	struct s_words	*next;
-}	t_words;
+	t_list	*new;
+	char	*content;
 
-char	*copy_word(char *line, int condition_expr)
-{
-	char	*cpy;
-	int		len;
-	int		i;
+	if (ft_strlen(storage) == 0)
+		return (1);
 
-	len = 0;
-	i = 0;
-	while (line[i] != '\0' && condition_expr)
-		len++;
-	cpy = ft_strndup(line, len);
-	if (cpy == NULL)
-		return (NULL);
-	return (cpy);
+	content = ft_strdup(storage);
+	if (content == NULL)
+		return (0);
+
+	new = ft_lstnew(content);
+	if (new == NULL)
+		return (ft_lstclear(head, free), free(content), content = NULL, 0);
+	printf("new->content = %s\n", (char *)new->content);
+
+	ft_lstadd_back(head, new);
+	ft_bzero(storage, ft_strlen(storage));
+	return (1);
 }
 
-t_words	*count_words_until_pipe(char *line)
+int	case_meta(char *storage, char *line, int i)
 {
-	int	num;
-	int	i;
-	char	in_quote;
-	int	word_start;
-	t_words	words;
+	int	si;
 
-	num = 0;
-	in_quote = 0;
-	word_start = 1;
+	si = 0;
+	while (line[i] != '\0' && ft_strchr("|&;()<>", line[i]) != NULL)
+	{
+		printf("meta/%c\n", line[i]);
+		storage[si] = line[i];
+		i++;
+		si++;
+	}
+	storage[si] = '\0';
+	return (i);
+}
+
+int	case_isspace(char *storage, char *line, int i)
+{
+	while (line[i] != '\0' && ft_strchr(" \t", line[i]) != NULL)
+	{
+		printf("space tab/%c\n", line[i]);
+		i++;
+	}
+	return (i);
+}
+
+int	case_normal(char *storage, char *line, int i)
+{
+	int		si;
+	char	in_quote;
+
+	in_quote = '\0';
+	si = 0;
+	while (line[i] != '\0' && ft_strchr("|&;()<> \t", line[i]) == NULL)
+	{
+		printf("normal/%c\n", line[i]);
+		storage[si] = line[i];
+		if (ft_strchr("\"\'", line[i]))
+		{
+			in_quote = line[i];
+			i++;
+			si++;
+			while (line[i] != '\0' && in_quote != line[i])
+			{
+				printf("quote/%c\n", line[i]);
+				storage[si++] = line[i++];
+			}
+			storage[si] = line[i];
+		}
+		i++;
+		si++;
+	}
+	storage[si] = '\0';
+	return (i);
+}
+
+t_list	*count_words_until_pipe(char *line)
+{
+	int		i;
+	char	*storage;
+	t_list	*head;
+
+	storage = ft_calloc(ft_strlen(line) + 1, sizeof(char));
+	if (storage == NULL)
+		return (NULL);
+	head = NULL;
 	i = 0;
 	while (line[i] != '\0')
 	{
-		//if (in_quote == 0 && line[i] == '|')
-		//	break ;
+		if (!add_node_from_storage(&head, storage))
+			return (free(storage), storage = NULL, NULL);
+
 		// meta
-		if (in_quote == 0 && strchr("&;()<>", line[i]) != NULL)
-		{
-			words.word = copy_word()
-			num++;
-			printf("meta/%c\n", line[i]);
-			word_start = 1;
-			while (line[i + 1] != '\0' && strchr("|&;()<>", line[i + 1]) != NULL)
-			{
-				i++;
-			}
-		}
-		// space or tab
-		else if (in_quote == 0 && strchr(" \t", line[i]) != NULL)
-		{
-			word_start = 1;
-		}
-		// quote
-		else if (in_quote == 0 && strchr("\'\"", line[i]) != NULL)
-		{
-			in_quote = line[i];
-			if (word_start == 1)
-			{
-				num++;
-				printf("quote on start/%c\n", line[i]);
-				word_start = 0;
-			}
-		}
-		else if (in_quote != 0 && in_quote == line[i])
-		{
-			in_quote = 0;
-		}
+		if (ft_strchr("|&;()<>", line[i]) != NULL)
+			i = case_meta(storage, line, i);
+		// isspace
+		else if (ft_strchr(" \t", line[i]) != NULL)
+			i = case_isspace(storage, line, i);
 		// normal
-		else if (in_quote == 0 && word_start == 1)
-		{
-			num++;
-			printf("normal/%c\n", line[i]);
-			word_start = 0;
-		}
-		
-		i++;
+		else
+			i = case_normal(storage, line, i);
 	}
-	return (num);
+	if (!add_node_from_storage(&head, storage))
+		return (free(storage), storage = NULL, NULL);
+	free(storage);
+	storage = NULL;
+	return (head);
 }
 
-void	set_command_line(char *line, char **command_line)
-{
+//void	set_command_line(char *line, char **command_line)
+//{
 
-}
+//}
 
-t_token	*lexer(char *line)
-{
-	int		words;
-	t_token	*head;
-	t_token	*new;
+//t_token	*lexer(char *line)
+//{
+//	int		words;
+//	t_token	*head;
+//	t_token	*new;
 
-	head = NULL;
-	new = malloc(sizeof(t_token));
-	if (new == NULL)
-		return (NULL);
-	words = count_words_until_pipe(line);
-	new->command_line = malloc(words * sizeof(char *));
-	if (new->command_line == NULL)
-		return (free(new), new = NULL, NULL);
-	set_command_line(line, new->command_line);
-}
+//	head = NULL;
+//	new = malloc(sizeof(t_token));
+//	if (new == NULL)
+//		return (NULL);
+//	words = count_words_until_pipe(line);
+//	new->command_line = malloc(words * sizeof(char *));
+//	if (new->command_line == NULL)
+//		return (free(new), new = NULL, NULL);
+//	set_command_line(line, new->command_line);
+//}
 
 int	main(int argc, char **argv)
 {
-	int	words;
+	t_list	*head;
+	t_list	*words;
 	int	i;
 
 	if (argc == 1)
@@ -124,8 +154,17 @@ int	main(int argc, char **argv)
 	i = 1;
 	while (argv[i] != NULL)
 	{
+		printf("\t%s\n", argv[i]);
 		words = count_words_until_pipe(argv[i]);
-		printf("%s: %dwords\n", argv[i], words);
+		if (words == NULL)
+			return (printf("Error\n"), 1);
+		head = words;
+		while (words != NULL)
+		{
+			printf("--%s\n", (char *)words->content);
+			words = words->next;
+		}
+		ft_lstclear(&head, free);
 		i++;
 	}
 	return (0);
