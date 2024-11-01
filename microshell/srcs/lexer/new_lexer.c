@@ -1,8 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-//libftのボーナスが使えなかったので違うとこから取ってきた
-#include "../../../../Libft/include/libft.h"
+#include "../libft/include/libft.h"
 
 typedef struct s_token
 {
