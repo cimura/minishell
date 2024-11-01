@@ -74,7 +74,7 @@ int	case_normal(char *storage, char *line, int i)
 			in_quote = line[i];
 			i++;
 			si++;
-			while (line[i] != '\0' && in_quote != line[i])
+			while (line[i + 1] != '\0' && in_quote != line[i])
 			{
 				printf("quote/%c\n", line[i]);
 				storage[si++] = line[i++];
@@ -88,7 +88,7 @@ int	case_normal(char *storage, char *line, int i)
 	return (i);
 }
 
-t_list	*count_words_until_pipe(char *line)
+t_list	*create_token_lst(char *line)
 {
 	int		i;
 	char	*storage;
@@ -136,7 +136,7 @@ t_list	*count_words_until_pipe(char *line)
 //	new = malloc(sizeof(t_token));
 //	if (new == NULL)
 //		return (NULL);
-//	words = count_words_until_pipe(line);
+//	words = create_token_lst(line);
 //	new->command_line = malloc(words * sizeof(char *));
 //	if (new->command_line == NULL)
 //		return (free(new), new = NULL, NULL);
@@ -155,7 +155,7 @@ int	main(int argc, char **argv)
 	while (argv[i] != NULL)
 	{
 		printf("\t%s\n", argv[i]);
-		words = count_words_until_pipe(argv[i]);
+		words = create_token_lst(argv[i]);
 		if (words == NULL)
 			return (printf("Error\n"), 1);
 		head = words;
