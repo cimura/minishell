@@ -6,7 +6,7 @@
 #    By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/01 16:27:09 by sshimura          #+#    #+#              #
-#    Updated: 2024/10/05 00:04:18 by cimy             ###   ########.fr        #
+#    Updated: 2024/10/31 19:47:06 by cimy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ GREEN		:=	\033[32m
 END			:=	\033[0m
 
 ifeq ($(BONUS_FLAG),true)
-	$(OBJS) += $(BONUS_OBJS)
+	OBJS += $(BONUS_OBJS)
 endif
 
 all: $(NAME)
