@@ -4,11 +4,11 @@
 #include "../libft/include/libft.h"
 #include "lexer.h"
 
-typedef struct s_token
-{
-	char	**command_line;
-	struct s_token	*next;
-}	t_token;
+// typedef struct s_token
+// {
+// 	char	**command_line;
+// 	struct s_token	*next;
+// }	t_token;
 
 t_list	*add_node_from_storage(t_list *head, char *storage)
 {
@@ -48,7 +48,7 @@ int	case_meta(char *storage, char *line, int i)
 	return (i);
 }
 
-int	case_whitespace(char *storage, char *line, int i)
+int	case_whitespace(char *line, int i)
 {
 	while (line[i] != '\0' && ft_strchr(" \t", line[i]) != NULL)
 	{
@@ -101,7 +101,7 @@ t_list	*create_token_lst(char *line)
 			i = case_meta(storage, line, i);
 		// whitespace
 		else if (ft_strchr(" \t\v\r\f\n", line[i]) != NULL)
-			i = case_whitespace(storage, line, i);
+			i = case_whitespace(line, i);
 		// normal
 		else
 			i = case_normal(storage, line, i);
@@ -125,50 +125,47 @@ int	count_token_until_pipe(t_list *lst)
 		size++;
 		lst = lst->next;
 	}
+	return (size);
+}
+
+char	**create_until_pipe_array(t_list *normal, int size)
+{
+	int		i;
+	char	**command_line;
+
+	command_line = malloc(size * sizeof(char *));
+	if (command_line == NULL)
+		return (NULL);
+	i = 0;
+	while (i < size)
+	{
+		command_line[i] = ft_strdup(normal->content);
+		i++;
+	}
+	command_line[i] = NULL;
+	return (command_line);
 }
 
 t_token	*create_pipe_lst(t_list *normal)
 {
-	t_token	*head;
-	t_token	*new;
 	int		size;
-	int		i;
+	t_token	*new;
+	t_token	*head;
 
 	head = NULL;
-	new = malloc(sizeof(t_token));
-	if (new == NULL)
-		return (NULL);
-	size = count_token_until_pipe(normal);
-	new->command_line = malloc(size * sizeof(char *));
-	if (new->command_line == NULL)
-		return (free(new), new = NULL, NULL);
-	i = 0;
 	while (normal != NULL)
 	{
-		if (ft_strncmp(normal->content, "|", 1) != 0)
-		{
-			new->command_line[i] = NULL;
-			new->next = NULL;
-			token_lstadd_back(&head, new);
+		new = malloc(sizeof(t_token));
+		if (new == NULL)
+			return (NULL);
+		size = count_token_until_pipe(normal);
+		new->command_line = create_until_pipe_array(normal, size);
+		new->next = NULL;
+		token_lstadd_back(&head, new);
+		while (--size)
 			normal = normal->next;
-			new = malloc(sizeof(t_token));
-			if (new == NULL)
-				return (token_lst_clear(&head, free_commands), NULL);
-			size = count_token_until_pipe(normal);
-			new->command_line = malloc(size * sizeof(char *));
-			if (new->command_line == NULL)
-				return (token_lst_clear(&head, free_commands),
-					 free(new), new = NULL, NULL);
-			i = 0;
-			continue ;
-		}
-		new->command_line[i] = ft_strdup(normal->content);
-		if (new->command_line[i] == NULL)
-			return (token_lst_clear(&head, free_commands), 
-				free_commands(new->command_line), free(new), new = NULL, NULL);
-		i++;
-		normal = normal->next;
 	}
+	return (head);
 }
 
 t_token	*lexer(char	*line)
@@ -177,14 +174,16 @@ t_token	*lexer(char	*line)
 	t_token	*per_pipe;
 
 	normal = create_token_lst(line);
+	per_pipe = create_pipe_lst(normal);
 	if (normal == NULL)
 		return (NULL);
+	return (per_pipe);
 }
 
 int	main(int argc, char **argv)
 {
-	t_list	*head;
-	t_list	*words;
+	t_token	*head;
+	t_token	*words;
 	int	i;
 
 	if (argc == 1)
@@ -193,13 +192,14 @@ int	main(int argc, char **argv)
 	while (argv[i] != NULL)
 	{
 		printf("\t%s\n", argv[i]);
-		words = create_token_lst(argv[i]);
+		words = lexer(argv[i]);
 		if (words == NULL)
 			return (printf("Error\n"), 1);
 		head = words;
 		while (words != NULL)
 		{
-			printf("--%s\n", (char *)words->content);
+			while (command_line[j] != NULL)
+				printf("--%s\n", (char *)words->command_line[j]);
 			words = words->next;
 		}
 		ft_lstclear(&head, free);
