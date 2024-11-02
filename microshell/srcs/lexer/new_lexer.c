@@ -10,26 +10,26 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-int	add_node_from_storage(t_list **head, char *storage)
+t_list	*add_node_from_storage(t_list *head, char *storage)
 {
 	t_list	*new;
 	char	*content;
 
 	if (ft_strlen(storage) == 0)
-		return (1);
+		return (head);
 
 	content = ft_strdup(storage);
 	if (content == NULL)
-		return (0);
+		return (ft_lstclear(&head, free), NULL);
 
 	new = ft_lstnew(content);
 	if (new == NULL)
-		return (ft_lstclear(head, free), free(content), content = NULL, 0);
+		return (ft_lstclear(&head, free), free(content), content = NULL, NULL);
 	printf("new->content = %s\n", (char *)new->content);
 
-	ft_lstadd_back(head, new);
+	ft_lstadd_back(&head, new);
 	ft_bzero(storage, ft_strlen(storage));
-	return (1);
+	return (head);
 }
 
 int	case_meta(char *storage, char *line, int i)
@@ -65,22 +65,17 @@ int	case_normal(char *storage, char *line, int i)
 
 	in_quote = '\0';
 	si = 0;
-	while (line[i] != '\0' && ft_strchr("|&;()<> \t\v\r\f\n", line[i]) == NULL)
+	while (line[i] != '\0' && (!in_quote && ft_strchr("|&;()<> \t\v\r\f\n", line[i]) == NULL))
 	{
-		printf("normal/%c\n", line[i]);
-		storage[si] = line[i];
-		if (ft_strchr("\"\'", line[i]))
+		if (!in_quote && ft_strchr("\"\'", line[i]))
 		{
 			in_quote = line[i];
-			i++;
-			si++;
-			while (line[i + 1] != '\0' && in_quote != line[i])
-			{
-				printf("quote/%c\n", line[i]);
-				storage[si++] = line[i++];
-			}
-			storage[si] = line[i];
 		}
+		else if (in_quote == line[i])
+			in_quote = 0;
+
+		printf("normal/%c\n", line[i]);
+		storage[si] = line[i];
 		i++;
 		si++;
 	}
@@ -101,9 +96,6 @@ t_list	*create_token_lst(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (!add_node_from_storage(&head, storage))
-			return (free(storage), storage = NULL, NULL);
-
 		// meta
 		if (ft_strchr("|&;()<>", line[i]) != NULL)
 			i = case_meta(storage, line, i);
@@ -113,9 +105,11 @@ t_list	*create_token_lst(char *line)
 		// normal
 		else
 			i = case_normal(storage, line, i);
+
+		head = add_node_from_storage(head, storage);
+		if (head == NULL)
+			return (free(storage), storage = NULL, NULL);
 	}
-	if (!add_node_from_storage(&head, storage))
-		return (free(storage), storage = NULL, NULL);
 	free(storage);
 	storage = NULL;
 	return (head);
