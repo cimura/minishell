@@ -3,148 +3,120 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 15:40:57 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/29 18:38:51 by ttakino          ###   ########.fr       */
+/*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
+/*   Updated: 2024/11/02 17:39:44 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-static int	count_meta_char(char *line, char *meta_char)
+static int	count_token_until_pipe(t_list *lst)
+{
+	int	size;
+
+	size = 0;
+	while (lst != NULL && ft_strncmp(lst->content, "|", 1) != 0)
+	{
+		size++;
+		lst = lst->next;
+	}
+	return (size);
+}
+
+static char	**create_until_pipe_array(t_list *normal, int size)
 {
 	int		i;
-	int		count;
+	char	**command_line;
 
-	count = 0;
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (ft_strchr(meta_char, line[i]))
-		{
-			if (line[i + 1] == line[i])
-				i++;
-			count++;
-		}
-		i++;
-	}
-	return (count);
-}
-
-static void	write_result(char *result, char *line, char *meta_char)
-{
-	int	ri;
-	int	li;
-
-	ri = 0;
-	li = 0;
-	while (line[li] != '\0')
-	{
-		if (ft_strchr(meta_char, line[li]))
-		{
-			result[ri++] = ' ';
-			if (line[li + 1] == line[li])
-				result[ri++] = line[li++];
-			result[ri++] = line[li++];
-			result[ri++] = ' ';
-		}
-		else if (line[li] == '\t')
-			line[li++] = ' ';
-		else
-			result[ri++] = line[li++];
-	}
-	result[ri] = '\0';
-}
-
-// newline:  ">" ---> " > "　number of metacharacter * 3
-static char	*cover_metachar_by_space(char *line, char *meta_char)
-{
-	char	*result;
-	int		n_meta;
-
-	n_meta = count_meta_char(line, meta_char);
-	result = malloc(ft_strlen(line) + n_meta * 3 + 1);
-	if (result == NULL)
-		return (NULL);
-	write_result(result, line, meta_char);
-	return (result);
-}
-
-static char	**ft_split_pipe(char *command_line)
-{
-	char	*meta_char;
-	char	**split_pipe;
-	char	*tmp;
-	int		i;
-
-	meta_char = "|&;()<>";
-	split_pipe = ft_split(command_line, '|');
-	if (split_pipe == NULL)
+	command_line = malloc((size + 1) * sizeof(char *));
+	if (command_line == NULL)
 		return (NULL);
 	i = 0;
-	while (split_pipe[i] != NULL)
+	while (i < size)
 	{
-		tmp = cover_metachar_by_space(split_pipe[i], meta_char);
-		if (tmp == NULL)
-			return (free_commands(split_pipe), NULL);
-		free(split_pipe[i]);
-		split_pipe[i] = tmp;
+		command_line[i] = ft_strdup(normal->content);
+		if (command_line[i] == NULL)
+			return (free_commands(command_line), NULL);
+		normal = normal->next;
 		i++;
 	}
-	split_pipe[i] = NULL;
-	return (split_pipe);
+	command_line[i] = NULL;
+	return (command_line);
 }
 
-t_token	*lexer(char *command_line)
+static t_token	*create_pipe_lst(t_list *normal)
 {
+	int		size;
 	t_token	*new;
 	t_token	*head;
-	char	**split_pipe;
-	int		i;
 
-	split_pipe = ft_split_pipe(command_line);
-	if (split_pipe == NULL)
-		return (NULL);
 	head = NULL;
-	i = 0;
-	while (split_pipe[i] != NULL)
+	while (normal != NULL)
 	{
+		if (ft_strncmp(normal->content, "|", 1) == 0)
+			normal = normal->next;
 		new = malloc(sizeof(t_token));
 		if (new == NULL)
-			return (free_commands(split_pipe), NULL);
-		new->command_line = ft_split(split_pipe[i], ' ');
+			return (token_lst_clear(&head, free_commands), NULL);
+		size = count_token_until_pipe(normal);
+		new->command_line = create_until_pipe_array(normal, size);
 		if (new->command_line == NULL)
-			return (free_commands(split_pipe), free(new), new = NULL,
-				token_lst_clear(&head, free_commands), NULL);
+			return (token_lst_clear(&head, free_commands), free(new), NULL);
 		new->next = NULL;
 		token_lstadd_back(&head, new);
-		i++;
+		while (size > 0)
+		{
+			normal = normal->next;
+			size--;
+		}
 	}
-	free_commands(split_pipe);
 	return (head);
+}
+
+t_token	*lexer(char	*line)
+{
+	t_list	*normal;
+	t_token	*per_pipe;
+
+	normal = create_token_lst(line);
+	if (normal == NULL)
+		return (NULL);
+	per_pipe = create_pipe_lst(normal);
+	if (per_pipe == NULL)
+		return (ft_lstclear(&normal, free), NULL);
+	ft_lstclear(&normal, free);
+	return (per_pipe);
 }
 
 //int	main(int argc, char **argv)
 //{
-//	t_token	*token;
 //	t_token	*head;
-//	int		i;
-
-//	if (argc != 2)
-//		return (1);
-//	printf("command: %s\n", argv[1]);
-//	token = lexer(argv[1]);
-//	if (token == NULL)
-//		return (1);
-//	head = token;
-//	i = 0;
-//	while (token != NULL)
+//	t_token	*words;
+//	int	i;
+//	int	j;
+//
+//	if (argc == 1)
+//		return (0);
+//	i = 1;
+//	while (argv[i] != NULL)
 //	{
-//		print_commands(token->command_line);
-//		printf("|\n");
-//		token = token->next;
+//		printf("\x1b[36m%s\n\x1b[0m", argv[i]);
+//		words = lexer(argv[i]);
+//		if (words == NULL)
+//			return (printf("Error\n"), 1);
+//		head = words;
+//		while (words != NULL)
+//		{
+//			j = 0;
+//			while (words->command_line[j] != NULL)
+//				printf("--\t%s\n", words->command_line[j++]);
+//			printf("\n");
+//			words = words->next;
+//		}
+//		token_lst_clear(&head, free_commands);
+//		i++;
 //	}
-//	token_lst_clear(&head, free_commands);
 //	return (0);
 //}
