@@ -1,6 +1,11 @@
 all:
 	$(MAKE) -C ../libft
-	cc -Wall -Wextra -Werror -g ../lexer/lexer.c ../lexer/lexer_utils.c exec.c ../libft/libft.a -o exec
+	$(MAKE) bonus -C ../libft
+	cc -Wall -Wextra -Werror -g ../env/env_lst.c \
+	../lexer/lexer.c ../lexer/lexer_helper.c ../lexer/lexer_util.c \
+	../expander/expander_util.c ../expander/expander_helper.c ../expander/expander.c \
+	main.c \
+	../libft/libft.a -o test
 clean:
 	$(MAKE) -C ../libft fclean
-	rm exec
+	rm test
