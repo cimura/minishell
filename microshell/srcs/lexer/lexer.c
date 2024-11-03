@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/02 17:39:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/03 14:34:50 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "../expander/expander.h"
 
 static int	count_token_until_pipe(t_list *lst)
 {
@@ -90,33 +91,38 @@ t_token	*lexer(char	*line)
 	return (per_pipe);
 }
 
-//int	main(int argc, char **argv)
-//{
-//	t_token	*head;
-//	t_token	*words;
-//	int	i;
-//	int	j;
-//
-//	if (argc == 1)
-//		return (0);
-//	i = 1;
-//	while (argv[i] != NULL)
-//	{
-//		printf("\x1b[36m%s\n\x1b[0m", argv[i]);
-//		words = lexer(argv[i]);
-//		if (words == NULL)
-//			return (printf("Error\n"), 1);
-//		head = words;
-//		while (words != NULL)
-//		{
-//			j = 0;
-//			while (words->command_line[j] != NULL)
-//				printf("--\t%s\n", words->command_line[j++]);
-//			printf("\n");
-//			words = words->next;
-//		}
-//		token_lst_clear(&head, free_commands);
-//		i++;
-//	}
-//	return (0);
-//}
+int	main(int argc, char **argv)
+{
+	t_token	*head;
+	t_token	*words;
+	int	i;
+	int	j;
+
+	if (argc == 1)
+		return (0);
+	i = 1;
+	while (argv[i] != NULL)
+	{
+		// printf("\x1b[36m%s\n\x1b[0m", argv[i]);
+		words = lexer(argv[i]);
+		if (words == NULL)
+			return (printf("Error\n"), 1);
+		head = words;
+		while (words != NULL)
+		{
+			j = 0;
+			while (words->command_line[j] != NULL)
+			{
+				printf("%s", words->command_line[j++]);
+				if (words->command_line[j] != NULL)
+					printf(",");
+			}
+			words = words->next;
+			if (words != NULL)
+				printf("\t");
+		}
+		token_lst_clear(&head, free_commands);
+		i++;
+	}
+	return (0);
+}
