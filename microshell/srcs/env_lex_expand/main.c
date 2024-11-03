@@ -46,17 +46,29 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
 	return (0);
 }
 
+// void	test_main(t_env *env_lst)
+// {
+// 	t_token	*token;
+// 	char	*input;
+
+// 	input = "echo hello$USER >cat out| ls  <<INFILE";
+// 	token = lexer(input);
+// 	assert(strcmp())
+// }
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_env	*head;
 	t_env	*env_lst;
 	t_token	*token;
+	(void)argv;
+	(void)argc;
 
-	if (argc == 1)
-		return (1);
+
 	env_lst = create_env_lst(envp);
 	head = env_lst;
-	token = lexer(argv[1]);
+	// test_main(env_lst);
+	token = lexer("echo hello$USER >cat out| ls  <<INFILE");
 	if (pass_token_to_expand(env_lst, token) == 1)
 		return (1);
 	printf(GREEN"\t--- Result---\n\n"RESET);

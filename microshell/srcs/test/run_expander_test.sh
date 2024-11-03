@@ -25,7 +25,7 @@ run_test() {
 # テスト実行
 # パイプが来るまではカンマ区切り、パイプはタブで区切ってる
 
-run_test "echo,hello	ls" "echo hello | ls"
+run_test "echo,hello	ls" "hello"$PATH""
 run_test "ls	grep,txt" "ls | grep txt"
 run_test "cat,file.txt	sort	uniq" "cat file.txt | sort | uniq"
 run_test 'echo,hello"$USER",>,cat,out	ls,<<,INFILE' 'echo hello"$USER" >cat out| ls  <<INFILE'
