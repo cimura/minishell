@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/02 17:34:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/03 14:45:42 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,11 @@ void			expand_lstclear(t_expand_lst **lst);
 void			expand_lstadd_back(t_expand_lst **lst, t_expand_lst *new);
 char			*ft_strndup(const char *str, size_t n);
 int				count_until_char(char *line, char *needle);
+
 // *** expander_helper.c ***
 char			*expand_env_variable(t_env *env_lst, char *lst_line);
+
+// *** expander.c ***
+char	*expander(t_env *env_lst, char *line);
 
 #endif
