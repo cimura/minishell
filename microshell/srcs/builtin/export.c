@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/03 15:29:23 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/03 16:58:40 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,6 @@
 //     }
 //     return (1);
 // }
-
-int	check_keyname(char *arg)
-{
-	int		i;
-
-	if (!(arg[0] >= 'A' && arg[0] <= 'Z') && arg[0] != '_'
-		&& !(arg[0] >= 'a' && arg[0] <= 'z'))
-		return (1);
-	i = 0;
-	while (arg[i] != '\0' && arg[i] != '=')
-	{
-		if (!(arg[i] >= 'A' && arg[i] <= 'Z') && arg[i] != '_'
-			&& !(arg[i] >= 'a' && arg[i] <= 'z')
-			&& !(arg[i] >= '0' && arg[i] <= '9'))
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
 {
@@ -69,7 +50,6 @@ t_env	*create_new_env_node(char *arg)
 		return (NULL);
 	vlen = ft_strlen(ft_strchr(arg, '=') + 1);
 	klen = ft_strlen(arg) - vlen - 1;
-	printf("klen = %d vlen = %d\nVALUE=%s\n", klen, vlen, ft_strchr(arg, '=') + 1);
 	new->key = malloc(klen + 1);
 	if (!new->key)
 		return (free(new), new = NULL, NULL);
@@ -86,12 +66,19 @@ t_env	*create_new_env_node(char *arg)
 
 int	parse_argument(char *arg)
 {
-	if (arg[0] == '\0' || ft_strchr(args[i], '=') == NULL)  
-		return (0);
-	else if (check_keyname(arg) != 0)
-	{
-		printf("export: '%s': not a valid identifier\n", arg);
+	int	i;
+
+	if (!(arg[0] >= 'A' && arg[0] <= 'Z') && arg[0] != '_'
+		&& !(arg[0] >= 'a' && arg[0] <= 'z'))
 		return (1);
+	i = 0;
+	while (arg[i] != '\0' && arg[i] != '=')
+	{
+		if (!(arg[i] >= 'A' && arg[i] <= 'Z') && arg[i] != '_'
+			&& !(arg[i] >= 'a' && arg[i] <= 'z')
+			&& !(arg[i] >= '0' && arg[i] <= '9'))
+			return (1);
+		i++;
 	}
 	return (0);
 }
@@ -100,12 +87,25 @@ int	export(char **args, t_env *env_lst)
 {
 	t_env	*targset;
 	int		i;
+	int		status;
 
+	status = 0;
 	i = 0;
 	while (args[i] != NULL)
 	{
+	//	status |= parse_argument(args[i]);
+		if (args[i][0] == '\0' || ft_strchr(args[i], '=') == NULL)
+		{
+			i++;
+			continue ;
+		}
 		if (parse_argument(args[i]) != 0)
-			return (1);
+		{
+			status = 1;
+			printf("export: '%s': not a valid identifier\n", args[i]);
+			i++;
+			continue ;
+		}
 		targset = get_node_having_same_key(args[i], env_lst);
 		if (targset)
 		{
@@ -123,26 +123,26 @@ int	export(char **args, t_env *env_lst)
 		}
 		i++;
 	}
-	return (0);
+	return (status);
 }
 
-// int    main(int argc, char *argv[], char *envp[])
-// {
-// 	int	i;
-// 	t_env	*head;
-// 	t_env	*env_lst;
-//
-// 	env_lst = create_env_lst(envp);
-// 	if (env_lst == NULL)
-// 		return (1);
-// 	int status = export(&argv[1], env_lst);
-// 	head = env_lst;
-// 	i = 0;
-// 	while (env_lst)
-// 	{
-// 		printf("%s=%s\n", env_lst->key, env_lst->value);
-// 		env_lst = env_lst->next;
-// 	}
-// 	env_lstclear(&head, free_env_node);
-// 	return (status);
-// }
+ int    main(int argc, char *argv[], char *envp[])
+ {
+ 	int	i;
+ 	t_env	*head;
+ 	t_env	*env_lst;
+
+ 	env_lst = create_env_lst(envp);
+ 	if (env_lst == NULL)
+ 		return (1);
+ 	int status = export(&argv[1], env_lst);
+ 	head = env_lst;
+ 	i = 0;
+ 	while (env_lst)
+ 	{
+ 		printf("%s=%s\n", env_lst->key, env_lst->value);
+ 		env_lst = env_lst->next;
+ 	}
+ 	env_lstclear(&head, free_env_node);
+ 	return (status);
+ }
