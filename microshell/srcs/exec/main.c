@@ -3,6 +3,7 @@
 #include "../lexer/lexer.h"
 
 #include <stdbool.h>
+#include <fcntl.h>
 
 #define RESET   "\033[0m"   // リセット
 #define RED     "\033[31m"  // 赤
@@ -16,6 +17,13 @@ typedef struct s_fd
   int in_fd;
   int out_fd;
 } t_fd;
+
+typedef struct s_cmd_data
+{
+  char  *path;
+  char  **cmd;
+} t_cmd_data;
+
 
 
 // static void	print_commands(char **commands)
@@ -94,8 +102,49 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
 
 
 // /bin/cat Makefile| /usr/bin/grep all
+// TODO: /bin/cat Makefile| /usr/bin/grep all > out
+
+t_cmd_data  *redirect(t_token *token)
+{
+  t_cmd_data  set;
+  int fd;
+  int i = 0;
+  
+  // $PATHからpathを得て代入
+  // set.path = get_path(token->command_line[0]);
+  // set.cmd = get_cmd(&token->command_line[i], i);
+
+  while (token->command_line[i] != NULL)
+  {
+    if (ft_strncmp(token->command_line[i], ">", 2))
+    {
+      fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY, 0644);
+      dup2(fd, STDOUT_FILENO);
+      close(fd);
+    }
+    else if (ft_strncmp(token->command_line[i], ">>", 3))
+    {
+      fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+      dup2(fd, STDOUT_FILENO);
+      close(fd);
+    }
+    else if (ft_strncmp(token->command_line[i], "<", 2))
+    {
+      fd = open(token->command_line[i - 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+      dup2(STDIN_FILENO, fd);
+      close(fd);
+    }
+    else if (ft_strncmp(token->command_line[i], "<<", 3))
+    {
+      //heredoc();
+    }
+    i++;
+  }
+}
+
 void	command(t_token *token, char **envp)
 {
+  t_cmd_data  *cmd;
 	pid_t	pid;
   t_fd t;
 
@@ -106,6 +155,8 @@ void	command(t_token *token, char **envp)
 	pid = fork();
   if (pid == -1)
     perror("fork");
+  
+  cmd = redirect(token);
 	if (pid == 0)
 	{
     close(t.tmp_fd[0]);
