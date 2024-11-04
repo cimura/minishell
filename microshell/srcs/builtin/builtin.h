@@ -27,11 +27,11 @@
 # include "../libft/include/libft.h"
 
 void	env(t_env *env_lst);
-int		export(char **argv, t_env *env_lst);
-void	unset(t_env *env_lst, char *key);
-void	echo(char **arg);
-void	cd(char *path);
+int		export(char **args, t_env *env_lst);
+void	unset(char **args, t_env *env_lst);
+void	echo(char **args);
+int		cd(char **args);
 void	pwd(void);
-void	_exit(int status);
+void	_exit(char **args);
 
 #endif

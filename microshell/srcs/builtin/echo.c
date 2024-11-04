@@ -12,26 +12,26 @@
 
 #include "builtin.h"
 
-void	echo(char **arg)
+void	echo(char **args)
 {
 	int	is_option;
 
 	is_option = 0;
-	if (strncmp(arg[0], "-n\0", 3) == 0)
+	if (strncmp(args[0], "-n\0", 3) == 0)
 		is_option = 1;
-	if (!arg || *arg == NULL)
+	if (!args || *args == NULL)
 	{
 		printf("\n");
 		return ;
 	}
 	if (is_option)
-		arg++;
-	while (*arg != NULL)
+		args++;
+	while (*args != NULL)
 	{
-		printf("%s", *arg);
-		if (*(arg + 1) != NULL)
+		printf("%s", *args);
+		if (*(args + 1) != NULL)
 			printf(" ");
-		arg++;
+		args++;
 	}
 	if (!is_option)
 		printf("\n");
