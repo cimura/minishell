@@ -104,49 +104,59 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
 // /bin/cat Makefile| /usr/bin/grep all
 // TODO: /bin/cat Makefile| /usr/bin/grep all > out
 
-t_cmd_data  *redirect(t_token *token)
+// char	*get_path(char *cmd)
+// {
+	
+// }
+
+// /bin/cat > out
+void  redirect(t_token *token, char **envp)
 {
-  t_cmd_data  set;
+  (void)envp;
+  // t_cmd_data  *set = NULL;
+  // t_env *env_lst = create_env_lst(envp);
+  // char  *path = get_value_from_key(env_lst, "PATH");
   int fd;
   int i = 0;
   
   // $PATHからpathを得て代入
   // set.path = get_path(token->command_line[0]);
   // set.cmd = get_cmd(&token->command_line[i], i);
+  // get_cmd関数はリダイレクトまでの配列を二次元配列にする
 
   while (token->command_line[i] != NULL)
   {
-    if (ft_strncmp(token->command_line[i], ">", 2))
+    if (ft_strncmp(token->command_line[i], ">", 2) == 0)
     {
       fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY, 0644);
       dup2(fd, STDOUT_FILENO);
       close(fd);
     }
-    else if (ft_strncmp(token->command_line[i], ">>", 3))
+    else if (ft_strncmp(token->command_line[i], ">>", 3) == 0)
     {
       fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
       dup2(fd, STDOUT_FILENO);
       close(fd);
     }
-    else if (ft_strncmp(token->command_line[i], "<", 2))
+    else if (ft_strncmp(token->command_line[i], "<", 2) == 0)
     {
-      fd = open(token->command_line[i - 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
-      dup2(STDIN_FILENO, fd);
+      fd = open(token->command_line[i - 1], O_CREAT | O_WRONLY, 0644);
+      dup2(fd, STDIN_FILENO);
       close(fd);
     }
-    else if (ft_strncmp(token->command_line[i], "<<", 3))
+    else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
     {
       //heredoc();
     }
     i++;
   }
+  // return (set);
 }
 
 void	command(t_token *token, char **envp)
 {
-  t_cmd_data  *cmd;
 	pid_t	pid;
-  t_fd t;
+	t_fd t;
 
   t.in_fd = STDIN_FILENO;
   t.out_fd = STDOUT_FILENO;
@@ -156,7 +166,7 @@ void	command(t_token *token, char **envp)
   if (pid == -1)
     perror("fork");
   
-  cmd = redirect(token);
+	// t_cmd_data *cmd = redirect(token, envp);
 	if (pid == 0)
 	{
     close(t.tmp_fd[0]);
@@ -169,7 +179,7 @@ void	command(t_token *token, char **envp)
 	}
 	else
 	{
-    close(t.tmp_fd[1]);
+		close(t.tmp_fd[1]);
 		dup2(t.tmp_fd[0], STDIN_FILENO);
 		close(t.tmp_fd[0]);
 		wait(NULL);
@@ -179,19 +189,21 @@ void	command(t_token *token, char **envp)
 void  last_command(t_token *token, char **envp)
 {
  	pid_t	pid;
-  t_fd t;
+	t_fd t;
 
   if (pipe(t.tmp_fd) == -1)
     perror("pipe");
 	pid = fork();
   if (pid == -1)
     perror("fork");
+
+  redirect(token, envp);
 	if (pid == 0)
 	{
     close(t.tmp_fd[0]);
     dup2(STDOUT_FILENO, t.out_fd);
     close(t.tmp_fd[1]);
-    ft_putendl_fd(token->command_line[0], 2);
+    // ft_putendl_fd(token->command_line[0], 2);
 		if (execve(token->command_line[0], token->command_line, envp) == -1)
       perror("execve failed");
     exit(EXIT_FAILURE);
@@ -201,7 +213,7 @@ void  last_command(t_token *token, char **envp)
     close(t.tmp_fd[1]);
 		dup2(t.tmp_fd[0], t.in_fd);
 		close(t.tmp_fd[0]);
-		wait(NULL);
+		// wait(NULL);
     exit(EXIT_SUCCESS);
 	} 
 }
@@ -220,7 +232,7 @@ void	execute_command_line(t_token *token, char **envp)
     {
       break ;
     }
-    command(token, envp);
+		command(token, envp);
 		token = token->next;
 	}
     last_command(token, envp);
@@ -237,7 +249,7 @@ int	main(int argc, char **argv, char **envp)
 	env_lst = create_env_lst(envp);
 	head = env_lst;
 	// test_main(env_lst);
-	token = lexer(argv[1]);
+	token = lexer("ls > out");
 	if (pass_token_to_expand(env_lst, token) == 1)
 		return (1);
 	printf("\t--- Result---\n\n");
