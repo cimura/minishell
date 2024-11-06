@@ -6,10 +6,10 @@ int count_until_redirection(char **cmdline)
   int count = 0;
   while (cmdline[count] != NULL)
   {
-    if (ft_strncmp(cmdline[count], ">", 1) == 0
-      || ft_strncmp(cmdline[count], ">>", 2) == 0
-      || ft_strncmp(cmdline[count], "<", 1) == 0
-      || ft_strncmp(cmdline[count], "<<", 2) == 0)
+    if (ft_strncmp(cmdline[count], ">", 2) == 0
+      || ft_strncmp(cmdline[count], ">>", 3) == 0
+      || ft_strncmp(cmdline[count], "<", 2) == 0
+      || ft_strncmp(cmdline[count], "<<", 3) == 0)
         return (count);
     count++;
   }
@@ -31,7 +31,7 @@ void	print_commands(char **commands)
 // {
 // 	while (token != NULL)
 // 	{
-// 		print_commands(token->command_line);
+// 		print_commands(cmd);
 // 		token = token->next;
 // 		if (token != NULL)
 // 			printf("\tnext...\n");
@@ -49,30 +49,45 @@ void	print_commands(char **commands)
 // 	assert(strcmp())
 // }
 
-bool  is_builtin(t_token *token)
+bool  is_builtin(char **cmd)
 {
-  return (ft_strncmp(token->command_line[0], "cd", 3) ||
-          ft_strncmp(token->command_line[0], "echo", 5) ||
-          ft_strncmp(token->command_line[0], "env", 4) ||
-          ft_strncmp(token->command_line[0], "exit", 5));
+  return (ft_strncmp(cmd[0], "cd", 3) == 0 ||
+          ft_strncmp(cmd[0], "echo", 5) == 0 ||
+          ft_strncmp(cmd[0], "env", 4) == 0 ||
+          ft_strncmp(cmd[0], "exit", 5) == 0 ||
+          ft_strncmp(cmd[0], "export", 6) == 0 ||
+          ft_strncmp(cmd[0], "pwd", 4) == 0 ||
+          ft_strncmp(cmd[0], "unset", 6) == 0);
 }
 
-void	builtin_command(t_token *token, t_env *env_lst)
+void	builtin_command(char **cmd, t_env *env_lst, bool last)
 {
+	int	fd[2];
+
+	if (pipe(fd) == -1)
+    	perror("pipe");
+	close(fd[0]);
+
+	if (last)
+		dup2(1, STDOUT_FILENO);
+	else
+		dup2(fd[1], STDOUT_FILENO);
+	close(fd[1]);
+
 	// exitの引数は何にすべきか
-	if (ft_strncmp(token->command_line[0], "cd", 3))
-		cd(&token->command_line[1]);
-	else if (ft_strncmp(token->command_line[0], "echo", 5))
-		echo(&token->command_line[1]);
-	else if (ft_strncmp(token->command_line[0], "env", 4))
+	if (ft_strncmp(cmd[0], "cd", 3) == 0)
+		cd(&cmd[1]);
+	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
+		echo(&cmd[1]);
+	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 		env(env_lst);
-	else if (ft_strncmp(token->command_line[0], "exit", 5))
+	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
 		exit(1);
-	else if (ft_strncmp(token->command_line[0], "export", 7))
-		export(&token->command_line[1], env_lst);
-	else if (ft_strncmp(token->command_line[0], "pwd", 4))
+	else if (ft_strncmp(cmd[0], "export", 7) == 0)
+		export(&cmd[1], env_lst);
+	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
 		pwd();
-	else if (ft_strncmp(token->command_line[0], "unset", 6))
-		unset(&token->command_line[1], env_lst);
+	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
+		unset(&cmd[1], env_lst);
 }
 

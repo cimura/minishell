@@ -122,7 +122,7 @@ int	main(int argc, char **argv, char **envp)
 	token = lexer(argv[1]);
 	if (pass_token_to_expand(env_lst, token) == 1)
 		return (1);
-	printf("\t--- Result---\n\n");
+	// printf("\t--- Result---\n\n");
 	execute_command_line(token, env_lst);
 	// Print(token);
 	env_lstclear(&head, free_env_node);
