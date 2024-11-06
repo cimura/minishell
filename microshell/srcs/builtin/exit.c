@@ -12,7 +12,10 @@
 
 #include "builtin.h"
 
-void	_exit(int status)
+void	_exit(char **args)
 {
+	int	status;
+
+	status = ft_atoi(args[0]);
 	exit(status);
 }

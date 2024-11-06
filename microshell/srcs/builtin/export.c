@@ -6,7 +6,11 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/10/28 17:02:14 by ttakino          ###   ########.fr       */
+=======
+/*   Updated: 2024/11/03 16:58:40 by ttakino          ###   ########.fr       */
+>>>>>>> builtin_modifying
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +20,16 @@
 // int    ft_strstr(char *haystack, char *needle)
 // { //     int    i;
 
-//     i = 0;
-//     if (needle[i] == '\0' || !haystack || *haystack == '\0')
-//         return (1);
-//     while (needle[i] != '\0')
-//     {
-//         if (strchr(haystack, needle[i]) != NULL)
-//             return (0);
-//         i++;
-//     }
-//     return (1);
+//	 i = 0;
+//	 if (needle[i] == '\0' || !haystack || *haystack == '\0')
+//		 return (1);
+//	 while (needle[i] != '\0')
+//	 {
+//		 if (strchr(haystack, needle[i]) != NULL)
+//			 return (0);
+//		 i++;
+//	 }
+//	 return (1);
 // }
 
 int	check_keyname(char *arg)
@@ -81,18 +85,51 @@ t_env	*create_new_env_node(char *arg)
 	new->value[vlen] = '\0';
 	new->next = NULL;
 	return (new);
+<<<<<<< HEAD
+=======
 }
 
-int	export(char *arg, t_env *env_lst)
+int	parse_argument(char *arg, int *status)
+{
+	int	i;
+
+	if (arg[0] == '\0' || ft_strchr(arg, '=') == NULL)
+		return (1);
+	if (!(arg[0] >= 'A' && arg[0] <= 'Z') && arg[0] != '_'
+		&& !(arg[0] >= 'a' && arg[0] <= 'z'))
+	{
+		*status = 1;
+		return (1);
+	}
+	i = 0;
+	while (arg[i] != '\0' && arg[i] != '=')
+	{
+		if (!(arg[i] >= 'A' && arg[i] <= 'Z') && arg[i] != '_'
+			&& !(arg[i] >= 'a' && arg[i] <= 'z')
+			&& !(arg[i] >= '0' && arg[i] <= '9'))
+		{
+			*status = 1;
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+>>>>>>> builtin_modifying
+}
+
+int	register_new_env(char *arg, t_env *env_lst)
 {
 	t_env	*target;
 
+<<<<<<< HEAD
 	if (!arg || *arg == '\0')
 		return (0);
 	if (!ft_strchr(arg, '='))
 		return (0);
 	if (!check_keyname(arg))
 		return (0);
+=======
+>>>>>>> builtin_modifying
 	target = get_node_having_same_key(arg, env_lst);
 	if (target)
 	{
@@ -111,21 +148,49 @@ int	export(char *arg, t_env *env_lst)
 	return (0);
 }
 
+int	export(char **args, t_env *env_lst)
+{
+	int		i;
+	int		status;
+
+	status = 0;
+	i = 0;
+	while (args[i] != NULL)
+	{
+		if (parse_argument(args[i], &status) != 0)
+		{
+			i++;
+			continue ;
+		}
+		if (register_new_env(args[i], env_lst) != 0)
+		{
+			status = 1;
+			return (status);
+		}
+		i++;
+	}
+	return (status);
+}
+
 // int    main(int argc, char *argv[], char *envp[])
 // {
 // 	int	i;
 // 	t_env	*head;
 // 	t_env	*env_lst;
+<<<<<<< HEAD
 //
 // 	if (argc != 2)
 // 		return (1);
+=======
+
+>>>>>>> builtin_modifying
 // 	env_lst = create_env_lst(envp);
-// 	if (!env_lst)
+// 	if (env_lst == NULL)
 // 		return (1);
-// 	int status = export(argv[1], env_lst);
+// 	int status = export(&argv[1], env_lst);
 // 	head = env_lst;
 // 	i = 0;
-// 	while (env_lst != NULL)
+// 	while (env_lst)
 // 	{
 // 		printf("%s=%s\n", env_lst->key, env_lst->value);
 // 		env_lst = env_lst->next;

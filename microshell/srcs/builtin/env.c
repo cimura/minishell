@@ -14,9 +14,6 @@
 
 void	env(t_env *env_lst)
 {
-	int	i;
-
-	i = 0;
 	while (env_lst != NULL)
 	{
 		printf("%s=%s\n", env_lst->key, env_lst->value);
