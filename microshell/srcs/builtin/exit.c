@@ -6,13 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/21 12:55:18 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:28:31 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	_exit(char **args)
+void	ft_exit(char **args)
 {
 	int	status;
 

@@ -49,29 +49,30 @@ void	print_commands(char **commands)
 // 	assert(strcmp())
 // }
 
-// bool  is_builtin(t_token *token)
-// {
-//   return (ft_strncmp(token->command_line[0], "cd", 3) ||
-//           ft_strncmp(token->command_line[0], "echo", 5) ||
-//           ft_strncmp(token->command_line[0], "env", 4) ||
-//           ft_strncmp(token->command_line[0], "exit", 5));
-// }
+bool  is_builtin(t_token *token)
+{
+  return (ft_strncmp(token->command_line[0], "cd", 3) ||
+          ft_strncmp(token->command_line[0], "echo", 5) ||
+          ft_strncmp(token->command_line[0], "env", 4) ||
+          ft_strncmp(token->command_line[0], "exit", 5));
+}
 
-// void	builtin_command(t_token *token)
-// {
-// 	if (ft_strncmp(token->command_line[0], "cd", 3))
-// 		cd(&token->command_line[1]);
-// 	else if (ft_strncmp(token->command_line[0], "echo", 5))
-// 		echo(&token->command_line[1]);
-// 	else if (ft_strncmp(token->command_line[0], "env", 4))
-// 		env(&token->command_line[1]);
-// 	else if (ft_strncmp(token->command_line[0], "exit", 5))
-// 		exit(&token->command_line[1]);
-// 	else if (ft_strncmp(token->command_line[0], "export", 7))
-// 		export(&token->command_line[1]);
-// 	else if (ft_strncmp(token->command_line[0], "pwd", 4))
-// 		pwd(&token->command_line[1]);
-// 	else if (ft_strncmp(token->command_line[0], "unset", 6))
-// 		unset(&token->command_line[1]);
-// }
+void	builtin_command(t_token *token, t_env *env_lst)
+{
+	// exitの引数は何にすべきか
+	if (ft_strncmp(token->command_line[0], "cd", 3))
+		cd(&token->command_line[1]);
+	else if (ft_strncmp(token->command_line[0], "echo", 5))
+		echo(&token->command_line[1]);
+	else if (ft_strncmp(token->command_line[0], "env", 4))
+		env(env_lst);
+	else if (ft_strncmp(token->command_line[0], "exit", 5))
+		exit(1);
+	else if (ft_strncmp(token->command_line[0], "export", 7))
+		export(&token->command_line[1], env_lst);
+	else if (ft_strncmp(token->command_line[0], "pwd", 4))
+		pwd();
+	else if (ft_strncmp(token->command_line[0], "unset", 6))
+		unset(&token->command_line[1], env_lst);
+}
 

@@ -123,7 +123,7 @@ int	main(int argc, char **argv, char **envp)
 	if (pass_token_to_expand(env_lst, token) == 1)
 		return (1);
 	printf("\t--- Result---\n\n");
-	execute_command_line(token, envp);
+	execute_command_line(token, env_lst);
 	// Print(token);
 	env_lstclear(&head, free_env_node);
 }

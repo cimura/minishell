@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/28 16:40:33 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/06 14:26:45 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // new[1]であるから，joinしないと文字列を格納できない．
 // これは最初でmallocのbytesを決め打ちしないためにこうしてる
 
-static char	*get_value_from_key(t_env *env_lst, char *key)
+char	*get_value_from_key(t_env *env_lst, char *key)
 {
 	int	longer;
 

@@ -75,20 +75,20 @@ void  last_command(t_token *token, char **envp)
 
 // 標準出力や標準入力はdup2によって書き換わるため，構造体でその値を保存しておく
 // -> 最後とそれ以外で分ければいい
-void	execute_command_line(t_token *token, char **envp)
+void	execute_command_line(t_token *token, t_env *env_lst)
 {
 	while (token != NULL)
 	{
 		// もしbuiltinコマンドの場合はforkは必要ない
-    // if (is_builtin(token))
-    //   builtin_command(token);
-    // else
+    if (is_builtin(token))
+      builtin_command(token, env_lst);
+    else
     if (token->next == NULL)
     {
       break ;
     }
-		command(token, envp);
+		command(token, env_lst_to_array(env_lst));
 		token = token->next;
 	}
-    last_command(token, envp);
+    last_command(token, env_lst_to_array(env_lst));
 }

@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/03 14:45:42 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:27:23 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int				count_until_char(char *line, char *needle);
 
 // *** expander_helper.c ***
 char			*expand_env_variable(t_env *env_lst, char *lst_line);
+char	*get_value_from_key(t_env *env_lst, char *key);
 
 // *** expander.c ***
 char	*expander(t_env *env_lst, char *line);

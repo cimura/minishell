@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/03 14:56:17 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/06 14:28:28 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ void	unset(char **args, t_env *env_lst);
 void	echo(char **args);
 int		cd(char **args);
 void	pwd(void);
-void	_exit(char **args);
+void	ft_exit(char **args);
 
 #endif

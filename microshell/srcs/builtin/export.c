@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/10/28 17:02:14 by ttakino          ###   ########.fr       */
-=======
-/*   Updated: 2024/11/03 16:58:40 by ttakino          ###   ########.fr       */
->>>>>>> builtin_modifying
+/*   Updated: 2024/11/06 14:36:57 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +81,6 @@ t_env	*create_new_env_node(char *arg)
 	new->value[vlen] = '\0';
 	new->next = NULL;
 	return (new);
-<<<<<<< HEAD
-=======
 }
 
 int	parse_argument(char *arg, int *status)
@@ -114,22 +108,12 @@ int	parse_argument(char *arg, int *status)
 		i++;
 	}
 	return (0);
->>>>>>> builtin_modifying
 }
 
 int	register_new_env(char *arg, t_env *env_lst)
 {
 	t_env	*target;
 
-<<<<<<< HEAD
-	if (!arg || *arg == '\0')
-		return (0);
-	if (!ft_strchr(arg, '='))
-		return (0);
-	if (!check_keyname(arg))
-		return (0);
-=======
->>>>>>> builtin_modifying
 	target = get_node_having_same_key(arg, env_lst);
 	if (target)
 	{
@@ -177,13 +161,6 @@ int	export(char **args, t_env *env_lst)
 // 	int	i;
 // 	t_env	*head;
 // 	t_env	*env_lst;
-<<<<<<< HEAD
-//
-// 	if (argc != 2)
-// 		return (1);
-=======
-
->>>>>>> builtin_modifying
 // 	env_lst = create_env_lst(envp);
 // 	if (env_lst == NULL)
 // 		return (1);
