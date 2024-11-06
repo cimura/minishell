@@ -81,25 +81,25 @@ t_cmd_data  *redirect(t_token *token, char **envp)
   int i = 0;
   while (token->command_line[i] != NULL)
   {
-    if (ft_strncmp(token->command_line[i], ">", 1) == 0)
+    if (ft_strncmp(token->command_line[i], ">", 2) == 0)
     {
-      fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY, 0644);
+      fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
       dup2(fd, STDOUT_FILENO);
       close(fd);
     }
-    else if (ft_strncmp(token->command_line[i], ">>", 2) == 0)
+    else if (ft_strncmp(token->command_line[i], ">>", 3) == 0)
     {
       fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
       dup2(fd, STDOUT_FILENO);
       close(fd);
     }
-    else if (ft_strncmp(token->command_line[i], "<", 1) == 0)
+    else if (ft_strncmp(token->command_line[i], "<", 2) == 0)
     {
       fd = open(token->command_line[i + 1], O_RDONLY, 0644);
       dup2(fd, STDIN_FILENO);
       close(fd);
     }
-    else if (ft_strncmp(token->command_line[i], "<<", 2) == 0)
+    else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
     {
       //heredoc();
     }
