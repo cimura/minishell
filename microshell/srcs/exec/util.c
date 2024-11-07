@@ -62,13 +62,13 @@ bool  is_builtin(char **cmd)
 
 void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd)
 {
-  int	out = dup(STDOUT_FILENO);
-// (void)last;
+	 int	out = dup(STDOUT_FILENO);
+	(void)in_fd;
 	// if (pipe(fd) == -1)
   //   	perror("pipe");
 	// dup2(fd[0], STDIN_FILENO);
-	if (in_fd != STDIN_FILENO)
-		dup2(in_fd, STDOUT_FILENO);
+//	if (in_fd != stdin_fileno)
+//		dup2(in_fd, stdin_fileno);
 	if (out_fd != STDOUT_FILENO)
 		dup2(out_fd, STDOUT_FILENO);
 	// close(fd[0]);
@@ -93,8 +93,8 @@ void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd)
 		pwd();
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		unset(&cmd[1], env_lst);
-
 	dup2(out, STDOUT_FILENO);
+//	close(STDOUT_FILENO);
 	close(out);
 }
 

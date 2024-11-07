@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 19:26:55 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/07 18:08:15 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,25 @@ int	cd(char **args)
 		printf("cd: too many arguments\n");
 		return (1);
 	}
+	// OLDPWD
+//	free(env_lst->value);
+//	env_lst->value = getcwd(NULL, 0);
 	if (chdir(args[0]) != 0)
 	{
 		perror(args[0]);
 		return (1);
 	}
+	// PWD
+//	free(env_lst->value);
+//	env_lst->value = getcwd(NULL, 0);
 	return (0);
 }
 
-//int	main(int argc, char **argv)
+//int	main(int argc, char **argv, char **envp)
 //{
+//	t_env	*lst;
+//
+//	lst = create_env_lst(envp);
 //	int	status;
 //	(void)argc;
 //	printf("Before: ");
@@ -38,5 +47,6 @@ int	cd(char **args)
 //	status = cd(&argv[1]);
 //	printf("After: ");
 //	pwd();
+//	env(lst);
 //	return (status);
 //}
