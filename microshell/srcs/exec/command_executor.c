@@ -1,32 +1,32 @@
 #include "exec.h"
 
-void	command(t_cmd_data *until_redirection, char **envp, bool last, int fd[2])
+void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd)
 {
 	pid_t	pid;
 
-  // if (pipe(fd) == -1)
-  //   perror("pipe");
 	pid = fork();
-  if (pid == -1)
-    perror("fork");
+	if (pid == -1)
+		perror("fork");
 
 	if (pid == 0)
 	{
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		if (!last)
-			dup2(fd[1], STDOUT_FILENO);
-    // else
-    //   dup2(1, STDOUT_FILENO);
-		close(fd[1]);
+		if (in_fd != STDIN_FILENO)
+		{
+			dup2(in_fd, STDIN_FILENO);
+			close(in_fd);
+		}
+		if (out_fd != STDOUT_FILENO)
+		{
+			dup2(out_fd, STDOUT_FILENO);
+			close(out_fd);
+		}
+
 		if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 			perror("execve failed");
 		exit(EXIT_FAILURE);
 	}
-	else
+	else if (pid > 0)
 	{
-		close(fd[1]);
-		// close(fd[0]);
 		wait(NULL);
 	}
 }
@@ -37,28 +37,38 @@ void	execute_command_line(t_token *token, t_env *env_lst)
 {
 	t_cmd_data	*until_redirection;
 	char 	**env_array = env_lst_to_array(env_lst);
-	bool	last;
 	int		fd[2];
+	int		in_fd;
 
-	// fd.out_fd = STDOUT_FILENO;
-	last = false;
+	in_fd = STDIN_FILENO;
 	while (token != NULL)
 	{
+		// 最後のコマンド
 		if (token->next == NULL)
-			last = true;
+		{
+			until_redirection = redirect(token, env_array);
+			if (is_builtin(until_redirection->cmd))
+				builtin_command(until_redirection->cmd, env_lst, in_fd, STDOUT_FILENO);
+			else
+				command(until_redirection, env_array, in_fd, STDOUT_FILENO);
+			close(in_fd);
+		}
+		// それ以外
 		else
 		{
-			if (pipe(fd) == -1)
-				perror("pipe");
+			pipe(fd);
+			until_redirection = redirect(token, env_array);
+			if (is_builtin(until_redirection->cmd))
+				builtin_command(until_redirection->cmd, env_lst, in_fd, fd[1]);
+			else
+				command(until_redirection, env_array, in_fd, fd[1]);
+			close(fd[1]);
+			if (in_fd != STDIN_FILENO)
+				close(in_fd);
+			in_fd = fd[0]; // 次のコマンドの入力に設定
 		}
-		until_redirection = redirect(token, env_array);
-		if (is_builtin(until_redirection->cmd))
-			builtin_command(until_redirection->cmd, env_lst, last, fd);
-		else
-			command(until_redirection, env_array, last, fd);
 		token = token->next;
 	}
-	close(fd[0]);
 }
 
 // void  last_command(t_token *token, char **envp)

@@ -60,15 +60,17 @@ bool  is_builtin(char **cmd)
           ft_strncmp(cmd[0], "unset", 6) == 0);
 }
 
-void	builtin_command(char **cmd, t_env *env_lst, bool last, int fd[2])
+void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd)
 {
   int	out = dup(STDOUT_FILENO);
 // (void)last;
 	// if (pipe(fd) == -1)
   //   	perror("pipe");
 	// dup2(fd[0], STDIN_FILENO);
-	if (!last)
-		dup2(fd[1], STDOUT_FILENO);
+	if (in_fd != STDIN_FILENO)
+		dup2(in_fd, STDOUT_FILENO);
+	if (out_fd != STDOUT_FILENO)
+		dup2(out_fd, STDOUT_FILENO);
 	// close(fd[0]);
 	// close(fd[1]);
   // else
