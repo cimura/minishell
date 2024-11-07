@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:26:27 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/06 17:31:02 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/07 14:57:13 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,28 @@
 void	echo(char **args)
 {
 	int	is_option;
+	int	i;
 
 	is_option = 0;
-	if (!args || *args == NULL)
+	i = 0;
+	if (args == NULL || *args == NULL)
 	{
-		printf("\n");
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		return ;
 	}
-	if (strncmp(args[0], "-n\0", 3) == 0)
+	if (strncmp(args[0], "-n", 3) == 0)
 		is_option = 1;
 	if (is_option)
-		args++;
-	while (*args != NULL)
+		i++;
+	while (args[i] != NULL)
 	{
-		printf("%s", *args);
-		if (*(args + 1) != NULL)
-			printf(" ");
-		args++;
+		ft_putstr_fd(args[i], STDOUT_FILENO);
+		if (args[i + 1] != NULL)
+			ft_putstr_fd(" ", STDOUT_FILENO);
+		i++;
 	}
-	if (!is_option)
-		printf("\n");
+	if (is_option != 1)
+		ft_putstr_fd("\n", STDOUT_FILENO);
 }
 
 // int    main(int argc, char *argv[]) {
