@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/06 17:39:03 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/07 10:20:38 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,15 @@ typedef struct s_cmd_data
 
 
 // *** command_executor.c ***
-void	command(t_cmd_data *until_redirection, char **envp, bool last);
-void  last_command(t_token *token, char **envp);
+void	command(t_cmd_data *until_redirection, char **envp, bool last, int fd[2]);
+// void  last_command(t_token *token, char **envp);
 void	execute_command_line(t_token *token, t_env *env_lst);
 
 // *** util.c ***
 int count_until_redirection(char **cmdline);
 void	print_commands(char **commands);
 bool  is_builtin(char **until_redirection);
-void	builtin_command(char **cmd, t_env *env_lst, bool last);
+void	builtin_command(char **cmd, t_env *env_lst, bool last, int fd[2]);
 
 t_cmd_data  *redirect(t_token *token, char **envp);
 

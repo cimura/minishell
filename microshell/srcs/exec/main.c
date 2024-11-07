@@ -71,7 +71,7 @@ t_cmd_data  *redirect(t_token *token, char **envp)
 {
   t_cmd_data  *set = malloc(sizeof(t_cmd_data));
   t_env *env_lst = create_env_lst(envp);
-  int fd;
+  int fd = dup(STDOUT_FILENO);
   
   // $PATHからpathを得て代入
   // get_cmd関数はリダイレクトまでの配列を二次元配列にする
@@ -105,6 +105,8 @@ t_cmd_data  *redirect(t_token *token, char **envp)
     }
     i++;
   }
+  dup2(fd, STDOUT_FILENO);
+  close(fd);
   return (set);
 }
 

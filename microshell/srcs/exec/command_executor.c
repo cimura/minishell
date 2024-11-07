@@ -1,12 +1,11 @@
 #include "exec.h"
 
-void	command(t_cmd_data *until_redirection, char **envp, bool last)
+void	command(t_cmd_data *until_redirection, char **envp, bool last, int fd[2])
 {
 	pid_t	pid;
-	int	fd[2];
 
-  if (pipe(fd) == -1)
-    perror("pipe");
+  // if (pipe(fd) == -1)
+  //   perror("pipe");
 	pid = fork();
   if (pid == -1)
     perror("fork");
@@ -14,10 +13,10 @@ void	command(t_cmd_data *until_redirection, char **envp, bool last)
 	if (pid == 0)
 	{
 		close(fd[0]);
-		if (last)
-			dup2(1, STDOUT_FILENO);
-		else
+		if (!last)
 			dup2(fd[1], STDOUT_FILENO);
+    // else
+    //   dup2(1, STDOUT_FILENO);
 		close(fd[1]);
 		if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 			perror("execve failed");
@@ -25,10 +24,10 @@ void	command(t_cmd_data *until_redirection, char **envp, bool last)
 	}
 	else
 	{
-		// wait(NULL);
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
+		wait(NULL);
 	}
 }
 
@@ -37,20 +36,29 @@ void	command(t_cmd_data *until_redirection, char **envp, bool last)
 void	execute_command_line(t_token *token, t_env *env_lst)
 {
 	t_cmd_data	*until_redirection;
+  char  **env_array = env_lst_to_array(env_lst);
 	bool	last;
+  int   fd[2];
 
 	// fd.out_fd = STDOUT_FILENO;
 	last = false;
 	while (token != NULL)
 	{
 		if (token->next == NULL)
-			last = true;
-		until_redirection = redirect(token, env_lst_to_array(env_lst));
+      last = true;
+    else
+    {
+      if (pipe(fd) == -1)
+        perror("pipe");
+    }
+		until_redirection = redirect(token, env_array);
 
 		if (is_builtin(until_redirection->cmd))
-			builtin_command(until_redirection->cmd, env_lst, last);
+			builtin_command(until_redirection->cmd, env_lst, last, fd);
 		else
-			command(until_redirection, env_lst_to_array(env_lst), last);
+			command(until_redirection, env_array, last, fd);
+    // dup2(0, STDIN_FILENO);
+    // dup2(1, STDOUT_FILENO);
 		token = token->next;
 	}
 }

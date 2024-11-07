@@ -60,18 +60,21 @@ bool  is_builtin(char **cmd)
           ft_strncmp(cmd[0], "unset", 6) == 0);
 }
 
-void	builtin_command(char **cmd, t_env *env_lst, bool last)
+void	builtin_command(char **cmd, t_env *env_lst, bool last, int fd[2])
 {
-	int	fd[2];
-
-	if (pipe(fd) == -1)
-    	perror("pipe");
+  // int stash_fd = dup(STDOUT_FILENO);
+// (void)last;
+	// if (pipe(fd) == -1)
+  //   	perror("pipe");
 	close(fd[0]);
-
-	if (last)
-		dup2(1, STDOUT_FILENO);
-	else
+  // dup2(fd[0], STDIN_FILENO);
+	if (!last)
 		dup2(fd[1], STDOUT_FILENO);
+  // else
+  // {
+  //   dup2(stash_fd, STDOUT_FILENO);
+  //   close(stash_fd);
+  // }
 	close(fd[1]);
 
 	// exitの引数は何にすべきか
