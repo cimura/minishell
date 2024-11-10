@@ -15,19 +15,19 @@
 # define EXEC_H
 
 # include "../lexer/lexer.h"
-#include "../env/env_lst.h"
-#include "../expander/expander.h"
-#include "../builtin/builtin.h"
+# include "../env/env_lst.h"
+# include "../expander/expander.h"
+# include "../builtin/builtin.h"
 
-#include <stdbool.h>
-#include <fcntl.h>
-#include <sys/wait.h>
+# include <stdbool.h>
+# include <fcntl.h>
+# include <sys/wait.h>
 
-#define RESET   "\033[0m"   // リセット
-#define RED     "\033[31m"  // 赤
-#define GREEN   "\033[32m"  // 緑
-#define YELLOW  "\033[33m"  // 黄
-#define BLUE    "\033[34m"  // 青
+# define RESET   "\033[0m"   // リセット
+# define RED     "\033[31m"  // 赤
+# define GREEN   "\033[32m"  // 緑
+# define YELLOW  "\033[33m"  // 黄
+# define BLUE    "\033[34m"  // 青
 
 // typedef struct s_fd
 // {
@@ -38,25 +38,25 @@
 
 typedef struct s_cmd_data
 {
-  char  *path;
-  char  **cmd;
-} t_cmd_data;
+	char	*path;
+	char	**cmd;
+}	t_cmd_data;
 
 
 // *** command_executor.c ***
 void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd);
-// void  last_command(t_token *token, char **envp);
-void	execute_command_line(t_token *token, t_env *env_lst);
+int		execute_command_line(t_token *token, t_env *env_lst);
 
 // *** util.c ***
-int count_until_redirection(char **cmdline);
+int 	count_until_redirection(char **cmdline);
 void	print_commands(char **commands);
-bool  is_builtin(char **until_redirection);
+void	free_cmd_data(t_cmd_data *data);
+bool  	is_builtin(char **until_redirection);
 void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd);
 
-t_cmd_data  *redirect(t_token *token, char **envp);
+t_cmd_data  *redirect(t_token *token, t_env *env_lst);
 
-// env
+// *** env/env_lst.c ***
 char	**env_lst_to_array(t_env *env_lst);
 
 #endif

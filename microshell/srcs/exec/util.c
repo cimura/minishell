@@ -3,17 +3,17 @@
 // /bin/cat Makefile > out1 > out2
 int count_until_redirection(char **cmdline)
 {
-  int count = 0;
-  while (cmdline[count] != NULL)
-  {
-    if (ft_strncmp(cmdline[count], ">", 2) == 0
-      || ft_strncmp(cmdline[count], ">>", 3) == 0
-      || ft_strncmp(cmdline[count], "<", 2) == 0
-      || ft_strncmp(cmdline[count], "<<", 3) == 0)
-        return (count);
-    count++;
-  }
-  return (count);
+	int count = 0;
+	while (cmdline[count] != NULL)
+	{
+	if (ft_strncmp(cmdline[count], ">", 2) == 0
+		|| ft_strncmp(cmdline[count], ">>", 3) == 0
+		|| ft_strncmp(cmdline[count], "<", 2) == 0
+		|| ft_strncmp(cmdline[count], "<<", 3) == 0)
+		return (count);
+	count++;
+	}
+	return (count);
 }
 
 void	print_commands(char **commands)
@@ -25,6 +25,15 @@ void	print_commands(char **commands)
 	{
 		printf("%s\n", commands[i++]);
 	}
+}
+
+void	free_cmd_data(t_cmd_data *data)
+{
+	free(data->path);
+	data->path = NULL;
+	free_commands(data->cmd);
+	free(data);
+	data = NULL;
 }
 
 // static void	Print(t_token *token)
@@ -51,13 +60,13 @@ void	print_commands(char **commands)
 
 bool  is_builtin(char **cmd)
 {
-  return (ft_strncmp(cmd[0], "cd", 3) == 0 ||
-          ft_strncmp(cmd[0], "echo", 5) == 0 ||
-          ft_strncmp(cmd[0], "env", 4) == 0 ||
-          ft_strncmp(cmd[0], "exit", 5) == 0 ||
-          ft_strncmp(cmd[0], "export", 6) == 0 ||
-          ft_strncmp(cmd[0], "pwd", 4) == 0 ||
-          ft_strncmp(cmd[0], "unset", 6) == 0);
+	return (ft_strncmp(cmd[0], "cd", 3) == 0 ||
+			ft_strncmp(cmd[0], "echo", 5) == 0 ||
+			ft_strncmp(cmd[0], "env", 4) == 0 ||
+			ft_strncmp(cmd[0], "exit", 5) == 0 ||
+			ft_strncmp(cmd[0], "export", 6) == 0 ||
+			ft_strncmp(cmd[0], "pwd", 4) == 0 ||
+			ft_strncmp(cmd[0], "unset", 6) == 0);
 }
 
 void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd)

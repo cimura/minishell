@@ -7,7 +7,6 @@ void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd)
 	pid = fork();
 	if (pid == -1)
 		perror("fork");
-
 	if (pid == 0)
 	{
 		if (in_fd != STDIN_FILENO)
@@ -20,7 +19,6 @@ void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd)
 			dup2(out_fd, STDOUT_FILENO);
 			close(out_fd);
 		}
-
 		if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 			perror("execve failed");
 		exit(EXIT_FAILURE);
@@ -33,20 +31,25 @@ void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd)
 
 // 標準出力や標準入力はdup2によって書き換わるため，構造体でその値を保存しておく
 // -> 最後とそれ以外で分ければいい
-void	execute_command_line(t_token *token, t_env *env_lst)
+int	execute_command_line(t_token *token, t_env *env_lst)
 {
 	t_cmd_data	*until_redirection;
-	char 	**env_array = env_lst_to_array(env_lst);
+	char 	**env_array;
 	int		fd[2];
 	int		in_fd;
 
+	env_array = env_lst_to_array(env_lst);
+	if (env_array == NULL)
+		return (1);
 	in_fd = STDIN_FILENO;
 	while (token != NULL)
 	{
 		// 最後のコマンド
 		if (token->next == NULL)
 		{
-			until_redirection = redirect(token, env_array);
+			until_redirection = redirect(token, env_lst);
+			if (until_redirection == NULL)
+				return (free_commands(env_array), 1);
 			if (is_builtin(until_redirection->cmd))
 				builtin_command(until_redirection->cmd, env_lst, in_fd, STDOUT_FILENO);
 			else
@@ -57,7 +60,9 @@ void	execute_command_line(t_token *token, t_env *env_lst)
 		else
 		{
 			pipe(fd);
-			until_redirection = redirect(token, env_array);
+			until_redirection = redirect(token, env_lst);
+			if (until_redirection == NULL)
+				return (free_commands(env_array), 1);
 			if (is_builtin(until_redirection->cmd))
 				builtin_command(until_redirection->cmd, env_lst, in_fd, fd[1]);
 			else
@@ -67,8 +72,11 @@ void	execute_command_line(t_token *token, t_env *env_lst)
 				close(in_fd);
 			in_fd = fd[0]; // 次のコマンドの入力に設定
 		}
+		free_cmd_data(until_redirection);
 		token = token->next;
 	}
+	free_commands(env_array);
+	return (0);
 }
 
 // void  last_command(t_token *token, char **envp)
