@@ -43,10 +43,10 @@ void	execute_command_line(t_token *token, t_env *env_lst)
 	in_fd = STDIN_FILENO;
 	while (token != NULL)
 	{
+    until_redirection = redirect(token, env_array);
 		// 最後のコマンド
 		if (token->next == NULL)
 		{
-			until_redirection = redirect(token, env_array);
 			if (is_builtin(until_redirection->cmd))
 				builtin_command(until_redirection->cmd, env_lst, in_fd, STDOUT_FILENO);
 			else
@@ -57,7 +57,6 @@ void	execute_command_line(t_token *token, t_env *env_lst)
 		else
 		{
 			pipe(fd);
-			until_redirection = redirect(token, env_array);
 			if (is_builtin(until_redirection->cmd))
 				builtin_command(until_redirection->cmd, env_lst, in_fd, fd[1]);
 			else

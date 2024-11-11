@@ -1,5 +1,39 @@
 #include "exec.h"
 
+void  set_stdin(const char *tmp_file)
+{
+  int fd_tmp = open(tmp_file, O_RDONLY);
+
+  unlink(tmp_file);
+  dup2(fd_tmp, STDIN_FILENO);
+  close(fd_tmp);
+}
+
+void	here_doc(char *eof)
+{
+	char		*line;
+	int			fd_tmp;
+	const char	*tmp_file = "/tmp/.heredoc_tmp";
+
+	fd_tmp = open(tmp_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_tmp == -1)
+		perror("tmpfile");
+
+	while (1)
+	{
+    ft_putstr_fd("heredoc> ", STDIN_FILENO);
+		line = readline("");
+		if (!line || (ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0))
+    			break ;
+		write(fd_tmp, line, ft_strlen(line));
+    write(fd_tmp, "\n", 1);
+		free(line);
+	}
+	free(line);
+	close(fd_tmp);
+	set_stdin(tmp_file);
+}
+
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
 {
 	int	i;
@@ -101,7 +135,7 @@ t_cmd_data  *redirect(t_token *token, char **envp)
     }
     else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
     {
-      //heredoc();
+      here_doc(token->command_line[i + 1]);
     }
     i++;
   }
