@@ -43,6 +43,7 @@ void	execute_command_line(t_token *token, t_env *env_lst)
 	in_fd = STDIN_FILENO;
 	while (token != NULL)
 	{
+    // dup2(STDIN_FILENO, in_fd);
     until_redirection = redirect(token, env_array);
 		// 最後のコマンド
 		if (token->next == NULL)
