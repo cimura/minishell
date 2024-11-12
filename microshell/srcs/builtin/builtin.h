@@ -30,8 +30,8 @@ void	env(t_env *env_lst);
 int		export(char **args, t_env *env_lst);
 void	unset(char **args, t_env *env_lst);
 void	echo(char **args);
-int		cd(char **args);
+int		cd(char **args, t_env *env_lst);
 void	pwd(void);
-void	_exit(char **args);
+void	__exit(char **args);
 
 #endif

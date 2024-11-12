@@ -3,7 +3,8 @@ all:
 	cc -Wall -Wextra -Werror -g -lreadline main.c ../env/env_lst.c env.c export.c unset.c echo.c \
 	cd.c pwd.c exit.c ../libft/libft.a -o builtin-shell
 com-cd:
-	cc -Wall -Wextra -Werror -g cd.c pwd.c -o cd
+	$(MAKE) -C ../libft
+	cc -Wall -Wextra -Werror -g cd.c pwd.c ../env/env_lst.c ../libft/libft.a -o cd
 com-export:
 	$(MAKE) -C ../libft
 	cc -Wall -Wextra -Werror -g export.c ../env/env_lst.c ../libft/libft.a -o export

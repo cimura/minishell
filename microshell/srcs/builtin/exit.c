@@ -12,7 +12,7 @@
 
 #include "builtin.h"
 
-void	_exit(char **args)
+void	__exit(char **args)
 {
 	int	status;
 

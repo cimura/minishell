@@ -25,7 +25,7 @@ char	*ft_strchr(const char *s, int c)
 			return ((char *)&s[i]);
 		i++;
 	}
-	if (uc == '\0' || uc > 255)
+	if (uc == '\0'/* || uc > 255*/)
 		return ((char *)&s[i]);
 	return (NULL);
 }
