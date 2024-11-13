@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
+/*   Updated: 2024/11/14 00:14:03 by cimy             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "builtin.h"
 #include "env_lst.h"
 #include "exec.h"
@@ -11,17 +23,30 @@ int	main(int argc, char **argv, char **envp)
 	t_token	*token;
 	char	*line;
 
+  int pure_STDIN = dup(STDIN_FILENO);
+
 	(void)argv;
 
-	if (argc < 2)
-		return (printf("Must have 2 arguments\n"), 1);
+	if (argc > 2)
+		return (printf("No need arguments\n"), 1);
 	env_lst = create_env_lst(envp);
 	if (env_lst == NULL)
 		return (1);
 
 	while (1)
 	{
+    dup2(pure_STDIN, STDIN_FILENO);
 		line = readline("minishell> ");
+    if (line == NULL)
+    {
+      printf("exit\n");
+      break ;
+    }
+    if (ft_strlen(line) == 0)
+    {
+      free(line);
+      continue;
+    }
 		token = lexer(line);
 		if (token == NULL)
 			return (env_lstclear(&env_lst, free_env_node), 1);
@@ -38,6 +63,8 @@ int	main(int argc, char **argv, char **envp)
 			return (1);
 		}
 		token_lst_clear(&token, free_commands);
+    if (ft_strlen(line) > 0)
+			add_history(line);
 	}
 	env_lstclear(&env_lst, free_env_node);
 	return (0);

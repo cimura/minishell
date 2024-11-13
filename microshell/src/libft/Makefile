@@ -6,7 +6,7 @@
 #    By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/01 16:27:09 by sshimura          #+#    #+#              #
-#    Updated: 2024/10/31 19:47:06 by cimy             ###   ########.fr        #
+#    Updated: 2024/11/14 00:00:22 by cimy             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ fclean: clean
 
 re: fclean all
 
-bonus: $(OBJS) $(BONUS_OBJS)
+bonus: $(DIR_OBJS) $(OBJS) $(BONUS_OBJS)
 	@$(MAKE) all BONUS_FLAG=true
 
 .PHONY: all clean fclean re bonus

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 17:57:26 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:42:44by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,8 @@ int		execute_command_line(t_token *token, t_env *env_lst);
 int 	count_until_redirection(char **cmdline);
 void	print_commands(char **commands);
 void	free_cmd_data(t_cmd_data *data);
-bool  	is_builtin(char **until_redirection);
+bool  is_builtin(char **cmd);
 void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd);
-
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe);
 

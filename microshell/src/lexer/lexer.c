@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/03 15:34:06 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:52:07 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "../expander/expander.h"
+// #include "expander.h"
 
 static int	count_token_until_pipe(t_list *lst)
 {
