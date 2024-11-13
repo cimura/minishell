@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ttakino <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/13 14:22:59 by ttakino           #+#    #+#             */
+/*   Updated: 2024/11/13 14:23:10 by ttakino          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "exec.h"
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
@@ -148,9 +160,9 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_env	*env_lst;
 	t_token	*token;
-	(void)argv;
-	(void)argc;
 
+	if (argc < 2)
+		return (printf("Must have 2 arguments\n"), 1);
 	env_lst = create_env_lst(envp);
 	if (env_lst == NULL)
 		return (1);
