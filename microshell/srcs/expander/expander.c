@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/02 17:42:27 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/13 15:33:29 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,10 @@ char	*expander(t_env *env_lst, char *line)
 	t_expand_lst	*expand_lst;
 	char			*result;
 
+	if (line == NULL)
+		return (NULL);
+	if (*line == '\0')
+		return (ft_strdup("\0"));
 	expand_lst = create_quoted_lst(line);
 	if (expand_lst == NULL)
 		return (NULL);

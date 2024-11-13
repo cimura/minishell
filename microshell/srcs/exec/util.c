@@ -103,7 +103,7 @@ void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd)
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		unset(&cmd[1], env_lst);
 	dup2(out, STDOUT_FILENO);
-	close(STDOUT_FILENO);
+	// close(STDOUT_FILENO);
 	close(out);
 }
 

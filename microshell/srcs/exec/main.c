@@ -6,26 +6,26 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:22:59 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 14:59:59 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:01:25 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-void  set_stdin(const char *tmp_file)
-{
-  int fd_tmp = open(tmp_file, O_RDONLY);
+// void  set_stdin(const char *tmp_file)
+// {
+//   int fd_tmp = open(tmp_file, O_RDONLY);
 
-  unlink(tmp_file);
-  dup2(fd_tmp, STDIN_FILENO);
-  close(fd_tmp);
-}
+//   unlink(tmp_file);
+//   dup2(fd_tmp, in_fd);
+//   close(fd_tmp);
+// }
 
-void	here_doc(char *eof, t_env *env_lst)
+void	here_doc(char *eof, t_env *env_lst, int in_fd)
 {
 	char		*line;
 	int			fd_tmp;
-	const char	*tmp_file = "/tmp/.heredoc_tmp";
+	char	*tmp_file = "/tmp/.heredoc_tmp";
   char  *expanded;
 
 	fd_tmp = open(tmp_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -34,21 +34,35 @@ void	here_doc(char *eof, t_env *env_lst)
 
 	while (1)
 	{
-    // ft_putendl_fd("in heredoc", STDERR_FILENO);
-    ft_putstr_fd("heredoc> ", STDIN_FILENO);
+	// ft_putendl_fd("in heredoc", STDERR_FILENO);
+	ft_putstr_fd("heredoc> ", in_fd);
+	// dup2(in_fd, STDIN_FILENO);
 		line = readline("");
-    expanded = expander(env_lst, line);
+		// if (*lined
+	// ft_putstr_fd(line, 2);
+	// dup2(STDIN_FILENO, in_fd);
+		expanded = expander(env_lst, line);
 		if (!expanded || (ft_strncmp(expanded, eof, ft_strlen(eof) + 1) == 0))
-    			break ;
+				break ;
 		write(fd_tmp, expanded, ft_strlen(expanded));
-    write(fd_tmp, "\n", 1);
+		write(fd_tmp, "\n", 1);
+		if (*line == '\0')
+			write(in_fd, "\n", 1);
 		free(line);
-    free(expanded);
+		free(expanded);
 	}
 	free(line);
-  free(expanded);
+	free(expanded);
 	close(fd_tmp);
-	set_stdin(tmp_file);
+	// set_stdin(tmp_file);
+  int tmp = open(tmp_file, O_RDONLY);
+
+  unlink(tmp_file);
+//   int save = dup(in_fd);
+  dup2(tmp, in_fd);
+  close(tmp);
+//   dup2(save, in_fd);
+//   close(save);
 }
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
@@ -91,8 +105,6 @@ int	set_path(char *cmd, char **path, t_env *env_lst)
 			return (1);
 		return (0);
 	}
-
-
 
 	env_path = get_value_from_key(env_lst, "PATH");
 
@@ -147,11 +159,12 @@ char  **get_cmd_until_redirection(char **head_cmdline)
 }
 
 // /bin/cat Makefile > out1 > out2
-t_cmd_data  *redirect(t_token *token, t_env *env_lst)
+t_cmd_data  *redirect(t_token *token, t_env *env_lst, int in_fd, int out_fd)
 {
 	t_cmd_data	*set;
 	int			fd;
 	int			i;
+	int			save = dup(STDIN_FILENO);
 
 	set = malloc(sizeof(t_cmd_data));
 	if (set == NULL)
@@ -171,24 +184,26 @@ t_cmd_data  *redirect(t_token *token, t_env *env_lst)
 		if (ft_strncmp(token->command_line[i], ">", 2) == 0)
 		{
 			fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			dup2(fd, STDOUT_FILENO);
+			dup2(fd, out_fd);
 			close(fd);
 		}
 		else if (ft_strncmp(token->command_line[i], ">>", 3) == 0)
 		{
 			fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
-			dup2(fd, STDOUT_FILENO);
+			dup2(fd, out_fd);
 			close(fd);
 		}
 		else if (ft_strncmp(token->command_line[i], "<", 2) == 0)
 		{
 			fd = open(token->command_line[i + 1], O_RDONLY, 0644);
-			dup2(fd, STDIN_FILENO);
+			dup2(fd, in_fd);
 			close(fd);
 		}
 		else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
 		{
-			here_doc(token->command_line[i + 1], create_env_lst(envp));
+			dup2(save, in_fd);
+			// ft_putendl_fd(token->command_line[i + 1], 2);
+			here_doc(token->command_line[i + 1], env_lst, in_fd);
 		}
 		i++;
 	}

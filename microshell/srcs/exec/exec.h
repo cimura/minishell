@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/11 14:27:10 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/13 15:06:12 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	free_cmd_data(t_cmd_data *data);
 bool  	is_builtin(char **until_redirection);
 void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd);
 
-t_cmd_data  *redirect(t_token *token, t_env *env_lst);
+t_cmd_data  *redirect(t_token *token, t_env *env_lst, int in_fd, int out_fd);
 
 // *** env/env_lst.c ***
 char	**env_lst_to_array(t_env *env_lst);

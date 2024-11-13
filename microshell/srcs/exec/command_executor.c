@@ -44,12 +44,10 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 	in_fd = STDIN_FILENO;
 	while (token != NULL)
 	{
-    // dup2(STDIN_FILENO, in_fd);
-    until_redirection = redirect(token, env_array);
 		// 最後のコマンド
 		if (token->next == NULL)
 		{
-			until_redirection = redirect(token, env_lst);
+			until_redirection = redirect(token, env_lst, in_fd, STDOUT_FILENO);
 			if (until_redirection == NULL)
 				return (free_commands(env_array), 1);
 			if (is_builtin(until_redirection->cmd))
@@ -62,7 +60,7 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 		else
 		{
 			pipe(fd);
-			until_redirection = redirect(token, env_lst);
+			until_redirection = redirect(token, env_lst, in_fd, fd[1]);
 			if (until_redirection == NULL)
 				return (free_commands(env_array), 1);
 			if (is_builtin(until_redirection->cmd))
