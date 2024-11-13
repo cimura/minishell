@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:27:28 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/23 19:31:45 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/13 17:45:16 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
-# include "../libft/include/libft.h"
+# include "libft.h"
 
 typedef struct s_env
 {

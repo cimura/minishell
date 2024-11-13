@@ -69,25 +69,10 @@ bool  is_builtin(char **cmd)
 			ft_strncmp(cmd[0], "unset", 6) == 0);
 }
 
-void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd)
+void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd)
 {
-	 int	out = dup(STDOUT_FILENO);
-	(void)in_fd;
-	// if (pipe(fd) == -1)
-  //   	perror("pipe");
-	// dup2(fd[0], STDIN_FILENO);
-//	if (in_fd != stdin_fileno)
-//		dup2(in_fd, stdin_fileno);
-	if (out_fd != STDOUT_FILENO)
-		dup2(out_fd, STDOUT_FILENO);
-	// close(fd[0]);
-	// close(fd[1]);
-  // else
-  // {
-  //   dup2(stash_fd, STDOUT_FILENO);
-  //   close(stash_fd);
-  // }
-	// exitの引数は何にすべきか
+	if (fd.write_to != STDOUT_FILENO)
+		dup2(fd.write_to, STDOUT_FILENO);
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		cd(&cmd[1]);
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
@@ -102,8 +87,7 @@ void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd)
 		pwd();
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		unset(&cmd[1], env_lst);
-	dup2(out, STDOUT_FILENO);
+	dup2(fd.pure_stdout, STDOUT_FILENO);
 	// close(STDOUT_FILENO);
-	close(out);
 }
 

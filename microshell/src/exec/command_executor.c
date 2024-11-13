@@ -1,6 +1,6 @@
 #include "exec.h"
 
-void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd)
+void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 {
 	pid_t	pid;
 
@@ -9,15 +9,15 @@ void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd)
 		perror("fork");
 	if (pid == 0)
 	{
-		if (in_fd != STDIN_FILENO)
+		if (fd.read_from != STDIN_FILENO)
 		{
-			dup2(in_fd, STDIN_FILENO);
-			close(in_fd);
+			dup2(fd.read_from, STDIN_FILENO);
+			close(fd.read_from);
 		}
-		if (out_fd != STDOUT_FILENO)
+		if (fd.write_to != STDOUT_FILENO)
 		{
-			dup2(out_fd, STDOUT_FILENO);
-			close(out_fd);
+			dup2(fd.write_to, STDOUT_FILENO);
+			close(fd.write_to);
 		}
 		if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 			perror("execve failed");
@@ -29,53 +29,70 @@ void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd)
 	}
 }
 
+void	initialize_fd(t_file_descripter *fd)
+{
+	fd->pure_stdin = dup(STDIN_FILENO);
+	fd->pure_stdout = dup(STDOUT_FILENO);
+	fd->read_from = STDIN_FILENO;
+	fd->write_to = STDOUT_FILENO;
+}
+
 // 標準出力や標準入力はdup2によって書き換わるため，構造体でその値を保存しておく
 // -> 最後とそれ以外で分ければいい
 int	execute_command_line(t_token *token, t_env *env_lst)
 {
 	t_cmd_data	*until_redirection;
+	t_file_descripter	fd;
 	char 	**env_array;
-	int		fd[2];
-	int		in_fd;
+	int		pipe_fd[2];
+	// int		in_fd;
 
+	// int	pure_stdin = dup(STDIN_FILENO);
+
+	initialize_fd(&fd);
 	env_array = env_lst_to_array(env_lst);
 	if (env_array == NULL)
 		return (1);
-	in_fd = STDIN_FILENO;
+	// in_fd = STDIN_FILENO;
 	while (token != NULL)
 	{
 		// 最後のコマンド
 		if (token->next == NULL)
 		{
-			until_redirection = redirect(token, env_lst, in_fd, STDOUT_FILENO);
+			fd.write_to = STDOUT_FILENO;
+			until_redirection = redirect(token, env_lst, fd);
 			if (until_redirection == NULL)
 				return (free_commands(env_array), 1);
 			if (is_builtin(until_redirection->cmd))
-				builtin_command(until_redirection->cmd, env_lst, in_fd, STDOUT_FILENO);
+				builtin_command(until_redirection->cmd, env_lst, fd);
 			else
-				command(until_redirection, env_array, in_fd, STDOUT_FILENO);
-			close(in_fd);
+				command(until_redirection, env_array, fd);
+			close(fd.read_from);
 		}
 		// それ以外
 		else
 		{
-			pipe(fd);
-			until_redirection = redirect(token, env_lst, in_fd, fd[1]);
+			pipe(pipe_fd);
+			fd.write_to = pipe_fd[1];
+			until_redirection = redirect(token, env_lst, fd);
 			if (until_redirection == NULL)
 				return (free_commands(env_array), 1);
 			if (is_builtin(until_redirection->cmd))
-				builtin_command(until_redirection->cmd, env_lst, in_fd, fd[1]);
+				builtin_command(until_redirection->cmd, env_lst, fd);
 			else
-				command(until_redirection, env_array, in_fd, fd[1]);
-			close(fd[1]);
-			if (in_fd != STDIN_FILENO)
-				close(in_fd);
-			in_fd = fd[0]; // 次のコマンドの入力に設定
+				command(until_redirection, env_array, fd);
+			close(pipe_fd[1]);
+			if (fd.read_from != STDIN_FILENO)
+				close(fd.read_from);
+			fd.read_from = pipe_fd[0]; // 次のコマンドの入力に設定
 		}
 		free_cmd_data(until_redirection);
 		token = token->next;
 	}
 	free_commands(env_array);
+
+	close(fd.pure_stdin);
+	close(fd.pure_stdout);
 	return (0);
 }
 

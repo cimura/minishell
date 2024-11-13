@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:22:59 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 16:01:25 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:57:20 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 //   int fd_tmp = open(tmp_file, O_RDONLY);
 
 //   unlink(tmp_file);
-//   dup2(fd_tmp, in_fd);
+//   dup2(fd_tmp, fd.read_from);
 //   close(fd_tmp);
 // }
 
-void	here_doc(char *eof, t_env *env_lst, int in_fd)
+void	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 {
-	char		*line;
-	int			fd_tmp;
+	char	*line;
+	int		fd_tmp;
 	char	*tmp_file = "/tmp/.heredoc_tmp";
-  char  *expanded;
+	char	*expanded;
 
 	fd_tmp = open(tmp_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_tmp == -1)
@@ -35,19 +35,19 @@ void	here_doc(char *eof, t_env *env_lst, int in_fd)
 	while (1)
 	{
 	// ft_putendl_fd("in heredoc", STDERR_FILENO);
-	ft_putstr_fd("heredoc> ", in_fd);
-	// dup2(in_fd, STDIN_FILENO);
+	ft_putstr_fd("heredoc> ", fd.pure_stdin);
+	// dup2(fd.read_from, STDIN_FILENO);
 		line = readline("");
 		// if (*lined
 	// ft_putstr_fd(line, 2);
-	// dup2(STDIN_FILENO, in_fd);
+	// dup2(STDIN_FILENO, fd.read_from);
 		expanded = expander(env_lst, line);
 		if (!expanded || (ft_strncmp(expanded, eof, ft_strlen(eof) + 1) == 0))
 				break ;
 		write(fd_tmp, expanded, ft_strlen(expanded));
 		write(fd_tmp, "\n", 1);
 		if (*line == '\0')
-			write(in_fd, "\n", 1);
+			write(fd.pure_stdin, "\n", 1);
 		free(line);
 		free(expanded);
 	}
@@ -58,10 +58,10 @@ void	here_doc(char *eof, t_env *env_lst, int in_fd)
   int tmp = open(tmp_file, O_RDONLY);
 
   unlink(tmp_file);
-//   int save = dup(in_fd);
-  dup2(tmp, in_fd);
+//   int save = dup(fd.read_from);
+  dup2(tmp, fd.read_from);
   close(tmp);
-//   dup2(save, in_fd);
+//   dup2(save, fd.read_from);
 //   close(save);
 }
 
@@ -159,12 +159,11 @@ char  **get_cmd_until_redirection(char **head_cmdline)
 }
 
 // /bin/cat Makefile > out1 > out2
-t_cmd_data  *redirect(t_token *token, t_env *env_lst, int in_fd, int out_fd)
+t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd)
 {
 	t_cmd_data	*set;
-	int			fd;
+	int			redirect_fd;
 	int			i;
-	int			save = dup(STDIN_FILENO);
 
 	set = malloc(sizeof(t_cmd_data));
 	if (set == NULL)
@@ -183,59 +182,59 @@ t_cmd_data  *redirect(t_token *token, t_env *env_lst, int in_fd, int out_fd)
 	{
 		if (ft_strncmp(token->command_line[i], ">", 2) == 0)
 		{
-			fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			dup2(fd, out_fd);
-			close(fd);
+			redirect_fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			dup2(redirect_fd, fd.write_to);
+			close(redirect_fd);
 		}
 		else if (ft_strncmp(token->command_line[i], ">>", 3) == 0)
 		{
-			fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
-			dup2(fd, out_fd);
-			close(fd);
+			redirect_fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+			dup2(redirect_fd, fd.write_to);
+			close(redirect_fd);
 		}
 		else if (ft_strncmp(token->command_line[i], "<", 2) == 0)
 		{
-			fd = open(token->command_line[i + 1], O_RDONLY, 0644);
-			dup2(fd, in_fd);
-			close(fd);
+			redirect_fd = open(token->command_line[i + 1], O_RDONLY, 0644);
+			dup2(redirect_fd, fd.read_from);
+			close(redirect_fd);
 		}
 		else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
 		{
-			dup2(save, in_fd);
+			dup2(fd.pure_stdin, STDIN_FILENO);
 			// ft_putendl_fd(token->command_line[i + 1], 2);
-			here_doc(token->command_line[i + 1], env_lst, in_fd);
+			here_doc(token->command_line[i + 1], env_lst, fd);
 		}
 		i++;
 	}
 	return (set);
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	t_env	*env_lst;
-	t_token	*token;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_env	*env_lst;
+// 	t_token	*token;
 
-	if (argc < 2)
-		return (printf("Must have 2 arguments\n"), 1);
-	env_lst = create_env_lst(envp);
-	if (env_lst == NULL)
-		return (1);
-	token = lexer(argv[1]);
-	if (token == NULL)
-		return (env_lstclear(&env_lst, free_env_node), 1);
-	if (pass_token_to_expand(env_lst, token) != 0)
-	{
-		env_lstclear(&env_lst, free_env_node);
-		token_lst_clear(&token, free_commands);
-		return (1);
-	}
-	if (execute_command_line(token, env_lst) != 0)
-	{
-		env_lstclear(&env_lst, free_env_node);
-		token_lst_clear(&token, free_commands);
-		return (1);
-	}
-	env_lstclear(&env_lst, free_env_node);
-	token_lst_clear(&token, free_commands);
-	return (0);
-}
+// 	if (argc < 2)
+// 		return (printf("Must have 2 arguments\n"), 1);
+// 	env_lst = create_env_lst(envp);
+// 	if (env_lst == NULL)
+// 		return (1);
+// 	token = lexer(argv[1]);
+// 	if (token == NULL)
+// 		return (env_lstclear(&env_lst, free_env_node), 1);
+// 	if (pass_token_to_expand(env_lst, token) != 0)
+// 	{
+// 		env_lstclear(&env_lst, free_env_node);
+// 		token_lst_clear(&token, free_commands);
+// 		return (1);
+// 	}
+// 	if (execute_command_line(token, env_lst) != 0)
+// 	{
+// 		env_lstclear(&env_lst, free_env_node);
+// 		token_lst_clear(&token, free_commands);
+// 		return (1);
+// 	}
+// 	env_lstclear(&env_lst, free_env_node);
+// 	token_lst_clear(&token, free_commands);
+// 	return (0);
+// }

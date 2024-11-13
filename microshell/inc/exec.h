@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 15:06:12 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/13 17:57:26 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 # define EXEC_H
 
-# include "../lexer/lexer.h"
-# include "../env/env_lst.h"
-# include "../expander/expander.h"
-# include "../builtin/builtin.h"
+# include "lexer.h"
+# include "env_lst.h"
+# include "expander.h"
+# include "builtin.h"
 
 # include <stdbool.h>
 # include <fcntl.h>
@@ -42,9 +42,17 @@ typedef struct s_cmd_data
 	char	**cmd;
 }	t_cmd_data;
 
+typedef struct	s_file_descripter
+{
+	int	pure_stdin;
+	int	pure_stdout;
+	int	read_from;
+	int	write_to;
+}	t_file_descripter;
+
 
 // *** command_executor.c ***
-void	command(t_cmd_data *until_redirection, char **envp, int in_fd, int out_fd);
+void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd);
 int		execute_command_line(t_token *token, t_env *env_lst);
 
 // *** util.c ***
@@ -52,9 +60,12 @@ int 	count_until_redirection(char **cmdline);
 void	print_commands(char **commands);
 void	free_cmd_data(t_cmd_data *data);
 bool  	is_builtin(char **until_redirection);
-void	builtin_command(char **cmd, t_env *env_lst, int in_fd, int out_fd);
+void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd);
 
-t_cmd_data  *redirect(t_token *token, t_env *env_lst, int in_fd, int out_fd);
+
+int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe);
+
+t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd);
 
 // *** env/env_lst.c ***
 char	**env_lst_to_array(t_env *env_lst);

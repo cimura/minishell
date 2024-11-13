@@ -1,25 +1,34 @@
 NAME		:=	microshell
 
-LIST_SRCS	:=	main.c cd.c \
-				pwd.c get_executable_path.c \
-				error.c execute_command.c redirect.c
+# BUILTIN_DIR	:=	src/builtin/
+# ENV_DIR		:=	src/env/
+# EXEC_DIR	:=	src/exec/
+# EXPANDER_DIR	:=	src/expander/
+# LEXER_DIR	:=	src/lexer/
 
-DIR_SRCS	:=	srcs
-DIR_OBJS	:=	objs
-DIR_INC		:=	include/
+LIST_SRCS	:=	main.c \
+				$(wildcard $(BUILTIN_DIR)*.c) \
+				$(wildcard $(ENV_DIR)*.c) \
+				$(wildcard $(EXEC_DIR)*.c) \
+				$(wildcard $(EXPANDER_DIR)*.c) \
+				$(wildcard $(LEXER_DIR)*.c)
 
-SRCS		:=	$(addprefix $(DIR_SRCS)/,$(LIST_SRCS))
-OBJS		:=	$(addprefix $(DIR_OBJS)/,$(LIST_SRCS:.c=.o))
+SRC_DIRS	:=	src/builtin/ src/env/ src/lexer/ src/exec/ src/expander/ 
+OBJ_DIR	:=	obj/
+INC_DIR		:=	inc/
 
-INCS		:=	$(addprefix $(DIR_INCS)/,$(LIST_SRCS:.c=.h))
+SRCS		:=	$(wildcard $(SRC_DIRS)/*.c)
+OBJS		:=	$($(SRC_DIRS)%.c=$(OBJ_DIR)%.o)
+# INCS		:=	$(addprefix $(INC_DIR),$(LIST_SRCS:.c=.h))
 
-LIBFT_DIR	:=	srcs/libft
+LIBFT_DIR	:=	src/libft
 LIBFT		:=	$(LIBFT_DIR)/libft.a
 
 CC			:=	cc
 CFLAGS		:=	-Wall -Wextra -Werror
 #DEBUG_FLAGS	:=	-g -fsanitize=address
 LDFLAGS		:=	-lreadline
+IFLAGS		:=	-I$(LIBFT_DIR)/include -I$(INC_DIR)
 
 ERASE		:=	\033[2K\r
 PINK		:=	\033[35m
@@ -29,22 +38,22 @@ END			:=	\033[0m
 
 all: $(NAME)
 
-$(DIR_OBJS)/%.o: $(DIR_SRCS)/%.c
-	@$(CC) $(CFLAGS) -I $(DIR_INC) -c $< -o $@
+$(OBJ_DIR)%.o: $(SRCS)%.c
+	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
-$(DIR_OBJS):
-	@mkdir -p $(DIR_OBJS)
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
 
-$(NAME): $(LIBFT) $(DIR_OBJS) $(OBJS)
-	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(LDFLAGS) -I $(DIR_INC) -o $(NAME) $(OBJS) $(LIBFT)
+$(NAME): $(LIBFT) $(OBJ_DIR) $(OBJS)
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(LDFLAGS) $(IFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 	@printf "$(ERASE)$(GREEN)$@ made\n$(END)"
 
 clean:
-	@rm -rf $(DIR_OBJS)
+	@rm -rf $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 	@printf "$(PINK)remove obj dir\n$(END)"
 
