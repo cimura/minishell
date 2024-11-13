@@ -6,19 +6,19 @@ EXEC_DIR    :=  src/exec/
 EXPANDER_DIR    :=  src/expander/
 LEXER_DIR   :=  src/lexer/
 
-LIST_SRCS   :=  minishell.c \
-                $(wildcard $(BUILTIN_DIR)*.c) \
+LIST_SRCS   :=  $(wildcard $(BUILTIN_DIR)*.c) \
                 $(wildcard $(ENV_DIR)*.c) \
                 $(wildcard $(EXEC_DIR)*.c) \
                 $(wildcard $(EXPANDER_DIR)*.c) \
-                $(wildcard $(LEXER_DIR)*.c)
+                $(wildcard $(LEXER_DIR)*.c) \
+				src/minishell.c
 
 SRC_DIRS    :=  src/ src/builtin/ src/env/ src/lexer/ src/exec/ src/expander/ 
 OBJ_DIR     :=  obj/
 INC_DIR     :=  inc/
 
-SRCS        :=  $(LIST_SRCS)
-OBJS := $(addprefix $(OBJ_DIR), $(notdir $(SRCS:.c=.o)))
+SRCS        :=  $(addsuffix $(SRC_DIRS:%), $(LIST_SRCS))
+OBJS		:=	$(addprefix $(OBJ_DIR), $(notdir $(SRCS:.c=.o)))
 LIBFT_DIR   :=  src/libft
 LIBFT       :=  $(LIBFT_DIR)/libft.a
 
@@ -27,6 +27,7 @@ CFLAGS      :=  -Wall -Wextra -Werror
 #DEBUG_FLAGS    :=  -g -fsanitize=address
 LDFLAGS     :=  -lreadline
 IFLAGS      :=  -I$(LIBFT_DIR)/include -I$(INC_DIR)
+LFLAGS		:=	-L$(LIBFT_DIR) -lft
 
 ERASE		:=	\033[2K\r
 PINK		:=	\033[35m
@@ -36,19 +37,19 @@ END			:=	\033[0m
 
 all: $(NAME)
 
-$(OBJ_DIR)%.o: $(SRC_DIRS)%.c
-	@$(CC) $(CFLAGS) $(IFLAGS) $(LDFLAGS) -c $< -o $@
-	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
-
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
-$(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR)
+$(OBJS): $(LIST_SRCS)
+	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(NAME): $(LIBFT) $(OBJ_DIR) $(OBJS)
-	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(LDFLAGS) $(IFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
+	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(IFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME) $(LFLAGS)
 	@printf "$(ERASE)$(GREEN)$@ made\n$(END)"
+
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_DIR)
 
 clean:
 	@rm -rf $(OBJ_DIR)

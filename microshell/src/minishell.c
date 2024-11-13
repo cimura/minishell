@@ -1,4 +1,9 @@
-#include "micro.h"
+#include "builtin.h"
+#include "env_lst.h"
+#include "exec.h"
+#include "expander.h"
+#include "lexer.h"
+#include "libft.h"
 
 int	main(int argc, char **argv, char **envp)
 {
