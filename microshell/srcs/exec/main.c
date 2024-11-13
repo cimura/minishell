@@ -3,14 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:22:59 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 14:23:10 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/13 14:59:59 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+
+void  set_stdin(const char *tmp_file)
+{
+  int fd_tmp = open(tmp_file, O_RDONLY);
+
+  unlink(tmp_file);
+  dup2(fd_tmp, STDIN_FILENO);
+  close(fd_tmp);
+}
+
+void	here_doc(char *eof, t_env *env_lst)
+{
+	char		*line;
+	int			fd_tmp;
+	const char	*tmp_file = "/tmp/.heredoc_tmp";
+  char  *expanded;
+
+	fd_tmp = open(tmp_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_tmp == -1)
+		perror("tmpfile");
+
+	while (1)
+	{
+    // ft_putendl_fd("in heredoc", STDERR_FILENO);
+    ft_putstr_fd("heredoc> ", STDIN_FILENO);
+		line = readline("");
+    expanded = expander(env_lst, line);
+		if (!expanded || (ft_strncmp(expanded, eof, ft_strlen(eof) + 1) == 0))
+    			break ;
+		write(fd_tmp, expanded, ft_strlen(expanded));
+    write(fd_tmp, "\n", 1);
+		free(line);
+    free(expanded);
+	}
+	free(line);
+  free(expanded);
+	close(fd_tmp);
+	set_stdin(tmp_file);
+}
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
 {
@@ -149,7 +188,7 @@ t_cmd_data  *redirect(t_token *token, t_env *env_lst)
 		}
 		else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
 		{
-			//heredoc();
+			here_doc(token->command_line[i + 1], create_env_lst(envp));
 		}
 		i++;
 	}
