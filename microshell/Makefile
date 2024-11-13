@@ -1,34 +1,32 @@
-NAME		:=	microshell
+NAME        :=  microshell
 
-# BUILTIN_DIR	:=	src/builtin/
-# ENV_DIR		:=	src/env/
-# EXEC_DIR	:=	src/exec/
-# EXPANDER_DIR	:=	src/expander/
-# LEXER_DIR	:=	src/lexer/
+BUILTIN_DIR :=  src/builtin/
+ENV_DIR     :=  src/env/
+EXEC_DIR    :=  src/exec/
+EXPANDER_DIR    :=  src/expander/
+LEXER_DIR   :=  src/lexer/
 
-LIST_SRCS	:=	main.c \
-				$(wildcard $(BUILTIN_DIR)*.c) \
-				$(wildcard $(ENV_DIR)*.c) \
-				$(wildcard $(EXEC_DIR)*.c) \
-				$(wildcard $(EXPANDER_DIR)*.c) \
-				$(wildcard $(LEXER_DIR)*.c)
+LIST_SRCS   :=  minishell.c \
+                $(wildcard $(BUILTIN_DIR)*.c) \
+                $(wildcard $(ENV_DIR)*.c) \
+                $(wildcard $(EXEC_DIR)*.c) \
+                $(wildcard $(EXPANDER_DIR)*.c) \
+                $(wildcard $(LEXER_DIR)*.c)
 
-SRC_DIRS	:=	src/builtin/ src/env/ src/lexer/ src/exec/ src/expander/ 
-OBJ_DIR	:=	obj/
-INC_DIR		:=	inc/
+SRC_DIRS    :=  src/ src/builtin/ src/env/ src/lexer/ src/exec/ src/expander/ 
+OBJ_DIR     :=  obj/
+INC_DIR     :=  inc/
 
-SRCS		:=	$(wildcard $(SRC_DIRS)/*.c)
-OBJS		:=	$($(SRC_DIRS)%.c=$(OBJ_DIR)%.o)
-# INCS		:=	$(addprefix $(INC_DIR),$(LIST_SRCS:.c=.h))
+SRCS        :=  $(LIST_SRCS)
+OBJS := $(addprefix $(OBJ_DIR), $(notdir $(SRCS:.c=.o)))
+LIBFT_DIR   :=  src/libft
+LIBFT       :=  $(LIBFT_DIR)/libft.a
 
-LIBFT_DIR	:=	src/libft
-LIBFT		:=	$(LIBFT_DIR)/libft.a
-
-CC			:=	cc
-CFLAGS		:=	-Wall -Wextra -Werror
-#DEBUG_FLAGS	:=	-g -fsanitize=address
-LDFLAGS		:=	-lreadline
-IFLAGS		:=	-I$(LIBFT_DIR)/include -I$(INC_DIR)
+CC          :=  cc
+CFLAGS      :=  -Wall -Wextra -Werror
+#DEBUG_FLAGS    :=  -g -fsanitize=address
+LDFLAGS     :=  -lreadline
+IFLAGS      :=  -I$(LIBFT_DIR)/include -I$(INC_DIR)
 
 ERASE		:=	\033[2K\r
 PINK		:=	\033[35m
@@ -38,8 +36,8 @@ END			:=	\033[0m
 
 all: $(NAME)
 
-$(OBJ_DIR)%.o: $(SRCS)%.c
-	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+$(OBJ_DIR)%.o: $(SRC_DIRS)%.c
+	@$(CC) $(CFLAGS) $(IFLAGS) $(LDFLAGS) -c $< -o $@
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(OBJ_DIR):
