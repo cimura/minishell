@@ -36,7 +36,7 @@ LIBFT := $(LIBFT_DIR)/libft.a
 
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
-#DEBUG_FLAGS := -g -fsanitize=address
+DEBUG_FLAGS := -g -fsanitize=address
 LDFLAGS := -lreadline
 IFLAGS := -I$(LIBFT_DIR)/include/ -I$(INC_DIR)
 LFLAGS := -L$(LIBFT_DIR) -lft
@@ -50,7 +50,7 @@ END := \033[0m
 # ディレクトリ作成
 DIRS := $(OBJ_DIR) $(OBJ_DIR)builtin $(OBJ_DIR)env $(OBJ_DIR)exec $(OBJ_DIR)expander $(OBJ_DIR)lexer
 
-all: $(DIRS) $(NAME)
+all: Makefile $(DIRS) $(NAME)
 
 # 必要なディレクトリを作成
 $(DIRS):
@@ -59,21 +59,27 @@ $(DIRS):
 # ソースファイルからオブジェクトファイルを生成
 $(OBJ_DIR)%.o: $(BUILTIN_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(OBJ_DIR)%.o: $(ENV_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(OBJ_DIR)%.o: $(EXEC_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(OBJ_DIR)%.o: $(EXPANDER_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(OBJ_DIR)%.o: $(LEXER_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(OBJ_DIR)%.o: $(MINISHELL_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 # バイナリ生成ルール
 $(NAME): $(LIBFT) $(OBJS)
