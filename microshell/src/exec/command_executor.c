@@ -49,56 +49,76 @@ void	initialize_fd(t_file_descripter *fd)
 	fd->write_to = STDOUT_FILENO;
 }
 
+int	case_no_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_descripter *fd)
+{
+	t_cmd_data	*until_redirection;
+
+	fd->write_to = STDOUT_FILENO;
+	(void)token;
+	until_redirection = redirect(token, env_lst, *fd);
+	if (until_redirection == NULL)
+		return (1);
+
+	if (is_builtin(until_redirection->cmd))
+		builtin_command(until_redirection->cmd, env_lst, *fd);
+	else
+		command(until_redirection, env_array, *fd);
+	close(fd->read_from);
+	free_cmd_data(until_redirection);
+	return (0);
+}
+
+int	case_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_descripter *fd)
+{
+	int			pipe_fd[2];
+	t_cmd_data	*until_redirection;
+
+	if (pipe(pipe_fd) != 0)
+	{
+		perror("pipe");
+		return (1);
+	}
+	fd->write_to = pipe_fd[1];
+	until_redirection = redirect(token, env_lst, *fd);
+	if (until_redirection == NULL)
+		return (1);
+	if (is_builtin(until_redirection->cmd))
+		builtin_command(until_redirection->cmd, env_lst, *fd);
+	else
+		command(until_redirection, env_array, *fd);
+	close(pipe_fd[1]);
+	if (fd->read_from != STDIN_FILENO)
+		close(fd->read_from);
+	free_cmd_data(until_redirection);;
+	fd->read_from = pipe_fd[0]; // 次のコマンドの入力に設定
+	return (0);
+}
+
 // 標準出力や標準入力はdup2によって書き換わるため，構造体でその値を保存しておく
 // -> 最後とそれ以外で分ければいい
 int	execute_command_line(t_token *token, t_env *env_lst)
 {
-	t_cmd_data	*until_redirection;
 	t_file_descripter	fd;
 	char 	**env_array;
-	int		pipe_fd[2];
-	// int		in_fd;
-
-	// int	pure_stdin = dup(STDIN_FILENO);
 
 	initialize_fd(&fd);
 	env_array = env_lst_to_array(env_lst);
 	if (env_array == NULL)
 		return (1);
-	// in_fd = STDIN_FILENO;
 	while (token != NULL)
 	{
 		// 最後のコマンド
 		if (token->next == NULL)
 		{
-			fd.write_to = STDOUT_FILENO;
-			until_redirection = redirect(token, env_lst, fd);
-			if (until_redirection == NULL)
+			if (case_no_pipe_ahead(token, env_lst, env_array, &fd) != 0)
 				return (free_commands(env_array), 1);
-			if (is_builtin(until_redirection->cmd))
-				builtin_command(until_redirection->cmd, env_lst, fd);
-			else
-				command(until_redirection, env_array, fd);
-			close(fd.read_from);
 		}
 		// それ以外
 		else
 		{
-			pipe(pipe_fd);
-			fd.write_to = pipe_fd[1];
-			until_redirection = redirect(token, env_lst, fd);
-			if (until_redirection == NULL)
+			if (case_pipe_ahead(token, env_lst, env_array, &fd) != 0)
 				return (free_commands(env_array), 1);
-			if (is_builtin(until_redirection->cmd))
-				builtin_command(until_redirection->cmd, env_lst, fd);
-			else
-				command(until_redirection, env_array, fd);
-			close(pipe_fd[1]);
-			if (fd.read_from != STDIN_FILENO)
-				close(fd.read_from);
-			fd.read_from = pipe_fd[0]; // 次のコマンドの入力に設定
 		}
-		free_cmd_data(until_redirection);
 		token = token->next;
 	}
 	free_commands(env_array);
@@ -108,39 +128,32 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 	return (0);
 }
 
-// void  last_command(t_token *token, char **envp)
-// {
-//  	pid_t	pid;
-// 	t_fd t;
+ int	main(int argc, char **argv, char **envp)
+ {
+ 	t_env	*env_lst;
+ 	t_token	*token;
 
-//   if (pipe(t.tmp_fd) == -1)
-//     perror("pipe");
-// 	pid = fork();
-//   if (pid == -1)
-//     perror("fork");
-
-// 	if (pid == 0)
-// 	{
-//     t_cmd_data *cmd = redirect(token, envp);
-//     // printf("cmd->path: %s\n", cmd->path);
-//     // printf("cmd->cmd: %s\n", cmd->cmd[0]);
-
-//     close(t.tmp_fd[0]);
-//     dup2(STDOUT_FILENO, t.out_fd);
-//     close(t.tmp_fd[1]);
-// 		if (execve(cmd->path, cmd->cmd, envp) == -1)
-//     {
-//       // ft_putendl_fd(cmd->path, 2);
-//       perror("execve failed");
-//     }
-//     exit(EXIT_FAILURE);
-// 	}
-// 	else
-// 	{
-//     close(t.tmp_fd[1]);
-// 		dup2(t.tmp_fd[0], t.in_fd);
-// 		close(t.tmp_fd[0]);
-// 		// wait(NULL);
-//     exit(EXIT_SUCCESS);
-// 	} 
-// }
+ 	if (argc < 2)
+ 		return (printf("Must have 2 arguments\n"), 1);
+ 	env_lst = create_env_lst(envp);
+ 	if (env_lst == NULL)
+ 		return (1);
+ 	token = lexer(argv[1]);
+ 	if (token == NULL)
+ 		return (env_lstclear(&env_lst, free_env_node), 1);
+ 	if (pass_token_to_expand(env_lst, token) != 0)
+ 	{
+ 		env_lstclear(&env_lst, free_env_node);
+ 		token_lst_clear(&token, free_commands);
+ 		return (1);
+ 	}
+ 	if (execute_command_line(token, env_lst) != 0)
+ 	{
+ 		env_lstclear(&env_lst, free_env_node);
+ 		token_lst_clear(&token, free_commands);
+ 		return (1);
+ 	}
+ 	env_lstclear(&env_lst, free_env_node);
+ 	token_lst_clear(&token, free_commands);
+ 	return (0);
+ }

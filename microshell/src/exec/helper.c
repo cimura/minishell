@@ -21,7 +21,7 @@
 //   close(fd_tmp);
 // }
 
-void	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
+int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 {
 	char	*line;
 	int		fd_tmp;
@@ -30,18 +30,17 @@ void	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 
 	fd_tmp = open(tmp_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_tmp == -1)
+	{
+		perror("open");
+		return (1);
+	}
+	if (fd_tmp == -1)
 		perror("tmpfile");
 
 	while (1)
 	{
-	// ft_putendl_fd("in heredoc", STDERR_FILENO);
-	ft_putstr_fd("heredoc> ", fd.pure_stdin);
-	// dup2(fd.read_from, STDIN_FILENO);
-		line = readline("");
-		// if (*lined
-	// ft_putstr_fd(line, 2);
-	// dup2(STDIN_FILENO, fd.read_from);
-		expanded = expander(env_lst, line);
+		line = readline("> ");
+		expanded = expand_env_variable(env_lst, line);
 		if (!expanded || (ft_strncmp(expanded, eof, ft_strlen(eof) + 1) == 0))
 				break ;
 		write(fd_tmp, expanded, ft_strlen(expanded));
@@ -55,14 +54,13 @@ void	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 	free(expanded);
 	close(fd_tmp);
 	// set_stdin(tmp_file);
-  int tmp = open(tmp_file, O_RDONLY);
+	int tmp = open(tmp_file, O_RDONLY);
 
-  unlink(tmp_file);
-//   int save = dup(fd.read_from);
-  dup2(tmp, fd.read_from);
-  close(tmp);
-//   dup2(save, fd.read_from);
-//   close(save);
+
+	unlink(tmp_file);
+	dup2(tmp, fd.read_from);
+	close(tmp);
+	return (1);
 }
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
@@ -183,26 +181,45 @@ t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd)
 		if (ft_strncmp(token->command_line[i], ">", 2) == 0)
 		{
 			redirect_fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			if (redirect_fd == -1)
+			{
+				perror("open");
+				return (free(set->path), set->path = NULL, free_commands(set->cmd),
+					free(set), set = NULL, NULL);
+			}
 			dup2(redirect_fd, fd.write_to);
 			close(redirect_fd);
 		}
 		else if (ft_strncmp(token->command_line[i], ">>", 3) == 0)
 		{
 			redirect_fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+			if (redirect_fd == -1)
+			{
+				perror("open");
+				return (free(set->path), set->path = NULL, free_commands(set->cmd),
+					free(set), set = NULL, NULL);
+			}
 			dup2(redirect_fd, fd.write_to);
 			close(redirect_fd);
 		}
 		else if (ft_strncmp(token->command_line[i], "<", 2) == 0)
 		{
 			redirect_fd = open(token->command_line[i + 1], O_RDONLY, 0644);
+			if (redirect_fd == -1)
+			{
+				perror("open");
+				return (free(set->path), set->path = NULL, free_commands(set->cmd),
+					free(set), set = NULL, NULL);
+			}
 			dup2(redirect_fd, fd.read_from);
 			close(redirect_fd);
 		}
 		else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
 		{
 			dup2(fd.pure_stdin, STDIN_FILENO);
-			// ft_putendl_fd(token->command_line[i + 1], 2);
-			here_doc(token->command_line[i + 1], env_lst, fd);
+			if (here_doc(token->command_line[i + 1], env_lst, fd) != 0)
+				return (free(set->path), set->path = NULL, free_commands(set->cmd),
+					free(set), set = NULL, NULL);
 		}
 		i++;
 	}
