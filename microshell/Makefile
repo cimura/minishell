@@ -24,12 +24,16 @@ LEXER_DIR := src/lexer/
 LEXER_SRCS := lexer_helper.c lexer_util.c lexer.c
 LEXER := $(addprefix $(OBJ_DIR)lexer/, $(LEXER_SRCS:.c=.o))
 
+SIGNAL_DIR := src/signal/
+SIGNAL_SRC := signal.c
+SIGNAL := $(addprefix $(OBJ_DIR)signal/, $(SIGNAL_SRC:.c=.o))
+
 MINISHELL_DIR := src/
 MINISHELL_SRC := minishell.c
 MINISHELL := $(addprefix $(OBJ_DIR), $(MINISHELL_SRC:.c=.o))
 
 # オブジェクトファイルをまとめる
-OBJS := $(BUILTIN) $(ENV) $(EXEC) $(EXPANDER) $(LEXER) $(MINISHELL)
+OBJS := $(BUILTIN) $(ENV) $(EXEC) $(EXPANDER) $(LEXER) $(SIGNAL) $(MINISHELL)
 
 LIBFT_DIR := src/libft
 LIBFT := $(LIBFT_DIR)/libft.a
@@ -48,7 +52,7 @@ GREEN := \033[32m
 END := \033[0m
 
 # ディレクトリ作成
-DIRS := $(OBJ_DIR) $(OBJ_DIR)builtin $(OBJ_DIR)env $(OBJ_DIR)exec $(OBJ_DIR)expander $(OBJ_DIR)lexer
+DIRS := $(OBJ_DIR) $(OBJ_DIR)builtin $(OBJ_DIR)env $(OBJ_DIR)exec $(OBJ_DIR)expander $(OBJ_DIR)lexer $(OBJ_DIR)signal
 
 all: Makefile $(DIRS) $(NAME)
 
@@ -74,6 +78,10 @@ $(OBJ_DIR)%.o: $(EXPANDER_DIR)%.c
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(OBJ_DIR)%.o: $(LEXER_DIR)%.c
+	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
+
+$(OBJ_DIR)%.o: $(SIGNAL_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 

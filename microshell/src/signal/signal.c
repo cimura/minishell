@@ -10,14 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-#include <termios.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "../libft/include/libft.h"
+#include "signal_handler.h"
 
 void	sigint_handler(int signum)
 {
