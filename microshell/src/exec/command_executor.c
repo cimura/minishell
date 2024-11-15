@@ -6,12 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/15 15:27:27 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/15 18:31:57 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
-#include "util.h"
+
+extern int g_status;
 
 void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 {
@@ -22,6 +23,8 @@ void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 		perror("fork");
 	if (pid == 0)
 	{
+	signal(SIGINT, sigint_handler_child);
+	signal(SIGQUIT, sigquit_handler_child);
 		if (fd.read_from != STDIN_FILENO)
 		{
 			dup2(fd.read_from, STDIN_FILENO);
@@ -33,12 +36,19 @@ void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 			close(fd.write_to);
 		}
 		if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
-			perror("execve failed");
-		exit(EXIT_FAILURE);
+		{
+			ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		}
+		exit(127);
 	}
 	else if (pid > 0)
 	{
 		waitpid(pid, &g_status, 0);
+		if (WIFEXITED(g_status))
+			g_status = WEXITSTATUS(g_status);
+		else if (WIFSIGNALED(g_status))
+			g_status = 128 + WTERMSIG(g_status);
 	}
 }
 
@@ -90,7 +100,7 @@ int	case_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_des
 	if (fd->read_from != STDIN_FILENO)
 		close(fd->read_from);
 	free_cmd_data(until_redirection);;
-	fd->read_from = pipe_fd[0]; // 次のコマンドの入力に設定
+	fd->read_from = pipe_fd[0];
 	return (0);
 }
 
@@ -107,25 +117,22 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 		return (1);
 	while (token != NULL)
 	{
-		// 最後のコマンド
 		if (token->next == NULL)
 		{
-			if (case_no_pipe_ahead(token, env_lst, env_array, &fd) != 0)
+			if (case_no_pipe_ahead(token, env_lst, env_array, &fd) == 1)
 				return (free_commands(env_array), 1);
 		}
-		// それ以外
 		else
 		{
-			if (case_pipe_ahead(token, env_lst, env_array, &fd) != 0)
+			if (case_pipe_ahead(token, env_lst, env_array, &fd) == 1)
 				return (free_commands(env_array), 1);
 		}
 		token = token->next;
 	}
 	free_commands(env_array);
-
 	close(fd.pure_stdin);
 	close(fd.pure_stdout);
-	return (g_status);
+	return (0);
 }
 
 // int	main(int argc, char **argv, char **envp)

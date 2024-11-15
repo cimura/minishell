@@ -18,10 +18,12 @@
 # include "env_lst.h"
 # include "expander.h"
 # include "builtin.h"
+# include "signal_handler.h"
 
 # include <stdbool.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 # define RESET   "\033[0m"   // リセット
 # define RED     "\033[31m"  // 赤

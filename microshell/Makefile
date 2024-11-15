@@ -40,7 +40,7 @@ LIBFT := $(LIBFT_DIR)/libft.a
 
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
-DEBUG_FLAGS := -g -fsanitize=address
+#DEBUG_FLAGS := -g -fsanitize=address
 LDFLAGS := -lreadline
 IFLAGS := -I$(LIBFT_DIR)/include/ -I$(INC_DIR)
 LFLAGS := -L$(LIBFT_DIR) -lft
@@ -105,7 +105,8 @@ clean:
 	@printf "$(PINK)remove obj dir\n$(END)"
 
 # フルクリーンアップルール
-fclean: clean
+fclean:
+	@rm -rf $(OBJ_DIR)
 	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@printf "$(PINK)remove lib.a\n$(END)"

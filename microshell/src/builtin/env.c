@@ -3,22 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 17:32:43 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 20:05:03 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/15 17:51:24 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	env(t_env *env_lst)
+int	env(t_env *env_lst)
 {
 	while (env_lst != NULL)
 	{
-		printf("%s=%s\n", env_lst->key, env_lst->value);
+		// printf("%s=%s\n", env_lst->key, env_lst->value);
+		ft_putstr_fd(env_lst->key, STDOUT_FILENO);
+		ft_putstr_fd("=", STDOUT_FILENO);
+		ft_putstr_fd(env_lst->value, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		env_lst = env_lst->next;
 	}
+	return (0);
 }
 
 // int    main(int argc, char *argv[], char *envp[])

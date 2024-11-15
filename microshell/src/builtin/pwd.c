@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:22 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 18:59:35 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/15 17:52:46 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	pwd(void)
+int	pwd(void)
 {
 	char	*cwd;
 
@@ -20,8 +20,9 @@ void	pwd(void)
 	if (cwd == NULL)
 	{
 		perror("getcwd failed");
-		return ;
+		return (0);
 	}
-	printf("%s\n", cwd);
+	ft_putendl_fd(cwd, STDOUT_FILENO);
 	free(cwd);
+	return (0);
 }

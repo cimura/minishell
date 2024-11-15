@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:05:59 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/23 18:59:11 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/15 17:52:08 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	delete_env_from_lst(char *arg, t_env *env_lst)
+static void	delete_env_from_lst(char *arg, t_env *env_lst)
 {
 	t_env	*prev;
 
 	prev = NULL;
 	while (env_lst != NULL)
 	{
-		if (!ft_strncmp(env_lst->key, arg, ft_strlen(env_lst->key) + 1))
+		if (ft_strncmp(env_lst->key, arg, ft_strlen(env_lst->key) + 1) == 0)
 		{
 			prev->next = env_lst->next;
 			free(env_lst->key);
@@ -35,7 +35,7 @@ void	delete_env_from_lst(char *arg, t_env *env_lst)
 	}
 }
 
-void	unset(char **args, t_env *env_lst)
+int	unset(char **args, t_env *env_lst)
 {
 	int	i;
 
@@ -45,6 +45,7 @@ void	unset(char **args, t_env *env_lst)
 		delete_env_from_lst(args[i], env_lst);
 		i++;
 	}
+	return (0);
 }
 
 //t_env	*get_node_having_same_key(char *arg, t_env *env_lst)

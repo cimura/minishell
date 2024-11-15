@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/13 20:04:59 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/15 16:31:03 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#define OLD "OLDPWD"
+#define NEW "PWD"
 
 static t_env	*get_node_from_key(t_env *env_lst, char *key)
 {
@@ -22,9 +24,6 @@ static t_env	*get_node_from_key(t_env *env_lst, char *key)
 	}
 	return (NULL);
 }
-
-#define OLD "OLDPWD"
-#define NEW "PWD"
 
 static int	set_pwd(t_env *env_lst, char *flag)
 {
@@ -47,13 +46,13 @@ static int	set_pwd(t_env *env_lst, char *flag)
 
 int	cd(char **args, t_env *env_lst)
 {
-	if (args == NULL || args[1] != NULL)
+	if (args == NULL || args[0] == NULL)
+		return (0);
+	else if (args[1] != NULL)
 	{
-		printf("cd: too many arguments\n");
+		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
 		return (1);
 	}
-	else if (args[0] == NULL)
-		return (0);
 	if (set_pwd(env_lst, OLD) != 0)
 		return (1);
 	if (chdir(args[0]) != 0)

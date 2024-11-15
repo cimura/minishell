@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+         #
+#    By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/01 16:27:09 by sshimura          #+#    #+#              #
-#    Updated: 2024/11/14 00:00:22 by cimy             ###   ########.fr        #
+#    Updated: 2024/11/15 16:26:09 by sshimura         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,8 @@ clean:
 	@rm -rf $(DIR_OBJS)
 	@printf "$(PINK)[LIBFT]remove obj dir\n$(END)"
 
-fclean: clean
+fclean:
+	@rm -rf $(DIR_OBJS)
 	@rm -f $(NAME)
 	@printf "$(PINK)[LIBFT]remove lib.a\n$(END)"
 

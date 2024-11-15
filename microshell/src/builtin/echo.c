@@ -6,24 +6,24 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:26:27 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/15 14:51:25 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:51:10 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "util.h"
 
-void	echo(char **args)
+int	echo(char **args)
 {
 	int	is_option;
 	int	i;
 
 	is_option = 0;
 	i = 0;
-	if (args == NULL || *args == NULL)
+	if (args == NULL || args[0] == NULL)
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
-		return ;
+		return (0);
 	}
 	if (ft_strncmp(args[0], "-n", 3) == 0)
 		is_option = 1;
@@ -38,6 +38,7 @@ void	echo(char **args)
 	}
 	if (is_option != 1)
 		ft_putstr_fd("\n", STDOUT_FILENO);
+	return (0);
 }
 
 // int    main(int argc, char *argv[]) {

@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 17:45:20 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 17:52:30 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@
 # include "env_lst.h"
 # include "libft.h"
 
-void	env(t_env *env_lst);
-int		export(char **args, t_env *env_lst);
-void	unset(char **args, t_env *env_lst);
-void	echo(char **args);
-int		cd(char **args, t_env *env_lst);
-void	pwd(void);
-void	__exit(char **args);
+int	env(t_env *env_lst);
+int	export(char **args, t_env *env_lst);
+int	unset(char **args, t_env *env_lst);
+int	echo(char **args);
+int	cd(char **args, t_env *env_lst);
+int	pwd(void);
+int	ft_exit(char **args);
 
 #endif

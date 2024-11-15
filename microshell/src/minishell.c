@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/15 14:46:10 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 18:30:32 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,9 @@ int	main(int argc, char **argv, char **envp)
 
 	int pure_STDIN = dup(STDIN_FILENO);
 
-	ft_signal();
-
 	(void)argv;
 
+	ft_signal();
 	if (argc > 2)
 		return (printf("No need arguments\n"), 1);
 	env_lst = create_env_lst(envp);

@@ -6,12 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/15 14:53:39 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:23:52 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
-#include "util.h"
+// #include "util.h"
+extern int	g_status;
 
 static t_expand_lst	*create_quoted_node(char *line)
 {

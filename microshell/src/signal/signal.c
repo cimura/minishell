@@ -3,18 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:16:02 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 14:16:05 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/15 18:27:19 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signal_handler.h"
 
+void	sigint_handler_child(int signum)
+{
+	printf("sigchild_handler\n");
+	(void)signum;
+}
+
+void	sigquit_handler_child(int signum)
+{
+	printf("Quit\n");
+	(void)signum;
+}
+
 void	sigint_handler(int signum)
 {
-	printf("\n");
+	printf("sigint_handler\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
