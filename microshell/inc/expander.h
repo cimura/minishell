@@ -41,7 +41,7 @@ int				count_until_char(char *line, char *needle);
 
 // *** expander_helper.c ***
 char			*expand_env_variable(t_env *env_lst, char *lst_line);
-char	*get_value_from_key(t_env *env_lst, char *key);
+char			*get_value_from_key(t_env *env_lst, char *key);
 
 // *** expander.c ***
 char	*expander(t_env *env_lst, char *line);
