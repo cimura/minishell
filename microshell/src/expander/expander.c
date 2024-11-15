@@ -6,11 +6,12 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/13 15:33:29 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:53:39 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
+#include "util.h"
 
 static t_expand_lst	*create_quoted_node(char *line)
 {
@@ -119,6 +120,8 @@ char	*expander(t_env *env_lst, char *line)
 		return (NULL);
 	if (*line == '\0')
 		return (ft_strdup("\0"));
+	if (ft_strncmp(line, "$?", 3) == 0)
+		return (ft_strdup(ft_itoa(g_status)));
 	expand_lst = create_quoted_lst(line);
 	if (expand_lst == NULL)
 		return (NULL);

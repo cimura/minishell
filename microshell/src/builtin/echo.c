@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:26:27 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/15 14:46:47 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:51:25 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,7 @@ void	echo(char **args)
 		i++;
 	while (args[i] != NULL)
 	{
-		if (ft_strncmp(args[i], "$?", 3) == 0)
-			ft_putnbr_fd(g_status, STDOUT_FILENO);
-		else
-			ft_putstr_fd(args[i], STDOUT_FILENO);
+		ft_putstr_fd(args[i], STDOUT_FILENO);
 		if (args[i + 1] != NULL)
 			ft_putstr_fd(" ", STDOUT_FILENO);
 		i++;
