@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/15 18:31:57 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 19:33:45 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@ void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 {
 	pid_t	pid;
 
+	signal(SIGINT, sigint_handler_child);
+	signal(SIGQUIT, sigquit_handler_child);
+	// signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
 	{
-	signal(SIGINT, sigint_handler_child);
-	signal(SIGQUIT, sigquit_handler_child);
 		if (fd.read_from != STDIN_FILENO)
 		{
 			dup2(fd.read_from, STDIN_FILENO);
@@ -45,6 +46,7 @@ void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 	else if (pid > 0)
 	{
 		waitpid(pid, &g_status, 0);
+		ft_signal();
 		if (WIFEXITED(g_status))
 			g_status = WEXITSTATUS(g_status);
 		else if (WIFSIGNALED(g_status))

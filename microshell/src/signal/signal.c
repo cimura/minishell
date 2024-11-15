@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:16:02 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/15 18:27:19 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 19:33:08 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 void	sigint_handler_child(int signum)
 {
 	printf("sigchild_handler\n");
+	fflush(stdout);
 	(void)signum;
 }
 
 void	sigquit_handler_child(int signum)
 {
 	printf("Quit\n");
+	fflush(stdout);
 	(void)signum;
 }
 
