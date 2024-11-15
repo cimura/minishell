@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/14 00:16:03 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/15 15:23:25 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 	unlink(tmp_file);
 	dup2(tmp, fd.read_from);
 	close(tmp);
-	return (1);
+	return (0);
 }
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)

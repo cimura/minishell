@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/13 23:53:44 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/15 15:17:55 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	case_no_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_
 	t_cmd_data	*until_redirection;
 
 	fd->write_to = STDOUT_FILENO;
-	(void)token;
 	until_redirection = redirect(token, env_lst, *fd);
 	if (until_redirection == NULL)
 		return (1);
