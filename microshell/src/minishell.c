@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/15 14:17:02 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:46:10 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "lexer.h"
 #include "signal_handler.h"
 #include "libft.h"
+
+int	g_status = 0;
 
 int	main(int argc, char **argv, char **envp)
 {

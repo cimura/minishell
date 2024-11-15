@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/15 15:23:25 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/15 15:28:15 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+// #include "util.h"
 
 // void  set_stdin(const char *tmp_file)
 // {
@@ -156,6 +157,18 @@ char  **get_cmd_until_redirection(char **head_cmdline)
 	return (result);
 }
 
+int	ft_open(char *path, int oflag, int to_dup)
+{
+	int	redirect_fd;
+
+	redirect_fd = open(path, oflag, 0644);
+	if (redirect_fd == -1)
+		return (1);
+	dup2(redirect_fd, to_dup);
+	close(redirect_fd);
+	return (0);
+}
+
 // /bin/cat Makefile > out1 > out2
 t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd)
 {
@@ -180,15 +193,11 @@ t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd)
 	{
 		if (ft_strncmp(token->command_line[i], ">", 2) == 0)
 		{
-			redirect_fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			if (redirect_fd == -1)
-			{
-				perror("open");
-				return (free(set->path), set->path = NULL, free_commands(set->cmd),
-					free(set), set = NULL, NULL);
-			}
-			dup2(redirect_fd, fd.write_to);
-			close(redirect_fd);
+			// redirect_fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			// dup2(redirect_fd, fd.write_to);
+			// close(redirect_fd);
+			if (ft_open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, fd.write_to) == -1)
+				return (NULL);
 		}
 		else if (ft_strncmp(token->command_line[i], ">>", 3) == 0)
 		{

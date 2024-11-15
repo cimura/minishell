@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/15 15:17:55 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/15 15:27:27 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "util.h"
 
 void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 {
@@ -37,7 +38,7 @@ void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 	}
 	else if (pid > 0)
 	{
-		wait(NULL);
+		waitpid(pid, &g_status, 0);
 	}
 }
 
@@ -124,35 +125,35 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 
 	close(fd.pure_stdin);
 	close(fd.pure_stdout);
-	return (0);
+	return (g_status);
 }
 
- int	main(int argc, char **argv, char **envp)
- {
- 	t_env	*env_lst;
- 	t_token	*token;
-
- 	if (argc < 2)
- 		return (printf("Must have 2 arguments\n"), 1);
- 	env_lst = create_env_lst(envp);
- 	if (env_lst == NULL)
- 		return (1);
- 	token = lexer(argv[1]);
- 	if (token == NULL)
- 		return (env_lstclear(&env_lst, free_env_node), 1);
- 	if (pass_token_to_expand(env_lst, token) != 0)
- 	{
- 		env_lstclear(&env_lst, free_env_node);
- 		token_lst_clear(&token, free_commands);
- 		return (1);
- 	}
- 	if (execute_command_line(token, env_lst) != 0)
- 	{
- 		env_lstclear(&env_lst, free_env_node);
- 		token_lst_clear(&token, free_commands);
- 		return (1);
- 	}
- 	env_lstclear(&env_lst, free_env_node);
- 	token_lst_clear(&token, free_commands);
- 	return (0);
- }
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_env	*env_lst;
+// 	t_token	*token;
+//
+// 	if (argc < 2)
+// 		return (printf("Must have 2 arguments\n"), 1);
+// 	env_lst = create_env_lst(envp);
+// 	if (env_lst == NULL)
+// 		return (1);
+// 	token = lexer(argv[1]);
+// 	if (token == NULL)
+// 		return (env_lstclear(&env_lst, free_env_node), 1);
+// 	if (pass_token_to_expand(env_lst, token) != 0)
+// 	{
+// 		env_lstclear(&env_lst, free_env_node);
+// 		token_lst_clear(&token, free_commands);
+// 		return (1);
+// 	}
+// 	if (execute_command_line(token, env_lst) != 0)
+// 	{
+// 		env_lstclear(&env_lst, free_env_node);
+// 		token_lst_clear(&token, free_commands);
+// 		return (1);
+// 	}
+// 	env_lstclear(&env_lst, free_env_node);
+// 	token_lst_clear(&token, free_commands);
+// 	return (0);
+// }
