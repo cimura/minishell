@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/14 00:14:03 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/15 14:17:02 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int argc, char **argv, char **envp)
 
 	while (1)
 	{
-	dup2(pure_STDIN, STDIN_FILENO);
+		dup2(pure_STDIN, STDIN_FILENO);
 		line = readline("minishell> ");
 	if (line == NULL)
 	{
