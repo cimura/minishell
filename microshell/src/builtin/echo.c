@@ -6,11 +6,12 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:26:27 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/07 14:57:13 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:46:47 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "util.h"
 
 void	echo(char **args)
 {
@@ -24,13 +25,16 @@ void	echo(char **args)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		return ;
 	}
-	if (strncmp(args[0], "-n", 3) == 0)
+	if (ft_strncmp(args[0], "-n", 3) == 0)
 		is_option = 1;
 	if (is_option)
 		i++;
 	while (args[i] != NULL)
 	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
+		if (ft_strncmp(args[i], "$?", 3) == 0)
+			ft_putnbr_fd(g_status, STDOUT_FILENO);
+		else
+			ft_putstr_fd(args[i], STDOUT_FILENO);
 		if (args[i + 1] != NULL)
 			ft_putstr_fd(" ", STDOUT_FILENO);
 		i++;

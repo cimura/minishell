@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/13 23:53:44 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/15 14:40:51 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "util.h"
 
 void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 {
@@ -37,7 +38,7 @@ void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 	}
 	else if (pid > 0)
 	{
-		wait(NULL);
+		waitpid(pid, &g_status, 0);
 	}
 }
 
@@ -57,9 +58,6 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 	t_file_descripter	fd;
 	char 	**env_array;
 	int		pipe_fd[2];
-	// int		in_fd;
-
-	// int	pure_stdin = dup(STDIN_FILENO);
 
 	initialize_fd(&fd);
 	env_array = env_lst_to_array(env_lst);
@@ -84,7 +82,8 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 		// それ以外
 		else
 		{
-			pipe(pipe_fd);
+			if (pipe(pipe_fd) == -1)
+				perror("pipe");
 			fd.write_to = pipe_fd[1];
 			until_redirection = redirect(token, env_lst, fd);
 			if (until_redirection == NULL)
@@ -105,7 +104,7 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 
 	close(fd.pure_stdin);
 	close(fd.pure_stdout);
-	return (0);
+	return (g_status);
 }
 
 // void  last_command(t_token *token, char **envp)
