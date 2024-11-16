@@ -20,7 +20,6 @@ void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 
 	signal(SIGINT, sigint_handler_child);
 	signal(SIGQUIT, sigquit_handler_child);
-	// signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
 		perror("fork");
@@ -67,8 +66,10 @@ int	case_no_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_
 	t_cmd_data	*until_redirection;
 
 	fd->write_to = STDOUT_FILENO;
-	until_redirection = redirect(token, env_lst, *fd);
+	until_redirection = register_cmd_data(token, env_lst);
 	if (until_redirection == NULL)
+		return (1);
+	if (on_redirection(token, env_lst, *fd) == 1)
 		return (1);
 	if (is_builtin(until_redirection->cmd))
 		builtin_command(until_redirection->cmd, env_lst, *fd);
@@ -90,8 +91,10 @@ int	case_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_des
 		return (1);
 	}
 	fd->write_to = pipe_fd[1];
-	until_redirection = redirect(token, env_lst, *fd);
+	until_redirection = register_cmd_data(token, env_lst);
 	if (until_redirection == NULL)
+		return (1);
+	if (on_redirection(token, env_lst, *fd) == 1)
 		return (1);
 	if (is_builtin(until_redirection->cmd))
 		builtin_command(until_redirection->cmd, env_lst, *fd);
@@ -121,17 +124,16 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 		if (token->next == NULL)
 		{
 			if (case_no_pipe_ahead(token, env_lst, env_array, &fd) == 1)
-				return (free_commands(env_array), 1);
+				return (free_ptr_array(env_array), 1);
 		}
 		else
 		{
 			if (case_pipe_ahead(token, env_lst, env_array, &fd) == 1)
-				return (free_commands(env_array), 1);
+				return (free_ptr_array(env_array), 1);
 		}
 		token = token->next;
-
 	}
-	free_commands(env_array);
+	free_ptr_array(env_array);
 	close(fd.pure_stdin);
 	close(fd.pure_stdout);
 	return (0);
@@ -153,16 +155,16 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 // 	if (pass_token_to_expand(env_lst, token) != 0)
 // 	{
 // 		env_lstclear(&env_lst, free_env_node);
-// 		token_lst_clear(&token, free_commands);
+// 		token_lst_clear(&token, free_ptr_array);
 // 		return (1);
 // 	}
 // 	if (execute_command_line(token, env_lst) != 0)
 // 	{
 // 		env_lstclear(&env_lst, free_env_node);
-// 		token_lst_clear(&token, free_commands);
+// 		token_lst_clear(&token, free_ptr_array);
 // 		return (1);
 // 	}
 // 	env_lstclear(&env_lst, free_env_node);
-// 	token_lst_clear(&token, free_commands);
+// 	token_lst_clear(&token, free_ptr_array);
 // 	return (0);
 // }

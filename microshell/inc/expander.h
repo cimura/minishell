@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include "libft.h"
 # include "env_lst.h"
+# include "util.h"
 
 enum	e_status
 {

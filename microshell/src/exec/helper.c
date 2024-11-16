@@ -63,8 +63,7 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 		{
 			g_global = 0;
 			close(fd_tmp);
-			free(line);
-			line = NULL;
+			ft_free(line);
 			return (0);
 		}
 		if (line == NULL)
@@ -91,8 +90,8 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 		free(line);
 		free(expanded);
 	}
-	free(line);
-	free(expanded);
+	ft_free(line);
+	ft_free(expanded);
 	close(fd_tmp);
 	// set_stdin(tmp_file);
 	int tmp = open(tmp_file, O_RDONLY);
@@ -156,22 +155,20 @@ int	set_path(char *cmd, char **path, t_env *env_lst)
 	{
 		segment = ft_strjoin(com_sep[i], "/");
 		if (segment == NULL)
-			return (free_commands(com_sep), 1);
+			return (free_ptr_array(com_sep), 1);
 		candidate = ft_strjoin(segment, cmd);
 		if (candidate == NULL)
-			return (free_commands(com_sep), free(segment), segment = NULL, 1);
-		free(segment);
-		segment = NULL;
+			return (free_ptr_array(com_sep), ft_free(segment), 1);
+		ft_free(segment);
 		if (access(candidate, X_OK) == 0)
 		{
 			*path = candidate;
 			break ;
 		}
-		free(candidate);
-		candidate = NULL;
+		ft_free(candidate);
 		i++;
 	}
-	free_commands(com_sep);
+	free_ptr_array(com_sep);
 	return (0);
 }
 
@@ -210,34 +207,47 @@ int	ft_open(char *path, int oflag, int to_dup)
 }
 
 // /bin/cat Makefile > out1 > out2
-t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd)
-{
-	t_cmd_data	*set;
-	int			redirect_fd;
-	int			i;
 
-	set = malloc(sizeof(t_cmd_data));
-	if (set == NULL)
+t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
+{
+	t_cmd_data	*cmd_data;
+
+	cmd_data = malloc(sizeof(t_cmd_data));
+	if (cmd_data == NULL)
 		return (NULL);
-	
-	// $PATHからpathを得て代入
-	// get_cmd_until_redirection関数はリダイレクトまでの配列を二次元配列にする
-	 if (set_path(token->command_line[0], &(set->path), env_lst) != 0)
-	 	return (free(set), set = NULL, NULL);
-	set->cmd = get_cmd_until_redirection(&token->command_line[0]);
-	if (set->cmd == NULL)
-		return (free(set->path), set->path = NULL, free(set), set = NULL, NULL);
+
+	if (set_path(token->command_line[0], &(cmd_data->path), env_lst) != 0)
+		return (ft_free(cmd_data), NULL);
+	cmd_data->cmd = get_cmd_until_redirection(&token->command_line[0]);
+	if (cmd_data->cmd == NULL)
+	{
+		ft_free(cmd_data->path);
+		ft_free(cmd_data);
+		return (NULL);
+	}
+	return (cmd_data);
+}
+
+int  on_redirection(t_token *token, t_env *env_lst, t_file_descripter fd)
+{
+	int	redirect_fd;
+	int	i;
 
 	i = 0;
 	while (token->command_line[i] != NULL)
 	{
 		if (ft_strncmp(token->command_line[i], ">", 2) == 0)
 		{
-			// redirect_fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			// dup2(redirect_fd, fd.write_to);
-			// close(redirect_fd);
-			if (ft_open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, fd.write_to) == -1)
-				return (NULL);
+			 redirect_fd = open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			if (redirect_fd == -1)
+			{
+				perror("open");
+				return (1);
+			}
+			 dup2(redirect_fd, fd.write_to);
+			 close(redirect_fd);
+			//if (ft_open(token->command_line[i + 1], O_CREAT | O_WRONLY | O_TRUNC, fd.write_to) == -1)
+			//	return (1);
 		}
 		else if (ft_strncmp(token->command_line[i], ">>", 3) == 0)
 		{
@@ -245,8 +255,7 @@ t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd)
 			if (redirect_fd == -1)
 			{
 				perror("open");
-				return (free(set->path), set->path = NULL, free_commands(set->cmd),
-					free(set), set = NULL, NULL);
+				return (1);
 			}
 			dup2(redirect_fd, fd.write_to);
 			close(redirect_fd);
@@ -257,8 +266,7 @@ t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd)
 			if (redirect_fd == -1)
 			{
 				perror("open");
-				return (free(set->path), set->path = NULL, free_commands(set->cmd),
-					free(set), set = NULL, NULL);
+				return (1);
 			}
 			dup2(redirect_fd, fd.read_from);
 			close(redirect_fd);
@@ -267,10 +275,9 @@ t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd)
 		{
 			dup2(fd.pure_stdin, STDIN_FILENO);
 			if (here_doc(token->command_line[i + 1], env_lst, fd) != 0)
-				return (free(set->path), set->path = NULL, free_commands(set->cmd),
-					free(set), set = NULL, NULL);
+				return (1);
 		}
 		i++;
 	}
-	return (set);
+	return (0);
 }

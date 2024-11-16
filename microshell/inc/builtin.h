@@ -25,6 +25,7 @@
 # include <readline/history.h>
 # include "env_lst.h"
 # include "libft.h"
+# include "util.h"
 
 int	env(t_env *env_lst);
 int	export(char **args, t_env *env_lst);

@@ -19,6 +19,7 @@
 # include "expander.h"
 # include "builtin.h"
 # include "signal_handler.h"
+# include "util.h"
 
 # include <stdbool.h>
 # include <fcntl.h>
@@ -66,7 +67,9 @@ void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd);
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe);
 
-t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd);
+// *** helper.c ***
+t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst);
+int  		on_redirection(t_token *token, t_env *env_lst, t_file_descripter fd);
 
 // *** env/env_lst.c ***
 char	**env_lst_to_array(t_env *env_lst);
