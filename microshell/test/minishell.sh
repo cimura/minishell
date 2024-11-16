@@ -13,6 +13,15 @@ TEST_CASES=(
     "exit"
 	"cat infile/hello.txt| grep world"
 	"cat hogehoge"
+	"cat << EOF
+	line 1
+	line 2
+	EOF"
+    "echo 'Test' > /dev/null"
+	"echo hello |cat << EOF
+	line 1
+	line 2
+	EOF"
 )
 
 # 一時ファイルを定義
