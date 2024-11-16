@@ -15,12 +15,13 @@
 void	sigint_handler_child(int signum)
 {
 	printf("sigchild_handler\n");
-	fflush(stdout);
+	//fflush(stdout);
 	(void)signum;
 }
 
 void	sigquit_handler_child(int signum)
 {
+	write(1, "a\n", 2);
 	printf("Quit\n");
 	fflush(stdout);
 	(void)signum;

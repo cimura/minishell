@@ -22,6 +22,23 @@
 //   close(fd_tmp);
 // }
 
+int	g_global = 0;
+
+void	sigint_handler_in_heredoc(int signum)
+{
+	int	pipefd[2];
+
+	(void)signum;
+	g_global = 1;
+	printf("heredoc_handler\n");
+	if (pipe(pipefd) < 0)
+		perror("Pipe: ");
+	dup2(pipefd[0], STDIN_FILENO);
+	write(pipefd[1], "", 1);
+	close(pipefd[0]);
+	close(pipefd[1]);
+}
+
 int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 {
 	char	*line;
@@ -37,10 +54,33 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 	}
 	if (fd_tmp == -1)
 		perror("tmpfile");
-
 	while (1)
 	{
+		signal(SIGINT, sigint_handler_in_heredoc);
 		line = readline("> ");
+		ft_signal();
+		if (g_global == 1)
+		{
+			g_global = 0;
+			close(fd_tmp);
+			free(line);
+			line = NULL;
+			return (0);
+		}
+		if (line == NULL)
+		{
+			//この処理がないとCtrl+Dを押したときにcatがあったらループしてしまう
+			//TODO
+			int	pipefd[2];
+			close(fd_tmp);
+			if (pipe(pipefd) < 0)
+			perror("Pipe: ");
+			dup2(pipefd[0], STDIN_FILENO);
+			write(pipefd[1], "", 1);
+			close(pipefd[0]);
+			close(pipefd[1]);
+			return (0);
+		}
 		expanded = expand_env_variable(env_lst, line);
 		if (!expanded || (ft_strncmp(expanded, eof, ft_strlen(eof) + 1) == 0))
 				break ;

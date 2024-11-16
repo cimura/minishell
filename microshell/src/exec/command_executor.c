@@ -70,7 +70,6 @@ int	case_no_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_
 	until_redirection = redirect(token, env_lst, *fd);
 	if (until_redirection == NULL)
 		return (1);
-
 	if (is_builtin(until_redirection->cmd))
 		builtin_command(until_redirection->cmd, env_lst, *fd);
 	else
@@ -130,6 +129,7 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 				return (free_commands(env_array), 1);
 		}
 		token = token->next;
+
 	}
 	free_commands(env_array);
 	close(fd.pure_stdin);
