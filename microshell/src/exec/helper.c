@@ -11,16 +11,6 @@
 /* ************************************************************************** */
 
 #include "exec.h"
-// #include "util.h"
-
-// void  set_stdin(const char *tmp_file)
-// {
-//   int fd_tmp = open(tmp_file, O_RDONLY);
-
-//   unlink(tmp_file);
-//   dup2(fd_tmp, fd.read_from);
-//   close(fd_tmp);
-// }
 
 int	g_global = 0;
 
@@ -30,9 +20,9 @@ void	sigint_handler_in_heredoc(int signum)
 
 	(void)signum;
 	g_global = 1;
-	printf("heredoc_handler\n");
+	//printf("heredoc_handler\n");
 	if (pipe(pipefd) < 0)
-		perror("Pipe: ");
+		perror("pipe: ");
 	dup2(pipefd[0], STDIN_FILENO);
 	write(pipefd[1], "", 1);
 	close(pipefd[0]);
@@ -46,7 +36,7 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 	char	*tmp_file = "/tmp/.heredoc_tmp";
 	char	*expanded;
 
-	fd_tmp = open(tmp_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd_tmp = open(tmp_file, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd_tmp == -1)
 	{
 		perror("open");
@@ -67,39 +57,27 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 			return (0);
 		}
 		if (line == NULL)
-		{
-			//この処理がないとCtrl+Dを押したときにcatがあったらループしてしまう
-			//TODO
-			int	pipefd[2];
-			close(fd_tmp);
-			if (pipe(pipefd) < 0)
-			perror("Pipe: ");
-			dup2(pipefd[0], STDIN_FILENO);
-			write(pipefd[1], "", 1);
-			close(pipefd[0]);
-			close(pipefd[1]);
-			return (0);
-		}
+			break ;
 		expanded = expand_env_variable(env_lst, line);
+		ft_free(line);
 		if (!expanded || (ft_strncmp(expanded, eof, ft_strlen(eof) + 1) == 0))
-				break ;
+		{
+			ft_free(expanded);
+			break ;
+		}
 		write(fd_tmp, expanded, ft_strlen(expanded));
 		write(fd_tmp, "\n", 1);
-		// if (*line == '\0')
-		// 	write(fd.pure_stdin, "\n", 1);
-		free(line);
-		free(expanded);
+		ft_free(expanded);
 	}
-	ft_free(line);
-	ft_free(expanded);
 	close(fd_tmp);
-	// set_stdin(tmp_file);
-	int tmp = open(tmp_file, O_RDONLY);
-
-
-	unlink(tmp_file);
-	dup2(tmp, fd.read_from);
-	close(tmp);
+	fd_tmp = open(tmp_file, O_RDONLY);
+	if (fd_tmp == -1)
+	{
+		perror("open");
+		return (1);
+	}
+	dup2(fd_tmp, fd.read_from);
+	close(fd_tmp);
 	return (0);
 }
 
@@ -207,7 +185,6 @@ int	ft_open(char *path, int oflag, int to_dup)
 }
 
 // /bin/cat Makefile > out1 > out2
-
 t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
 {
 	t_cmd_data	*cmd_data;

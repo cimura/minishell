@@ -76,6 +76,7 @@ int	case_no_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_
 	else
 		command(until_redirection, env_array, *fd);
 	close(fd->read_from);
+	close(fd->write_to);
 	free_cmd_data(until_redirection);
 	return (0);
 }
@@ -134,6 +135,8 @@ int	execute_command_line(t_token *token, t_env *env_lst)
 		token = token->next;
 	}
 	free_ptr_array(env_array);
+	dup2(fd.pure_stdin, STDIN_FILENO);
+	dup2(fd.pure_stdout, STDOUT_FILENO);
 	close(fd.pure_stdin);
 	close(fd.pure_stdout);
 	return (0);
