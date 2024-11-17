@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/15 17:34:00 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/17 15:02:04 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,13 +121,10 @@ int	set_path(char *cmd, char **path, t_env *env_lst)
 			return (1);
 		return (0);
 	}
-
 	env_path = get_value_from_key(env_lst, "PATH");
-
 	com_sep = ft_split(env_path, ':');
 	if (com_sep == NULL)
 		return (1);
-	
 	i = 0;
 	while (com_sep[i])
 	{

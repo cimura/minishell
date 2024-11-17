@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:16:02 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/15 19:33:08 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/17 15:05:16 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ void	sigint_handler_child(int signum)
 
 void	sigquit_handler_child(int signum)
 {
-	write(1, "a\n", 2);
 	printf("Quit\n");
-	fflush(stdout);
 	(void)signum;
 }
 
