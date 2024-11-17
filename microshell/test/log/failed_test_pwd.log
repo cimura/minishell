@@ -1,0 +1,11 @@
+===  Test: pwd ===
+  Bash output:
+/home/ttakino/GitHub/minishell/microshell/test
+
+=================================================
+  Minishell output:
+minishell> pwd
+/home/ttakino/GitHub/minishell/microshell/test
+minishell> exit
+
+  Exit codes: Bash=0, Minishell=0

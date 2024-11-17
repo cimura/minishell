@@ -1,0 +1,11 @@
+===  Test: echo Hello, World! ===
+  Bash output:
+Hello, World!
+
+=================================================
+  Minishell output:
+minishell> echo Hello, World!
+Hello, World!
+minishell> exit
+
+  Exit codes: Bash=0, Minishell=0

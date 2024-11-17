@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include "libft.h"
+# include "util.h"
 
 typedef struct s_env
 {

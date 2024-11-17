@@ -6,13 +6,11 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/15 16:23:52 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/17 17:21:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
-// #include "util.h"
-extern int	g_status;
 
 static t_expand_lst	*create_quoted_node(char *line)
 {
@@ -68,7 +66,8 @@ static t_expand_lst	*create_quoted_lst(char *line)
 	return (head);
 }
 
-static int	handle_doller_expand(t_env *env_lst, t_expand_lst *expand_lst)
+static int	handle_doller_expand(t_env *env_lst, t_expand_lst *expand_lst,
+	int end_status)
 {
 	char	*old;
 
@@ -77,7 +76,7 @@ static int	handle_doller_expand(t_env *env_lst, t_expand_lst *expand_lst)
 		if (expand_lst->status != SINGLE)
 		{
 			old = expand_lst->str;
-			expand_lst->str = expand_env_variable(env_lst, expand_lst->str);
+			expand_lst->str = expand_env_variable(env_lst, expand_lst->str, end_status);
 			if (expand_lst->str == NULL)
 				return (free(old), old = NULL, 1);
 			free(old);
@@ -112,7 +111,7 @@ static char	*join_lst(t_expand_lst *expand_lst)
 }
 
 // この関数を呼べば展開されて返ってくる
-char	*expander(t_env *env_lst, char *line)
+char	*expander(t_env *env_lst, char *line, int end_status)
 {
 	t_expand_lst	*expand_lst;
 	char			*result;
@@ -121,12 +120,12 @@ char	*expander(t_env *env_lst, char *line)
 		return (NULL);
 	if (*line == '\0')
 		return (ft_strdup("\0"));
-	if (ft_strncmp(line, "$?", 3) == 0)
-		return (ft_strdup(ft_itoa(g_status)));
+//	if (ft_strncmp(line, "$?", 3) == 0)
+//		return (ft_strdup(ft_itoa(g_status)));
 	expand_lst = create_quoted_lst(line);
 	if (expand_lst == NULL)
 		return (NULL);
-	if (handle_doller_expand(env_lst, expand_lst) == 1)
+	if (handle_doller_expand(env_lst, expand_lst, end_status) == 1)
 	{
 		expand_lstclear(&expand_lst);
 		return (NULL);

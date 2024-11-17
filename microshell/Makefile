@@ -29,7 +29,7 @@ SIGNAL_SRC := signal.c
 SIGNAL := $(addprefix $(OBJ_DIR)signal/, $(SIGNAL_SRC:.c=.o))
 
 MINISHELL_DIR := src/
-MINISHELL_SRC := minishell.c
+MINISHELL_SRC := minishell.c utils.c
 MINISHELL := $(addprefix $(OBJ_DIR), $(MINISHELL_SRC:.c=.o))
 
 # オブジェクトファイルをまとめる

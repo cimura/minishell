@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 23:42:44by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/17 18:34:39 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "expander.h"
 # include "builtin.h"
 # include "signal_handler.h"
+# include "util.h"
 
 # include <stdbool.h>
 # include <fcntl.h>
@@ -54,19 +55,21 @@ typedef struct	s_file_descripter
 
 
 // *** command_executor.c ***
-void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd);
-int		execute_command_line(t_token *token, t_env *env_lst);
+int		command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd);
+int		execute_command_line(t_token *token, t_env *env_lst, int *end_status);
 
 // *** util.c ***
 int 	count_until_redirection(char **cmdline);
 void	print_commands(char **commands);
 void	free_cmd_data(t_cmd_data *data);
 bool  is_builtin(char **cmd);
-void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd);
+void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd, int *end_status);
 
-int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe);
+int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status);
 
-t_cmd_data  *redirect(t_token *token, t_env *env_lst, t_file_descripter fd);
+// *** helper.c ***
+t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst);
+int  		on_redirection(t_token *token, t_env *env_lst, t_file_descripter fd, int end_status);
 
 // *** env/env_lst.c ***
 char	**env_lst_to_array(t_env *env_lst);

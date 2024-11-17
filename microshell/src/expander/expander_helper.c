@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/17 15:16:25 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/17 18:53:29 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static int	count_key_size(char *line_ptr)
 	int	size;
 
 	size = 0;
+	if (line_ptr[0] == '?')
+		return (1);
 	if (!(line_ptr[0] >= 'A' && line_ptr[0] <= 'Z') && line_ptr[0] != '_'
 		&& !(line_ptr[0] >= 'a' && line_ptr[0] <= 'z'))
 		return (size);
@@ -52,7 +54,7 @@ static int	count_key_size(char *line_ptr)
 	return (size);
 }
 
-static char	*env_query(t_env *env_lst, char *new, char *line_ptr)
+static char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status)
 {
 	char	*to_expand;
 	char	*env_value;
@@ -63,7 +65,9 @@ static char	*env_query(t_env *env_lst, char *new, char *line_ptr)
 	to_expand = ft_strndup(line_ptr, count_key_size(line_ptr));
 	if (to_expand == NULL)
 		return (free(new), new = NULL, NULL);
-	if (ft_strlen(to_expand) == 0)
+	if  (to_expand[0] == '?')
+		env_value = ft_strdup(ft_itoa(end_status));	
+	else if (ft_strlen(to_expand) == 0)
 		env_value = "$";
 	else
 		env_value = get_value_from_key(env_lst, to_expand);
@@ -95,7 +99,7 @@ static char	*non_expandble_str(char *new, char *line_ptr)
 	return (new);
 }
 
-char	*expand_env_variable(t_env *env_lst, char *lst_line)
+char	*expand_env_variable(t_env *env_lst, char *lst_line, int end_status)
 {
 	int		i;
 	char	*new;
@@ -108,7 +112,7 @@ char	*expand_env_variable(t_env *env_lst, char *lst_line)
 		if (lst_line[i] == '$')
 		{
 			i++;
-			new = env_query(env_lst, new, &lst_line[i]);
+			new = env_query(env_lst, new, &lst_line[i], end_status);
 			if (new == NULL)
 				return (NULL);
 			i += count_key_size(&lst_line[i]);

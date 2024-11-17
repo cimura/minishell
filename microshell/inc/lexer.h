@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include "libft.h"
+# include "util.h"
 
 typedef struct s_token
 {

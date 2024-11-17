@@ -15,4 +15,10 @@
 
 // extern int	g_status;
 
+void	ft_free(void *ptr);
+void	free_ptr_array(char **ptr);
+
+//sDebug
+void	print_char_array(char **array);
+
 #endif
