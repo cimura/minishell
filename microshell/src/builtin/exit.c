@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/17 18:31:18 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/17 18:49:45 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ int	ft_exit(char **args, int *status)
 	}
 	else
 		*status = ft_atoi(args[0]);
-	return (0);
+	return (*status);
 }
