@@ -1,9 +1,0 @@
-===  Test: echo 'Test' > /dev/null ===
-  Bash output:
-
-=================================================
-  Minishell output:
-minishell> echo 'Test' > /dev/null
-minishell> exit
-
-  Exit codes: Bash=0, Minishell=0

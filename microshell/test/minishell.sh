@@ -5,23 +5,39 @@ MINISHELL="../microshell"
 
 # テストケースを定義（コマンドリスト）
 TEST_CASES=(
+	"cd PATH"
+	"cd PATH1 PATH2"
+	"cd .."
+	"cd /tmp .."
+	"cd /tmp | pwd"
     "echo Hello, World!"
-    "ls -l | grep -v 'tmp'"
+    "echo 'Test' > /dev/null"
+	"echo hello |cat << EOF"
+	"echo hello > infile/cannot_write"	
     "pwd"
+	"pwd hi"
     "env"
-    "cat /dev/null"
+	"env hi"
+	"export"
+	"export HOGE=PIYO
+	env"
     "exit"
+	"exit 5"
+	"exit 1000"
+	"ls | exit 8"
+	"exit 10 | ls"
+    "ls -l | grep -v 'tmp'"
+    "cat /dev/null"
 	"cat infile/hello.txt| grep world"
 	"cat hogehoge"
 	"cat << EOF
 	line 1
 	line 2
 	EOF"
-    "echo 'Test' > /dev/null"
-	"echo hello |cat << EOF
-	line 1
-	line 2
-	EOF"
+	"hogehoge"
+	"cat infile/cannot_read"
+	"hoge '"
+	"hoge \""
 )
 
 # 一時ファイルを定義
@@ -44,6 +60,8 @@ LOG_DIR="log"
 rm -rf "$LOG_DIR"
 mkdir -p "$LOG_DIR"  # ディレクトリが存在しなければ作成
 
+chmod -r infile/cannot_read
+
 echo -e "${CYAN}Starting tests...${NC}"
 echo "==================="
 
@@ -57,7 +75,7 @@ for CMD in "${TEST_CASES[@]}"; do
 
     # Minishell用の入力スクリプトを作成
     echo "$CMD" > "$MINISHELL_INPUT"
-    echo "exit" >> "$MINISHELL_INPUT"  # Minishellを終了させるためのexitコマンド
+    #echo "exit" >> "$MINISHELL_INPUT"  # Minishellを終了させるためのexitコマンド
 
     # Minishellで実行
     $MINISHELL < "$MINISHELL_INPUT" > "$MINISHELL_OUTPUT" 2>&1
@@ -71,7 +89,7 @@ for CMD in "${TEST_CASES[@]}"; do
         echo -e "${RED}FAIL${NC}"
 
         # ログファイル名を生成（コマンド名を整形して使用）
-        LOG_FILE="$LOG_DIR/failed_test_$(echo "$CMD" | sed 's/ /_/g' | sed 's/[^a-zA-Z0-9_]/_/g').log"
+        LOG_FILE="$LOG_DIR/$(echo "$CMD" | sed 's/ /_/g' | sed 's/[^a-zA-Z0-9_]/_/g').log"
         {
             echo "===  Test: $CMD ==="
             echo "  Bash output:"

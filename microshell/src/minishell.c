@@ -44,7 +44,7 @@ int	main(int argc, char **argv, char **envp)
 		line = readline("minishell> ");
 	if (line == NULL)
 	{
-	  printf("exit\n");
+//	  printf("exit\n");
 	  break ;
 	}
 	if (ft_strlen(line) == 0)

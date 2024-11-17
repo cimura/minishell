@@ -1,9 +1,0 @@
-===  Test: cat /dev/null ===
-  Bash output:
-
-=================================================
-  Minishell output:
-minishell> cat /dev/null
-minishell> exit
-
-  Exit codes: Bash=0, Minishell=0
