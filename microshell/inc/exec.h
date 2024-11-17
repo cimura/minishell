@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 23:42:44by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/17 15:30:33 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct	s_file_descripter
 
 
 // *** command_executor.c ***
-void	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd);
+int		command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd);
 int		execute_command_line(t_token *token, t_env *env_lst);
 
 // *** util.c ***
@@ -63,7 +63,7 @@ int 	count_until_redirection(char **cmdline);
 void	print_commands(char **commands);
 void	free_cmd_data(t_cmd_data *data);
 bool  is_builtin(char **cmd);
-void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd);
+int		builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd);
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe);
 

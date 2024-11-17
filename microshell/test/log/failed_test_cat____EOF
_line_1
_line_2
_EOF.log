@@ -1,0 +1,21 @@
+===  Test: cat << EOF
+	line 1
+	line 2
+	EOF ===
+  Bash output:
+bash: line 4: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')
+	line 1
+	line 2
+	EOF
+
+=================================================
+  Minishell output:
+minishell> cat << EOF
+> line 1
+> line 2
+> EOF
+line 1
+line 2
+minishell> exit
+
+  Exit codes: Bash=0, Minishell=0

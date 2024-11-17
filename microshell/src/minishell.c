@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/15 18:30:32 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/17 15:24:15 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*env_lst;
 	t_token	*token;
 	char	*line;
+	int		status;
 
 	int pure_STDIN = dup(STDIN_FILENO);
 
@@ -60,8 +61,10 @@ int	main(int argc, char **argv, char **envp)
 			token_lst_clear(&token, free_commands);
 			return (1);
 		}
-		if (execute_command_line(token, env_lst) != 0)
+		status = execute_command_line(token, env_lst);
+		if (status == -1)
 		{
+			// system error
 			env_lstclear(&env_lst, free_env_node);
 			token_lst_clear(&token, free_commands);
 			return (1);
@@ -71,7 +74,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(line);
 	}
 	env_lstclear(&env_lst, free_env_node);
-	return (0);
+	return (status);
 }
 
 
