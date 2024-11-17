@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/17 18:53:29 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/17 19:01:17 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ static char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status
 	char	*env_value;
 	char	*tmp;
 
-	if (ft_strncmp(line_ptr, "$?", 3) == 0)
-		return (ft_strdup(ft_itoa(g_status)));
 	to_expand = ft_strndup(line_ptr, count_key_size(line_ptr));
 	if (to_expand == NULL)
 		return (free(new), new = NULL, NULL);
