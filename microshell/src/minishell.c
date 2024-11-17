@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/17 15:24:15 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/17 18:44:33 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*env_lst;
 	t_token	*token;
 	char	*line;
-	int		status;
+	int		status = 0;
 
 	int pure_STDIN = dup(STDIN_FILENO);
 
@@ -55,14 +55,26 @@ int	main(int argc, char **argv, char **envp)
 		token = lexer(line);
 		if (token == NULL)
 			return (env_lstclear(&env_lst, free_env_node), 1);
-		if (pass_token_to_expand(env_lst, token) != 0)
+		if (pass_token_to_expand(env_lst, token, status) != 0)
 		{
 			env_lstclear(&env_lst, free_env_node);
 			token_lst_clear(&token, free_commands);
 			return (1);
 		}
-		status = execute_command_line(token, env_lst);
-		if (status == -1)
+		if (ft_strncmp(token->command_line[0], "exit", 5 ) == 0 && token->next == NULL)
+		{
+			if (ft_exit(&token->command_line[1], &status) == 1)
+			{
+				token_lst_clear(&token, free_commands);
+				continue ;
+			}
+			else
+			{
+				token_lst_clear(&token, free_commands);
+				break ;
+			}
+		}
+		if (execute_command_line(token, env_lst, &status) == -1)
 		{
 			// system error
 			env_lstclear(&env_lst, free_env_node);

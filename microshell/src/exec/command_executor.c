@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/17 15:30:34 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/17 18:34:24 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd)
 	pid_t	pid;
 	int		status;
 
+	status = 0;
 	signal(SIGINT, sigint_handler_child);
 	signal(SIGQUIT, sigquit_handler_child);
 	pid = fork();
@@ -63,85 +64,90 @@ void	initialize_fd(t_file_descripter *fd)
 	fd->write_to = STDOUT_FILENO;
 }
 
-int	case_no_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_descripter *fd)
+int	case_no_pipe_ahead(t_token *token, t_env *env_lst, t_file_descripter *fd,
+	int *end_status)
 {
 	t_cmd_data	*until_redirection;
-	int			status;
+	char		**env_array;
 
+	env_array = env_lst_to_array(env_lst);
+	if (env_array == NULL)
+		return (-1);
 	fd->write_to = STDOUT_FILENO;
 	until_redirection = register_cmd_data(token, env_lst);
 	if (until_redirection == NULL)
 		return (-1);
-	if (on_redirection(token, env_lst, *fd) == 1)
+	if (on_redirection(token, env_lst, *fd, *end_status) == 1)
 		return (-1);
 	if (is_builtin(until_redirection->cmd))
-		status = builtin_command(until_redirection->cmd, env_lst, *fd);
+		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
 	else
-		status = command(until_redirection, env_array, *fd);
+		*end_status = command(until_redirection, env_array, *fd);
 	close(fd->read_from);
 	close(fd->write_to);
 	free_cmd_data(until_redirection);
-	return (status);
+	free_ptr_array(env_array);
+	return (0);
 }
 
-int	case_pipe_ahead(t_token *token, t_env *env_lst, char **env_array, t_file_descripter *fd)
+int	case_pipe_ahead(t_token *token, t_env *env_lst, t_file_descripter *fd,
+	int *end_status)
 {
 	int			pipe_fd[2];
 	t_cmd_data	*until_redirection;
-	int			status;
+	char		**env_array;
 
+	env_array = env_lst_to_array(env_lst);
+	if (env_array == NULL)
+		return (-1);
 	if (pipe(pipe_fd) != 0)
 	{
 		perror("pipe");
-		return (1);
+		return (-1);
 	}
 	fd->write_to = pipe_fd[1];
 	until_redirection = register_cmd_data(token, env_lst);
 	if (until_redirection == NULL)
 		return (-1);
-	if (on_redirection(token, env_lst, *fd) == 1)
+	if (on_redirection(token, env_lst, *fd, *end_status) == 1)
 		return (-1);
 	if (is_builtin(until_redirection->cmd))
-		status = builtin_command(until_redirection->cmd, env_lst, *fd);
+		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
 	else
-		status = command(until_redirection, env_array, *fd);
+		*end_status = command(until_redirection, env_array, *fd);
 	close(pipe_fd[1]);
 	if (fd->read_from != STDIN_FILENO)
 		close(fd->read_from);
 	free_cmd_data(until_redirection);;
 	fd->read_from = pipe_fd[0];
-	return (status);
+	free_ptr_array(env_array);
+	return (0);
 }
 
 // 標準出力や標準入力はdup2によって書き換わるため，構造体でその値を保存しておく
 // -> 最後とそれ以外で分ければいい
-int	execute_command_line(t_token *token, t_env *env_lst)
+int	execute_command_line(t_token *token, t_env *env_lst, int *end_status)
 {
 	t_file_descripter	fd;
-	char 	**env_array;
 	int		status;
 
 	initialize_fd(&fd);
-	env_array = env_lst_to_array(env_lst);
-	if (env_array == NULL)
-		return (-1);
 	while (token != NULL)
 	{
 		if (token->next == NULL)
 		{
-			status = case_no_pipe_ahead(token, env_lst, env_array, &fd);
+			status = case_no_pipe_ahead(token, env_lst, &fd, end_status);
 			if (status == -1)
-				return (free_ptr_array(env_array), -1);
+				return (-1);
 		}
 		else
 		{
-			status = case_pipe_ahead(token, env_lst, env_array, &fd);
+			status = case_pipe_ahead(token, env_lst, &fd, end_status);
 			if (status == -1)
-				return (free_ptr_array(env_array), -1);
+				return (-1);
 		}
 		token = token->next;
 	}
-	free_ptr_array(env_array);
 	dup2(fd.pure_stdin, STDIN_FILENO);
 	dup2(fd.pure_stdout, STDOUT_FILENO);
 	close(fd.pure_stdin);

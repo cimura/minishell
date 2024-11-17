@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/17 15:02:04 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/17 17:44:53 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	sigint_handler_in_heredoc(int signum)
 	close(pipefd[1]);
 }
 
-int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
+int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd, int end_status)
 {
 	char	*line;
 	int		fd_tmp;
@@ -58,7 +58,7 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 		}
 		if (line == NULL)
 			break ;
-		expanded = expand_env_variable(env_lst, line);
+		expanded = expand_env_variable(env_lst, line, end_status);
 		ft_free(line);
 		if (!expanded || (ft_strncmp(expanded, eof, ft_strlen(eof) + 1) == 0))
 		{
@@ -81,7 +81,7 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd)
 	return (0);
 }
 
-int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
+int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
 {
 	int		i;
 	char	*expand;
@@ -91,7 +91,7 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe)
 		i = 0;
 		while (per_pipe->command_line[i] != NULL)
 		{
-			expand = expander(env_lst, per_pipe->command_line[i]);
+			expand = expander(env_lst, per_pipe->command_line[i], end_status);
 			if (expand== NULL)
 				return (1);
 			free(per_pipe->command_line[i]);
@@ -202,7 +202,7 @@ t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
 	return (cmd_data);
 }
 
-int  on_redirection(t_token *token, t_env *env_lst, t_file_descripter fd)
+int  on_redirection(t_token *token, t_env *env_lst, t_file_descripter fd, int end_status)
 {
 	int	redirect_fd;
 	int	i;
@@ -248,7 +248,7 @@ int  on_redirection(t_token *token, t_env *env_lst, t_file_descripter fd)
 		else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
 		{
 			dup2(fd.pure_stdin, STDIN_FILENO);
-			if (here_doc(token->command_line[i + 1], env_lst, fd) != 0)
+			if (here_doc(token->command_line[i + 1], env_lst, fd, end_status) != 0)
 				return (1);
 		}
 		i++;

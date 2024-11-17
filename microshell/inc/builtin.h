@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/15 17:52:30 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/17 17:01:49 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ int	unset(char **args, t_env *env_lst);
 int	echo(char **args);
 int	cd(char **args, t_env *env_lst);
 int	pwd(void);
-int	ft_exit(char **args);
+int	ft_exit(char **args, int *status);
 
 #endif
