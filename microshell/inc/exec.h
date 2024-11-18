@@ -55,7 +55,8 @@ typedef struct	s_file_descripter
 
 
 // *** command_executor.c ***
-int		command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd);
+void	execve_command(t_cmd_data *until_redirection, char **envp, t_file_descripter fd,
+			int *end_status);
 int		execute_command_line(t_token *token, t_env *env_lst, int *end_status);
 
 // *** util.c ***
