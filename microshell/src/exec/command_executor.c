@@ -171,16 +171,16 @@ int	execute_command_line(t_token *token, t_env *env_lst, int *end_status)
 // 	if (pass_token_to_expand(env_lst, token) != 0)
 // 	{
 // 		env_lstclear(&env_lst, free_env_node);
-// 		token_lst_clear(&token, free_ptr_array);
+// 		token_lst_clear(&token, free_commands);
 // 		return (1);
 // 	}
 // 	if (execute_command_line(token, env_lst) != 0)
 // 	{
 // 		env_lstclear(&env_lst, free_env_node);
-// 		token_lst_clear(&token, free_ptr_array);
+// 		token_lst_clear(&token, free_commands);
 // 		return (1);
 // 	}
 // 	env_lstclear(&env_lst, free_env_node);
-// 	token_lst_clear(&token, free_ptr_array);
+// 	token_lst_clear(&token, free_commands);
 // 	return (0);
 // }

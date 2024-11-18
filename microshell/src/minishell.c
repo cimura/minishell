@@ -42,16 +42,16 @@ int	main(int argc, char **argv, char **envp)
 	{
 		dup2(pure_STDIN, STDIN_FILENO);
 		line = readline("minishell> ");
-	if (line == NULL)
-	{
-	  printf("exit\n");
-	  break ;
-	}
-	if (ft_strlen(line) == 0)
-	{
-	  free(line);
-	  continue;
-	}
+		if (line == NULL)
+		{
+			printf("exit\n");
+			break ;
+		}
+		if (ft_strlen(line) == 0)
+		{
+			free(line);
+			continue;
+		}
 		token = lexer(line);
 		if (token == NULL)
 			return (env_lstclear(&env_lst, free_env_node), 1);
@@ -82,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 			return (1);
 		}
 		token_lst_clear(&token, free_commands);
-	if (ft_strlen(line) > 0)
+		if (ft_strlen(line) > 0)
 			add_history(line);
 	}
 	env_lstclear(&env_lst, free_env_node);

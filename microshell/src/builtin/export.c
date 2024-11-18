@@ -118,6 +118,7 @@ int	export(char **args, t_env *env_lst)
 		}
 		if (register_new_env(args[i], env_lst) == 1)
 			return (1);
+		i++;
 	}
 	return (status);
 }

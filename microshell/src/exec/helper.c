@@ -53,21 +53,21 @@ int	here_doc(char *eof, t_env *env_lst, t_file_descripter fd, int end_status)
 		{
 			g_global = 0;
 			close(fd_tmp);
-			ft_free(line);
+			free(line);
 			return (0);
 		}
 		if (line == NULL)
 			break ;
 		expanded = expand_env_variable(env_lst, line, end_status);
-		ft_free(line);
+		free(line);
 		if (!expanded || (ft_strncmp(expanded, eof, ft_strlen(eof) + 1) == 0))
 		{
-			ft_free(expanded);
+			free(expanded);
 			break ;
 		}
 		write(fd_tmp, expanded, ft_strlen(expanded));
 		write(fd_tmp, "\n", 1);
-		ft_free(expanded);
+		free(expanded);
 	}
 	close(fd_tmp);
 	fd_tmp = open(tmp_file, O_RDONLY);
@@ -133,14 +133,14 @@ int	set_path(char *cmd, char **path, t_env *env_lst)
 			return (free_ptr_array(com_sep), 1);
 		candidate = ft_strjoin(segment, cmd);
 		if (candidate == NULL)
-			return (free_ptr_array(com_sep), ft_free(segment), 1);
-		ft_free(segment);
+			return (free_ptr_array(com_sep), free(segment), 1);
+		free(segment);
 		if (access(candidate, X_OK) == 0)
 		{
 			*path = candidate;
 			break ;
 		}
-		ft_free(candidate);
+		free(candidate);
 		i++;
 	}
 	free_ptr_array(com_sep);
@@ -162,7 +162,7 @@ char  **get_cmd_until_redirection(char **head_cmdline)
 	{
 		result[i] = ft_strdup(head_cmdline[i]);
 		if (result[i] == NULL)
-			return (free_commands(result), NULL);
+			return (free_ptr_array(result), NULL);
 		i++;
 	}
 	result[i] = NULL;
@@ -191,12 +191,12 @@ t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
 		return (NULL);
 
 	if (set_path(token->command_line[0], &(cmd_data->path), env_lst) != 0)
-		return (ft_free(cmd_data), NULL);
+		return (free(cmd_data), NULL);
 	cmd_data->cmd = get_cmd_until_redirection(&token->command_line[0]);
 	if (cmd_data->cmd == NULL)
 	{
-		ft_free(cmd_data->path);
-		ft_free(cmd_data);
+		free(cmd_data->path);
+		free(cmd_data);
 		return (NULL);
 	}
 	return (cmd_data);
