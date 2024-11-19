@@ -32,7 +32,7 @@ void	setup_and_exec(t_cmd_data *until_redirection, char **envp,
 	}
 }
 
-void	execve_command(t_cmd_data *until_redirection, char **envp
+void	execve_command(t_cmd_data *until_redirection, char **envp,
 								t_file_descripter fd, int *end_status)
 {
 	pid_t	pid;
@@ -66,6 +66,13 @@ void	initialize_fd(t_file_descripter *fd)
 	fd->write_to = STDOUT_FILENO;
 }
 
+bool	is_executable(char **cmd)
+{
+	if (cmd == NULL || cmd[0] == NULL)
+		return (false);
+	return (true);
+}
+
 int	run_command_with_redirect(t_token *token, t_env *env_lst,
 						t_file_descripter *fd, int *end_status)
 {
@@ -75,14 +82,14 @@ int	run_command_with_redirect(t_token *token, t_env *env_lst,
 	env_array = env_lst_to_array(env_lst);
 	if (env_array == NULL)
 		return (-1);
+	if (redirect(token, env_lst, *fd, *end_status) == 1)
+		return (free_ptr_array(env_array), -1);
 	until_redirection = register_cmd_data(token, env_lst);
 	if (until_redirection == NULL)
-		return (-1);
-	if (on_redirection(token, env_lst, *fd, *end_status) == 1)
-		return (-1);
+		return (free_ptr_array(env_array), -1);
 	if (is_builtin(until_redirection->cmd))
 		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
-	else
+	else if (is_executable(until_redirection->cmd))
 		execve_command(until_redirection, env_array, *fd, end_status);
 	free_cmd_data(until_redirection);
 	free_ptr_array(env_array);
