@@ -1,4 +1,4 @@
-NAME        := microshell
+NAME        := minishell
 
 OBJ_DIR     := obj/
 INC_DIR     := inc/

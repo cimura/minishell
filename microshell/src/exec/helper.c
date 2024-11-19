@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/17 17:44:53 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/19 16:23:19 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,11 +147,55 @@ int	set_path(char *cmd, char **path, t_env *env_lst)
 	return (0);
 }
 
+static inline bool  is_redirection(char *arg)
+{
+  	if (ft_strncmp(arg, ">", 2) == 0
+		|| ft_strncmp(arg, ">>", 3) == 0
+		|| ft_strncmp(arg, "<", 2) == 0
+		|| ft_strncmp(arg, "<<", 3) == 0)
+      return (true);
+    else
+      return (false);
+}
+
+char  **echo_adhoc(char **head_cmdline)
+{
+ 	int		i;
+  int   ri;
+	int		size;
+	char	**result;
+
+  size = 0;
+	while (head_cmdline[size] != NULL)
+    size++;
+	result = malloc((size + 1) * sizeof(char *));
+	if (result == NULL)
+		return (NULL);
+	i = 0;
+  ri = 0;
+	while (i < size)
+	{
+    if (is_redirection(head_cmdline[i]))
+      i += 2;
+		result[ri] = ft_strdup(head_cmdline[i]);
+		if (result[ri] == NULL)
+			return (free_commands(result), NULL);
+		i++;
+    ri++;
+	}
+	result[ri] = NULL;
+	return (result); 
+}
+
+
 char  **get_cmd_until_redirection(char **head_cmdline)
 {
 	int		i;
 	int		size;
 	char	**result;
+
+  if (ft_strncmp(head_cmdline[0], "echo", 5) == 0)
+    return (echo_adhoc(head_cmdline));
 
 	size = count_until_redirection(head_cmdline);
 	result = malloc((size + 1) * sizeof(char *));
