@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:16:02 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/17 15:05:16 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/19 19:59:02 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 void	sigint_handler_child(int signum)
 {
-	printf("sigchild_handler\n");
+	ft_putstr_fd("\n", STDOUT_FILENO);
 	//fflush(stdout);
 	(void)signum;
 }
 
 void	sigquit_handler_child(int signum)
 {
-	printf("Quit\n");
+	ft_putstr_fd("Quit\n", STDOUT_FILENO);
 	(void)signum;
 }
 
 void	sigint_handler(int signum)
 {
-	printf("sigint_handler\n");
 	rl_on_new_line();
-//	rl_replace_line("", 0);
+	ft_putstr_fd("\n", STDOUT_FILENO);
+	rl_replace_line("", 0);
 	rl_redisplay();
 	(void)signum;
 }
@@ -55,7 +55,7 @@ void	ft_signal(void)
 
 //		if (line == NULL)
 //		{
-//		  printf("exit\n");
+//		  ft_putstr_fd("exit\n");
 //		  break;
 //		}
 //		if (ft_strlen(line) == 0)
@@ -65,7 +65,7 @@ void	ft_signal(void)
 //		}
 //		else
 //		{
-//			printf("input: %s\n", line);
+//			ft_putstr_fd("input: %s\n", line);
 //		}
 //		if (ft_strlen(line) > 0)
 //			add_history(line);

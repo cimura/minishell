@@ -44,6 +44,14 @@ CFLAGS := -Wall -Wextra -Werror
 LDFLAGS := -lreadline
 IFLAGS := -I$(LIBFT_DIR)/include/ -I$(INC_DIR)
 LFLAGS := -L$(LIBFT_DIR) -lft
+ifeq ($(shell uname), Linux)
+	LINK_LIB += -lbsd
+endif
+ifeq ($(shell uname), Darwin)
+	# User have to run brew install readline before run make to build minishell
+	CFLAGS += -I $(shell brew --prefix readline)/include
+	LDFLAGS += -L$(shell brew --prefix readline)/lib
+endif
 
 ERASE := \033[2K\r
 PINK := \033[35m
