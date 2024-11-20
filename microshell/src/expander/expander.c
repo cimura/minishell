@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/17 17:21:01 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/20 15:05:18 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ static t_expand_lst	*create_quoted_lst(char *line)
 	t_expand_lst	*new;
 	t_expand_lst	*head;
 
-	if (str_count(line, "\'") % 2 != 0
-		|| str_count(line, "\"") % 2 != 0)
-		return (NULL);
+	// if (str_count(line, "\'") % 2 != 0
+	// 	|| str_count(line, "\"") % 2 != 0)
+	// 	return (NULL);
 	head = NULL;
 	i = 0;
 	while (line[i])

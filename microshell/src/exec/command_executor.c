@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/17 18:34:24 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/20 17:37:53 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,15 @@ void	setup_and_exec(t_cmd_data *until_redirection, char **envp,
 		dup2(fd.read_from, STDIN_FILENO);
 		close(fd.read_from);
 	}
+	// else
+	// 	close(fd.read_from);
 	if (fd.write_to != STDOUT_FILENO)
 	{
 		dup2(fd.write_to, STDOUT_FILENO);
 		close(fd.write_to);
 	}
+	// else
+	// 	close(fd.write_to);
 	if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 	{
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
@@ -49,6 +53,9 @@ void	execve_command(t_cmd_data *until_redirection, char **envp,
 	}
 	else if (pid > 0)
 	{
+		// close(fd.write_to);
+		// if (fd.read_from != STDIN_FILENO)
+		// 	close(fd.read_from);
 		waitpid(pid, end_status, 0);
 		ft_signal();
 		if (WIFEXITED(*end_status))
@@ -101,7 +108,7 @@ int	case_no_pipe_ahead(t_token *token, t_env *env_lst, t_file_descripter *fd,
 {
 	int	local_status;
 
-	fd->write_to = STDOUT_FILENO;
+	fd->write_to = dup(STDOUT_FILENO);
 	local_status = run_command_with_redirect(token, env_lst, fd, end_status);
 	close(fd->read_from);
 	close(fd->write_to);
@@ -119,9 +126,10 @@ int	case_pipe_ahead(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		perror("pipe");
 		return (-1);
 	}
-	fd->write_to = pipe_fd[1];
-	local_status = run_command_with_redirect(token, env_lst, fd, end_status);
+	fd->write_to = dup(pipe_fd[1]);
 	close(pipe_fd[1]);
+	local_status = run_command_with_redirect(token, env_lst, fd, end_status);
+	close(fd->write_to);
 	if (fd->read_from != STDIN_FILENO)
 		close(fd->read_from);
 	fd->read_from = pipe_fd[0];

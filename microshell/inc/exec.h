@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/17 18:34:39 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/20 14:59:44 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status);
 
 // *** helper.c ***
 t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst);
-int  		on_redirection(t_token *token, t_env *env_lst, t_file_descripter fd, int end_status);
+int  		redirect(t_token *token, t_env *env_lst, t_file_descripter fd, int end_status);
 
 // *** env/env_lst.c ***
 char	**env_lst_to_array(t_env *env_lst);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_helper.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/17 19:01:17 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:35:13 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,28 @@ static char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status
 	char	*to_expand;
 	char	*env_value;
 	char	*tmp;
+	char	*doller;
 
 	to_expand = ft_strndup(line_ptr, count_key_size(line_ptr));
 	if (to_expand == NULL)
-		return (free(new), new = NULL, NULL);
+		return (free(new), NULL);
+	doller = NULL;
 	if  (to_expand[0] == '?')
-		env_value = ft_strdup(ft_itoa(end_status));	
+	{
+		doller = ft_itoa(end_status);
+		if (doller == NULL)
+			return (free(new), NULL);
+		env_value = doller;
+	}
 	else if (ft_strlen(to_expand) == 0)
 		env_value = "$";
 	else
 		env_value = get_value_from_key(env_lst, to_expand);
 	free(to_expand);
-	to_expand = NULL;
 	tmp = ft_strjoin(new, env_value);
 	if (tmp == NULL)
-		return (free(new), new = NULL, NULL);
+		return (free(new), free(doller), NULL);
+	free(doller);
 	free(new);
 	new = tmp;
 	return (new);

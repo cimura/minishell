@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Minishell実行ファイルのパス
-MINISHELL="../microshell"
+MINISHELL="../minishell"
 
 # テストケースを定義（コマンドリスト）
 TEST_CASES=(
@@ -38,6 +38,8 @@ TEST_CASES=(
 	"cat infile/cannot_read"
 	"hoge '"
 	"hoge \""
+	"unset PATH"
+	"unset SHELL"
 )
 
 # 一時ファイルを定義

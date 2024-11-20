@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/17 22:14:56 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/20 15:12:58 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,14 @@ t_env	*create_new_env_node(char *arg)
 	return (new);
 }
 
-int	parse_argument(char *arg)
+int	parse_argument(char *arg, int *status)
 {
 	int	i;
 
-	if (arg[0] == '\0' || ft_strchr(arg, '=') == NULL)
-		return (1);
 	if (!(arg[0] >= 'A' && arg[0] <= 'Z') && arg[0] != '_'
 		&& !(arg[0] >= 'a' && arg[0] <= 'z'))
 	{
+		*status = 1;
 		return (1);
 	}
 	i = 0;
@@ -66,10 +65,13 @@ int	parse_argument(char *arg)
 			&& !(arg[i] >= 'a' && arg[i] <= 'z')
 			&& !(arg[i] >= '0' && arg[i] <= '9'))
 		{
+			*status = 1;
 			return (1);
 		}
 		i++;
 	}
+	if (arg[0] == '\0' || ft_strchr(arg, '=') == NULL)
+		return (1);
 	return (0);
 }
 
@@ -110,9 +112,10 @@ int	export(char **args, t_env *env_lst)
 	status = 0;
 	while (args[i] != NULL)
 	{
-		if (parse_argument(args[i]) == 1)
+		if (parse_argument(args[i], &status) == 1)
 		{
-			status = 1;
+			if (status == 1)
+				ft_putendl_fd(" not a valid identifier", STDERR_FILENO);
 			i++;
 			continue ;
 		}
