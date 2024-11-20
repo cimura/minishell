@@ -28,12 +28,16 @@ SIGNAL_DIR := src/signal/
 SIGNAL_SRC := signal.c
 SIGNAL := $(addprefix $(OBJ_DIR)signal/, $(SIGNAL_SRC:.c=.o))
 
+SYNTAX_DIR := src/syntax/
+SYNTAX_SRC := check_syntax.c
+SYNTAX := $(addprefix $(OBJ_DIR)syntax/, $(SYNTAX_SRC:.c=.o))
+
 MINISHELL_DIR := src/
 MINISHELL_SRC := minishell.c utils.c
 MINISHELL := $(addprefix $(OBJ_DIR), $(MINISHELL_SRC:.c=.o))
 
 # オブジェクトファイルをまとめる
-OBJS := $(BUILTIN) $(ENV) $(EXEC) $(EXPANDER) $(LEXER) $(SIGNAL) $(MINISHELL)
+OBJS := $(BUILTIN) $(ENV) $(EXEC) $(EXPANDER) $(LEXER) $(SIGNAL) $(SYNTAX) $(MINISHELL)
 
 LIBFT_DIR := src/libft
 LIBFT := $(LIBFT_DIR)/libft.a
@@ -44,6 +48,7 @@ CFLAGS := -Wall -Wextra -Werror
 LDFLAGS := -lreadline
 IFLAGS := -I$(LIBFT_DIR)/include/ -I$(INC_DIR)
 LFLAGS := -L$(LIBFT_DIR) -lft
+
 ifeq ($(shell uname), Linux)
 	LINK_LIB += -lbsd
 endif
@@ -60,7 +65,8 @@ GREEN := \033[32m
 END := \033[0m
 
 # ディレクトリ作成
-DIRS := $(OBJ_DIR) $(OBJ_DIR)builtin $(OBJ_DIR)env $(OBJ_DIR)exec $(OBJ_DIR)expander $(OBJ_DIR)lexer $(OBJ_DIR)signal
+DIRS := $(OBJ_DIR) $(OBJ_DIR)builtin $(OBJ_DIR)env $(OBJ_DIR)exec \
+		$(OBJ_DIR)expander $(OBJ_DIR)lexer $(OBJ_DIR)signal $(OBJ_DIR)syntax
 
 all: Makefile $(DIRS) $(NAME)
 
@@ -90,6 +96,10 @@ $(OBJ_DIR)%.o: $(LEXER_DIR)%.c
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
 $(OBJ_DIR)%.o: $(SIGNAL_DIR)%.c
+	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
+
+$(OBJ_DIR)%.o: $(SYNTAX_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
