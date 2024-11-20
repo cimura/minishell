@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 17:37:53 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/20 17:47:41 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,8 @@ int	case_pipe_ahead(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	close(fd->write_to);
 	if (fd->read_from != STDIN_FILENO)
 		close(fd->read_from);
-	fd->read_from = pipe_fd[0];
+	fd->read_from = dup(pipe_fd[0]);
+	close(pipe_fd[0]);
 	return (local_status);
 }
 
