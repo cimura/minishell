@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/17 18:44:33 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/20 14:54:04 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 #include "lexer.h"
 #include "signal_handler.h"
 #include "libft.h"
-
-int	g_status = 0;
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -42,16 +40,16 @@ int	main(int argc, char **argv, char **envp)
 	{
 		dup2(pure_STDIN, STDIN_FILENO);
 		line = readline("minishell> ");
-	if (line == NULL)
-	{
-//	  printf("exit\n");
-	  break ;
-	}
-	if (ft_strlen(line) == 0)
-	{
-	  free(line);
-	  continue;
-	}
+		if (line == NULL)
+		{
+			printf("exit\n");
+			break ;
+		}
+		if (ft_strlen(line) == 0)
+		{
+			free(line);
+			continue;
+		}
 		token = lexer(line);
 		if (token == NULL)
 			return (env_lstclear(&env_lst, free_env_node), 1);
@@ -82,7 +80,7 @@ int	main(int argc, char **argv, char **envp)
 			return (1);
 		}
 		token_lst_clear(&token, free_commands);
-	if (ft_strlen(line) > 0)
+		if (ft_strlen(line) > 0)
 			add_history(line);
 	}
 	env_lstclear(&env_lst, free_env_node);

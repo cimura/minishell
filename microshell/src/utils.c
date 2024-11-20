@@ -2,16 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void	ft_free(void *ptr)
-{
-	free(ptr);
-	ptr = NULL;
-}
-
 void	free_ptr_array(char **ptr)
 {
 	int	i;
 
+	if (ptr == NULL)
+		return ;
 	i = 0;
 	while (ptr[i] != NULL)
 	{
