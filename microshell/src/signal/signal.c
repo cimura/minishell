@@ -15,18 +15,20 @@
 void	sigint_handler_child(int signum)
 {
 	ft_putstr_fd("\n", STDOUT_FILENO);
-	//fflush(stdout);
+	printf("sigint child handler\n");
 	(void)signum;
 }
 
 void	sigquit_handler_child(int signum)
 {
+	printf("sigquit child handler\n");
 	ft_putstr_fd("Quit\n", STDOUT_FILENO);
 	(void)signum;
 }
 
 void	sigint_handler(int signum)
 {
+	printf("sigint handler\n");
 	rl_on_new_line();
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_replace_line("", 0);

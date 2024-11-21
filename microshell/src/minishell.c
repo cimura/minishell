@@ -16,7 +16,30 @@
 #include "expander.h"
 #include "lexer.h"
 #include "signal_handler.h"
+#include "utils.h"
 #include "libft.h"
+
+int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
+{
+	int		i;
+	char	*expand;
+
+	while (per_pipe != NULL)
+	{
+		i = 0;
+		while (per_pipe->command_line[i] != NULL)
+		{
+			expand = expander(env_lst, per_pipe->command_line[i], end_status);
+			if (expand == NULL)
+				return (1);
+			free(per_pipe->command_line[i]);
+			per_pipe->command_line[i] = expand;
+			i++;
+		}
+		per_pipe = per_pipe->next;
+	}
+	return (0);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -59,6 +82,10 @@ int	main(int argc, char **argv, char **envp)
 			token_lst_clear(&token, free_commands);
 			return (1);
 		}
+
+		// debug
+		//d_print_token_lst(token);
+
 		if (ft_strncmp(token->command_line[0], "exit", 5 ) == 0 && token->next == NULL)
 		{
 			if (ft_exit(&token->command_line[1], &status) == 1)
@@ -72,7 +99,7 @@ int	main(int argc, char **argv, char **envp)
 				break ;
 			}
 		}
-		if (execute_command_line(token, env_lst, &status) == -1)
+		if (execute_command_line(token, env_lst, &status) == 1)
 		{
 			// system error
 			env_lstclear(&env_lst, free_env_node);

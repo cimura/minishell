@@ -13,7 +13,7 @@ ENV_SRCS := env_lst.c
 ENV := $(addprefix $(OBJ_DIR)env/, $(ENV_SRCS:.c=.o))
 
 EXEC_DIR := src/exec/
-EXEC_SRCS := new_command_executor.c env_lst_to_array.c util.c helper.c
+EXEC_SRCS := command_executor.c register_cmd_data.c redirect.c heredoc.c exec_and_bltin.c env_lst_to_array.c exec_utils.c
 EXEC := $(addprefix $(OBJ_DIR)exec/, $(EXEC_SRCS:.c=.o))
 
 EXPANDER_DIR := src/expander/

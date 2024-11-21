@@ -12,45 +12,29 @@
 
 #include "exec.h"
 
-bool	is_executable(char **cmd)
-{
-	if (cmd == NULL || cmd[0] == NULL)
-		return (false);
-	return (true);
-}
-
 int	run_command_with_redirect(t_token *token, t_env *env_lst,
 						t_file_descripter *fd, int *end_status)
 {
 	t_cmd_data	*until_redirection;
 	char		**env_array;
+	int			local_status;
 
 	env_array = env_lst_to_array(env_lst);
 	if (env_array == NULL)
-		return (-1);
-	if (redirect(token, env_lst, *fd, *end_status) == 1)
-		return (free_ptr_array(env_array), -1);
+		return (1);
+	local_status = redirect(token, env_lst, *fd, end_status);
+	if (local_status == 1 || local_status == -1)
+		return (free_ptr_array(env_array), local_status);
 	until_redirection = register_cmd_data(token, env_lst);
 	if (until_redirection == NULL)
-		return (free_ptr_array(env_array), -1);
+		return (free_ptr_array(env_array), 1);
 	if (is_builtin(until_redirection->cmd))
 		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
 	else if (is_executable(until_redirection->cmd))
-		execve_command(until_redirection, env_array, *fd, end_status);
+		execve_command(until_redirection, env_array);
 	free_cmd_data(until_redirection);
 	free_ptr_array(env_array);
 	return (0);
-}
-
-void	setup_and_exec(t_cmd_data *until_redirection, char **envp,
-												t_file_descripter fd)
-{
-	(void)fd;
-	if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
-	{
-		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	}
 }
 
 int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
@@ -71,8 +55,8 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
-		if (run_command_with_redirect(token, env_lst, fd, end_status) == -1)
-			return (-1);
+		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
+			return (1);
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -80,7 +64,6 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[1]);
 		dup2(pipe_fd[0], STDIN_FILENO);
 		close(pipe_fd[0]);
-		ft_signal();
 		if (WIFEXITED(*end_status))
 			*end_status = WEXITSTATUS(*end_status);
 		else if (WIFSIGNALED(*end_status))
@@ -95,8 +78,6 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	int		pipe_fd[2];
 	pid_t	pid;
 
-	signal(SIGINT, sigint_handler_child);
-	signal(SIGQUIT, sigquit_handler_child);
 	if (pipe(pipe_fd) == -1)
 		perror("pipe");
 	pid = fork();
@@ -107,8 +88,8 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
-		if (run_command_with_redirect(token, env_lst, fd, end_status) == -1)
-			return (-1);
+		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
+			return (1);
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -116,7 +97,6 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[1]);
 		dup2(pipe_fd[0], STDIN_FILENO);
 		close(pipe_fd[0]);
-		ft_signal();
 		if (WIFEXITED(*end_status))
 			*end_status = WEXITSTATUS(*end_status);
 		else if (WIFSIGNALED(*end_status))
@@ -131,16 +111,14 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	int		status;
 	pid_t	pid;
 
-	signal(SIGINT, sigint_handler_child);
-	signal(SIGQUIT, sigquit_handler_child);
 	status = 0;
 	pid = fork();
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
 	{
-		if (run_command_with_redirect(token, env_lst, fd, end_status) == -1)
-			return (-1);
+		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
+			return (1);
 		exit(EXIT_FAILURE);
 	}
 	else
@@ -154,14 +132,6 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 			*end_status = 128 + WTERMSIG(*end_status);
 	}
 	return (status);
-}
-
-void	execve_command(t_cmd_data *until_redirection, char **envp,
-								t_file_descripter fd, int *end_status)
-{
-	(void)end_status;
-		setup_and_exec(until_redirection, envp, fd);
-		exit(127);
 }
 
 void	initialize_fd(t_file_descripter *fd)
@@ -186,13 +156,13 @@ int	one_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		perror("fork");
 	if (pid == 0)
 	{
-		if (run_command_with_redirect(token, env_lst, fd, end_status) == -1)
-			return (-1);
+		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
+			return (1);
 	}
 	else
 	{
-		ft_signal();
 		waitpid(pid, end_status, 0);
+		ft_signal();
 		if (WIFEXITED(*end_status))
 			*end_status = WEXITSTATUS(*end_status);
 		else if (WIFSIGNALED(*end_status))
@@ -201,7 +171,7 @@ int	one_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	return (0);
 }
 
-int	count_lstsize(t_token *token)
+int	token_lstsize(t_token *token)
 {
 	int	c;
 
@@ -218,30 +188,30 @@ int	branch(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	int *end_status)
 {
 	int	count;
-	count = count_lstsize(token);
+	count = token_lstsize(token);
 	if (count == 1)
 		one_command(token, env_lst, fd, end_status);
 	else if (count == 2)
 	{
-		if (first_command(token, env_lst, fd, end_status) == -1)
-			return (-1);
+		if (first_command(token, env_lst, fd, end_status) == 1)
+			return (1);
 		token = token->next;
-		if (last_command(token, env_lst, fd, end_status) == -1)
-				return (-1);
+		if (last_command(token, env_lst, fd, end_status) == 1)
+				return (1);
 	}
 	else
 	{
-		if (first_command(token, env_lst, fd, end_status) == -1)
-			return (-1);
+		if (first_command(token, env_lst, fd, end_status) == 1)
+			return (1);
 		token = token->next;
 		while (token->next != NULL)
 		{
-			if (middle_command(token, env_lst, fd, end_status) == -1)
-				return (-1);
+			if (middle_command(token, env_lst, fd, end_status) == 1)
+				return (1);
 			token = token->next;
 		}
 		if (last_command(token, env_lst, fd, end_status))
-				return (-1);
+				return (1);
 	}
 	return (0);
 }
@@ -253,8 +223,8 @@ int	execute_command_line(t_token *token, t_env *env_lst, int *end_status)
 	t_file_descripter	fd;
 
 	initialize_fd(&fd);
-	if (branch(token, env_lst, &fd, end_status) == -1)
-		return (-1);
+	if (branch(token, env_lst, &fd, end_status) == 1)
+		return (1);
 	dup2(fd.pure_stdin, STDIN_FILENO);
 	dup2(fd.pure_stdout, STDOUT_FILENO);
 	close(fd.pure_stdin);

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.h                                             :+:      :+:    :+:   */
+/*   utils.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTIL_H
-#define UTIL_H
-
-// extern int	g_status;
+#ifndef UTILS_H
+#define UTILS_H
 
 void	free_ptr_array(char **ptr);
+int		count_char_array_words(char **ptr);
 
-//sDebug
-void	print_char_array(char **array);
+// Debug
+void	d_print_char_array(char **array);
 
 #endif

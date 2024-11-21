@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "builtin.h"
-#include "util.h"
+#include "utils.h"
 
 int	echo(char **args)
 {

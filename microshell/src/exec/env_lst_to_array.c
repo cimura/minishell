@@ -12,7 +12,7 @@
 
 #include "exec.h"
 
-int	env_lstsize(t_env *env_lst)
+static int	env_lstsize(t_env *env_lst)
 {
 	int	size;
 
@@ -25,7 +25,7 @@ int	env_lstsize(t_env *env_lst)
 	return (size);
 }
 
-char	*generate_key_value_str(t_env node)
+static char	*generate_key_value_str(t_env node)
 {
 	char	*key_equal;
 	char	*result;
@@ -39,7 +39,7 @@ char	*generate_key_value_str(t_env node)
 	return (result);
 }
 
-void	free_env_array(char **env_array)
+static void	free_env_array(char **env_array)
 {
 	int	i;
 

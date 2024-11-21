@@ -1,53 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.c                                             :+:      :+:    :+:   */
+/*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 23:54:54 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 20:00:02 by ttakino          ###   ########.fr       */
+/*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
+/*   Updated: 2024/11/20 15:27:16 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-// /bin/cat Makefile > out1 > out2
-int	count_until_redirection(char **cmdline)
+bool	is_executable(char **cmd)
 {
-	int	count;
-
-	count = 0;
-	while (cmdline[count] != NULL)
-	{
-		if (ft_strncmp(cmdline[count], ">", 2) == 0
-			|| ft_strncmp(cmdline[count], ">>", 3) == 0
-			|| ft_strncmp(cmdline[count], "<", 2) == 0
-			|| ft_strncmp(cmdline[count], "<<", 3) == 0)
-			return (count);
-		count++;
-	}
-	return (count);
+	if (cmd == NULL || cmd[0] == NULL)
+		return (false);
+	return (true);
 }
 
-void	print_commands(char **commands)
+void	execve_command(t_cmd_data *until_redirection, char **envp)
 {
-	int	i;
-
-	i = 0;
-	while (commands[i])
+	if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 	{
-		printf("%s\n", commands[i++]);
+		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	}
-}
-
-void	free_cmd_data(t_cmd_data *data)
-{
-	free(data->path);
-	data->path = NULL;
-	free_commands(data->cmd);
-	free(data);
-	data = NULL;
+	exit(127);
 }
 
 bool	is_builtin(char **cmd)
@@ -68,7 +47,6 @@ void	builtin_command(char **cmd, t_env *env_lst,
 {
 	if (fd.write_to != STDOUT_FILENO)
 		dup2(fd.write_to, STDOUT_FILENO);
-
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		*end_status = cd(&cmd[1], env_lst);
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)

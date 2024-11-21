@@ -60,6 +60,18 @@ void	free_commands(char **commands)
 	free(commands);
 }
 
+void	d_print_token_lst(t_token *token)
+{
+	printf("-token-\n");
+	while (token != NULL)
+	{
+		d_print_char_array(token->command_line);
+		token = token->next;
+		if (token != NULL)
+			printf("-------------pipe------------\n");
+	}
+}
+
 //void	print_commands(char **commands)
 //{
 //	int	i;
