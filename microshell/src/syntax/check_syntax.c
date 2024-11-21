@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/21 12:24:03 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/22 01:41:08 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ static int	white_space(char check_chr)
 
 int check_syntax_before_lexer(char *line)
 {
-  int   i;
+  // int   i;
   // pipe単体 ex) "|"
-  if (line[0] == '|' && white_space(line[1]))
+  if (line[0] == '|' && (line[1] == '\0' || white_space(line[1])))
     return (1);
-  i = 0;
-  while (line[i] != '\0')
-  {
+  // i = 0;
+  // while (line[i] != '\0')
+  // {
     // トークンの中身がカラ
     // ex) "echo | | "
     // if (line[i] == '|')
@@ -52,8 +52,8 @@ int check_syntax_before_lexer(char *line)
     //      ft_putendl_fd("syntax error", STDERR_FILENO);
     //     return (1);
     //   }
-    i++;
-  }
+  //   i++;
+  // }
   return (0);
 }
 
@@ -91,6 +91,8 @@ int check_syntax(t_env *env_lst, t_token *token)
       i++;
     }
     token = token->next;
+    // if (token->command_line[0] == NULL && token != NULL)
+    //   return (1);
   }
   return (0);
 }
