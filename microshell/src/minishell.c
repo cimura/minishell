@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/21 00:28:40 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/21 12:25:10 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,18 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 			continue;
 		}
+    if (check_syntax_before_lexer(line) == 1)
+    {
+      status = 2;
+      continue;
+    }
 		token = lexer(line);
 		if (token == NULL)
 			return (env_lstclear(&env_lst, free_env_node), 1);
     if (check_syntax(env_lst, token) != 0)
     {
       status = 2;
-      break;
+      continue;
     }
 		if (pass_token_to_expand(env_lst, token, status) != 0)
 		{
