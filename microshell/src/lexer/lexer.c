@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/22 01:39:29 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/22 16:29:51 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,34 +95,28 @@ t_token	*lexer(char	*line)
 // {
 // 	t_token	*head;
 // 	t_token	*words;
-// 	int	i;
 // 	int	j;
 
 // 	if (argc == 1)
 // 		return (0);
-// 	i = 1;
-// 	while (argv[i] != NULL)
-// 	{
-// 		// printf("\x1b[36m%s\n\x1b[0m", argv[i]);
-// 		words = lexer(argv[i]);
-// 		if (words == NULL)
-// 			return (printf("Error\n"), 1);
-// 		head = words;
-// 		while (words != NULL)
-// 		{
-// 			j = 0;
-// 			while (words->command_line[j] != NULL)
-// 			{
-// 				printf("%s", words->command_line[j++]);
-// 				if (words->command_line[j] != NULL)
-// 					printf(",");
-// 			}
-// 			words = words->next;
-// 			if (words != NULL)
-// 				printf("\t");
-// 		}
-// 		token_lst_clear(&head, free_commands);
-// 		i++;
-// 	}
+//   words = lexer(argv[1]);
+//   if (words == NULL)
+//     return (printf("Error\n"), 1);
+//   head = words;
+//   while (words != NULL)
+//   {
+//     j = 0;
+//     while (words->command_line[j] != NULL)
+//     {
+//       printf("%s", words->command_line[j]);
+//       if (words->command_line[j] != NULL)
+//         printf(",");
+//       j++;
+//     }
+//     words = words->next;
+//     if (words != NULL)
+//       printf("\n");
+//   }
+//   token_lst_clear(&head, free_commands);
 // 	return (0);
 // }

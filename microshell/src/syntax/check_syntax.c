@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/22 01:41:08 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/22 16:50:23 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,48 @@ static int	white_space(char check_chr)
 		return (0);
 }
 
+int check_quotation(char *line)
+{
+  int i;
+  int s_flag;
+  int d_flag;
+
+  i = 0;
+  s_flag = 0;
+  d_flag = 0;
+  while (line[i] != '\0')
+  {
+    if (s_flag == 0 && d_flag == 0 && line[i] == '\'')
+      s_flag = 1;
+    else if (s_flag == 0 && d_flag == 0 && line[i] == '\"')
+      d_flag = 1;
+    else if (s_flag == 1 && line[i] == '\'')
+      s_flag = 0;
+    else if (d_flag == 1 && line[i] == '\"')
+      d_flag = 0;
+    i++;
+  }
+  if (s_flag == 1 || d_flag == 1)
+  {
+    return (1);
+  }
+  return (0);
+}
+
 int check_syntax_before_lexer(char *line)
 {
   // int   i;
   // pipe単体 ex) "|"
   if (line[0] == '|' && (line[1] == '\0' || white_space(line[1])))
+  {
+    ft_putendl_fd("syntax error", STDERR_FILENO);
     return (1);
+  }
+  if (check_quotation(line) == 1)
+  {
+    ft_putendl_fd("syntax error", STDERR_FILENO);
+    return (1);
+  }
   // i = 0;
   // while (line[i] != '\0')
   // {
@@ -57,6 +93,9 @@ int check_syntax_before_lexer(char *line)
   return (0);
 }
 
+// TODO
+// case1: " echo hi |   |  "
+// case2: " echo hi |  "|" " の区別
 int check_syntax(t_env *env_lst, t_token *token)
 {
   int i;
@@ -65,6 +104,13 @@ int check_syntax(t_env *env_lst, t_token *token)
   while (token != NULL)
   {
     i = 0;
+    
+    // case1 の対応
+    if (token->command_line[0] == NULL)
+    {
+      ft_putendl_fd("syntax error", STDERR_FILENO);
+      return (1);
+    }
     while (token->command_line[i] != NULL)
     {
       // リダイレクト先がない　ex)" echo > "
