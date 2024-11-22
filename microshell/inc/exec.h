@@ -62,6 +62,8 @@ int		here_doc(char *eof, t_env *env_lst,
 
 // *** exec_and_bltin.c ***
 bool	is_executable(char **cmd);
+void	execve_command_create_process(t_cmd_data *until_redirection,
+											int *end_status, char **envp);
 void	execve_command(t_cmd_data *until_redirection, char **envp);
 bool	is_builtin(char **cmd);
 void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd, int *end_status);

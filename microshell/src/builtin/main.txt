@@ -98,14 +98,14 @@
 
 // 			if (command == NULL)
 // 			{
-// 				env_lstclear(&env_lst, free_env_node);
+// 				env_lstclear(&env_lst);
 // 				free(line);
 // 				printf("System Error: ft_split\n");
 // 				return (1);
 // 			}
 // 			if (do_command(command, env_lst) != 0)
 // 			{
-// 				env_lstclear(&env_lst, free_env_node);
+// 				env_lstclear(&env_lst);
 // 				free_command(command);
 // 				free(line);
 // 				return (1);
@@ -116,6 +116,6 @@
 // 			add_history(line);
 // 		free(line); // Free memory allocated by readline
 // 	}
-// 	env_lstclear(&env_lst, free_env_node);
+// 	env_lstclear(&env_lst);
 // 	return 0;
 // }

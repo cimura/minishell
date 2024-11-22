@@ -14,8 +14,8 @@
 
 void	sigint_handler_child(int signum)
 {
-	ft_putstr_fd("\n", STDOUT_FILENO);
 	printf("sigint child handler\n");
+	ft_putstr_fd("\n", STDOUT_FILENO);
 	(void)signum;
 }
 

@@ -57,7 +57,7 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[1]);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
-		exit(EXIT_FAILURE);
+		exit(*end_status);
 	}
 	else
 	{
@@ -90,7 +90,7 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[1]);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
-		exit(EXIT_FAILURE);
+		exit(*end_status);
 	}
 	else
 	{
@@ -119,7 +119,7 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	{
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
-		exit(EXIT_FAILURE);
+		exit(*end_status);
 	}
 	else
 	{
@@ -146,28 +146,25 @@ void	initialize_fd(t_file_descripter *fd)
 int	one_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	int *end_status)
 {
-	pid_t	pid;
+	t_cmd_data	*until_redirection;
+	char		**env_array;
+	int			local_status;
 
-	signal(SIGINT, sigint_handler_child);
-	signal(SIGQUIT, sigquit_handler_child);
-
-	pid = fork();
-	if (pid == -1)
-		perror("fork");
-	if (pid == 0)
-	{
-		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
-			return (1);
-	}
-	else
-	{
-		waitpid(pid, end_status, 0);
-		ft_signal();
-		if (WIFEXITED(*end_status))
-			*end_status = WEXITSTATUS(*end_status);
-		else if (WIFSIGNALED(*end_status))
-			*end_status = 128 + WTERMSIG(*end_status);
-	}
+	env_array = env_lst_to_array(env_lst);
+	if (env_array == NULL)
+		return (1);
+	local_status = redirect(token, env_lst, *fd, end_status);
+	if (local_status == 1 || local_status == -1)
+		return (free_ptr_array(env_array), local_status);
+	until_redirection = register_cmd_data(token, env_lst);
+	if (until_redirection == NULL)
+		return (free_ptr_array(env_array), 1);
+	if (is_builtin(until_redirection->cmd))
+		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
+	else if (is_executable(until_redirection->cmd))
+		execve_command_create_process(until_redirection, end_status, env_array);
+	free_cmd_data(until_redirection);
+	free_ptr_array(env_array);
 	return (0);
 }
 
@@ -246,20 +243,20 @@ int	execute_command_line(t_token *token, t_env *env_lst, int *end_status)
 // 		return (1);
 // 	token = lexer(argv[1]);
 // 	if (token == NULL)
-// 		return (env_lstclear(&env_lst, free_env_node), 1);
+// 		return (env_lstclear(&env_lst), 1);
 // 	if (pass_token_to_expand(env_lst, token, status) != 0)
 // 	{
-// 		env_lstclear(&env_lst, free_env_node);
-// 		token_lst_clear(&token, free_commands);
+// 		env_lstclear(&env_lst);
+// 		token_lstclear(&token);
 // 		return (1);
 // 	}
 //	if (execute_command_line(token, env_lst, &status) == -1)
 // 	{
-// 		env_lstclear(&env_lst, free_env_node);
-// 		token_lst_clear(&token, free_commands);
+// 		env_lstclear(&env_lst);
+// 		token_lstclear(&token);
 // 		return (1);
 // 	}
-// 	env_lstclear(&env_lst, free_env_node);
-// 	token_lst_clear(&token, free_commands);
+// 	env_lstclear(&env_lst);
+// 	token_lstclear(&token);
 // 	return (status);
 // }

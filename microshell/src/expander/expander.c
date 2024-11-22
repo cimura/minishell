@@ -147,7 +147,7 @@ char	*expander(t_env *env_lst, char *line, int end_status)
 //	char *result_line = expander(env_lst, line);
 //   if (result_line == NULL)
 //   {
-//   	env_lstclear(&env_lst, free_env_node);
+//   	env_lstclear(&env_lst);
 //   	return (0);
 //   }
 //   printf("\x1b[33m%s\x1b[0m\n", line);
@@ -155,6 +155,6 @@ char	*expander(t_env *env_lst, char *line, int end_status)
 //   printf("echo\n");
 //   system(com);
 //	printf("./expand\n%s\n", result_line);
-//	env_lstclear(&env_lst, free_env_node);
+//	env_lstclear(&env_lst);
 //	free(result_line);
 //}

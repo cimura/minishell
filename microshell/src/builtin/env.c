@@ -16,7 +16,6 @@ int	env(t_env *env_lst)
 {
 	while (env_lst != NULL)
 	{
-		// printf("%s=%s\n", env_lst->key, env_lst->value);
 		ft_putstr_fd(env_lst->key, STDOUT_FILENO);
 		ft_putstr_fd("=", STDOUT_FILENO);
 		ft_putstr_fd(env_lst->value, STDOUT_FILENO);
@@ -51,5 +50,5 @@ int	env(t_env *env_lst)
 // 	// 	printf("%s=%s\n", env_lst->key, env_lst->value);
 // 	// 	env_lst = env_lst->next;
 // 	// }
-// 	env_lstclear(&head, free_env_node);
+// 	env_lstclear(&head);
 // }

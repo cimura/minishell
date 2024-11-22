@@ -179,20 +179,20 @@ int	execute_command_line(t_token *token, t_env *env_lst, int *end_status)
 // 		return (1);
 // 	token = lexer(argv[1]);
 // 	if (token == NULL)
-// 		return (env_lstclear(&env_lst, free_env_node), 1);
+// 		return (env_lstclear(&env_lst), 1);
 // 	if (pass_token_to_expand(env_lst, token, status) != 0)
 // 	{
-// 		env_lstclear(&env_lst, free_env_node);
-// 		token_lst_clear(&token, free_commands);
+// 		env_lstclear(&env_lst);
+// 		token_lstclear(&token);
 // 		return (1);
 // 	}
 //	if (execute_command_line(token, env_lst, &status) == -1)
 // 	{
-// 		env_lstclear(&env_lst, free_env_node);
-// 		token_lst_clear(&token, free_commands);
+// 		env_lstclear(&env_lst);
+// 		token_lstclear(&token);
 // 		return (1);
 // 	}
-// 	env_lstclear(&env_lst, free_env_node);
-// 	token_lst_clear(&token, free_commands);
+// 	env_lstclear(&env_lst);
+// 	token_lstclear(&token);
 // 	return (status);
 // }

@@ -12,18 +12,7 @@
 
 #include "builtin.h"
 
-t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
-{
-	while (env_lst != NULL)
-	{
-		if (ft_strncmp(arg, env_lst->key, ft_strlen(env_lst->key)) == 0)
-			return (env_lst);
-		env_lst = env_lst->next;
-	}
-	return (NULL);
-}
-
-t_env	*create_new_env_node(char *arg)
+static t_env	*create_new_env_node(char *arg)
 {
 	t_env	*new;
 	int		klen;
@@ -48,7 +37,7 @@ t_env	*create_new_env_node(char *arg)
 	return (new);
 }
 
-int	parse_argument(char *arg, int *status)
+static int	parse_argument(char *arg, int *status)
 {
 	int	i;
 
@@ -75,7 +64,7 @@ int	parse_argument(char *arg, int *status)
 	return (0);
 }
 
-int	register_new_env(char *arg, t_env *env_lst)
+static int	register_new_env(char *arg, t_env *env_lst)
 {
 	t_env	*target;
 
@@ -142,6 +131,6 @@ int	export(char **args, t_env *env_lst)
 // 		printf("%s=%s\n", env_lst->key, env_lst->value);
 // 		env_lst = env_lst->next;
 // 	}
-// 	env_lstclear(&head, free_env_node);
+// 	env_lstclear(&head);
 // 	return (status);
 // }

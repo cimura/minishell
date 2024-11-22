@@ -12,18 +12,21 @@
 
 #include "env_lst.h"
 
-void	env_lstclear(t_env **lst, void (*del)(t_env *))
+void	env_lstclear(t_env **lst)
 {
 	t_env	*current;
 	t_env	*next;
 
-	if (lst == NULL || del == NULL)
+	if (lst == NULL)
 		return ;
 	current = *lst;
 	while (current != NULL)
 	{
 		next = current->next;
-		del(current);
+		free(current->key);
+		current->key = NULL;
+		free(current->value);
+		current->value = NULL;
 		free(current);
 		current = next;
 	}
@@ -45,14 +48,6 @@ void	env_lstadd_back(t_env **lst, t_env *new)
 		last = last->next;
 	}
 	last->next = new;
-}
-
-void	free_env_node(t_env *node)
-{
-	free(node->key);
-	node->key = NULL;
-	free(node->value);
-	node->value = NULL;
 }
 
 // PATH=/usr/bin -> "PATH"		(key)	
@@ -94,7 +89,7 @@ t_env	*create_env_lst(char *envp[])
 			return (NULL);
 		if (!set_key_value(new, envp[i]))
 			return (free(new), new = NULL,
-				env_lstclear(&head, free_env_node), NULL);
+				env_lstclear(&head), NULL);
 		new->next = NULL;
 		env_lstadd_back(&head, new);
 		i++;
@@ -118,5 +113,5 @@ t_env	*create_env_lst(char *envp[])
 // 		printf("%s=%s\n", env_lst->key, env_lst->value);
 // 		env_lst = env_lst->next;
 // 	}
-// 	env_lstclear(&head, free_env_node);
+// 	env_lstclear(&head);
 // }

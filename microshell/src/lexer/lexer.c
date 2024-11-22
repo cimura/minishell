@@ -39,7 +39,7 @@ static char	**create_until_pipe_array(t_list *normal, int size)
 	{
 		command_line[i] = ft_strdup(normal->content);
 		if (command_line[i] == NULL)
-			return (free_commands(command_line), NULL);
+			return (free_ptr_array(command_line), NULL);
 		normal = normal->next;
 		i++;
 	}
@@ -60,11 +60,11 @@ static t_token	*create_pipe_lst(t_list *normal)
 			normal = normal->next;
 		new = malloc(sizeof(t_token));
 		if (new == NULL)
-			return (token_lst_clear(&head, free_commands), NULL);
+			return (token_lstclear(&head), NULL);
 		size = count_token_until_pipe(normal);
 		new->command_line = create_until_pipe_array(normal, size);
 		if (new->command_line == NULL)
-			return (token_lst_clear(&head, free_commands), free(new), NULL);
+			return (token_lstclear(&head), free(new), NULL);
 		new->next = NULL;
 		token_lstadd_back(&head, new);
 		while (size > 0)
@@ -121,7 +121,7 @@ t_token	*lexer(char	*line)
 // 			if (words != NULL)
 // 				printf("\t");
 // 		}
-// 		token_lst_clear(&head, free_commands);
+// 		token_lstclear(&head);
 // 		i++;
 // 	}
 // 	return (0);

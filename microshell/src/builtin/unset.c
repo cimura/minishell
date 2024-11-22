@@ -100,6 +100,6 @@ int	unset(char **args, t_env *env_lst)
 //		i++;
 //	}
 
-//	env_lstclear(&env_lst, free_env_node);
+//	env_lstclear(&env_lst);
 // 	return (0);
 // }

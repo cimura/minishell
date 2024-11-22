@@ -75,11 +75,11 @@ int	main(int argc, char **argv, char **envp)
 		}
 		token = lexer(line);
 		if (token == NULL)
-			return (env_lstclear(&env_lst, free_env_node), 1);
+			return (env_lstclear(&env_lst), 1);
 		if (pass_token_to_expand(env_lst, token, status) != 0)
 		{
-			env_lstclear(&env_lst, free_env_node);
-			token_lst_clear(&token, free_commands);
+			env_lstclear(&env_lst);
+			token_lstclear(&token);
 			return (1);
 		}
 
@@ -90,27 +90,27 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (ft_exit(&token->command_line[1], &status) == 1)
 			{
-				token_lst_clear(&token, free_commands);
+				token_lstclear(&token);
 				continue ;
 			}
 			else
 			{
-				token_lst_clear(&token, free_commands);
+				token_lstclear(&token);
 				break ;
 			}
 		}
 		if (execute_command_line(token, env_lst, &status) == 1)
 		{
 			// system error
-			env_lstclear(&env_lst, free_env_node);
-			token_lst_clear(&token, free_commands);
+			env_lstclear(&env_lst);
+			token_lstclear(&token);
 			return (1);
 		}
-		token_lst_clear(&token, free_commands);
+		token_lstclear(&token);
 		if (ft_strlen(line) > 0)
 			add_history(line);
 	}
-	env_lstclear(&env_lst, free_env_node);
+	env_lstclear(&env_lst);
 	return (status);
 }
 

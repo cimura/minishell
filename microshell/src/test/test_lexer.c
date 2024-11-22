@@ -4,7 +4,7 @@ static void free_token_list(t_token *head) {
     while (head) {
         tmp = head;
         head = head->next;
-        free_commands(tmp->command_line);  // 予め用意されたコマンド解放関数
+        free_ptr_array(tmp->command_line);  // 予め用意されたコマンド解放関数
         free(tmp);
     }
 }

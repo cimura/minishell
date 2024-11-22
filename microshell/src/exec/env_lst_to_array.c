@@ -39,20 +39,6 @@ static char	*generate_key_value_str(t_env node)
 	return (result);
 }
 
-static void	free_env_array(char **env_array)
-{
-	int	i;
-
-	i = 0;
-	while (env_array[i] != NULL)
-	{
-		free(env_array[i]);
-		env_array[i] = NULL;
-		i++;
-	}
-	free(env_array);
-}
-
 char	**env_lst_to_array(t_env *env_lst)
 {
 	char	**env_array;
@@ -66,7 +52,7 @@ char	**env_lst_to_array(t_env *env_lst)
 	{
 		env_array[i] = generate_key_value_str(*env_lst);
 		if (env_array[i] == NULL)
-			return (free_env_array(env_array), NULL);
+			return (free_ptr_array(env_array), NULL);
 		i++;
 		env_lst = env_lst->next;
 	}
@@ -86,14 +72,14 @@ char	**env_lst_to_array(t_env *env_lst)
 //		return (1);
 //	env_array = env_lst_to_array(env_lst);
 //	if (env_array == NULL)
-//		return (env_lstclear(&env_lst, free_env_node), 1);
+//		return (env_lstclear(&env_lst), 1);
 //	int	i = 0;
 //	while (env_array[i] != NULL)
 //	{
 //		printf("%s\n", env_array[i]);
 //		i++;
 //	}
-//	env_lstclear(&env_lst, free_env_node);
-//	free_env_array(env_array);
+//	env_lstclear(&env_lst);
+//	free_ptr_array(env_array);
 //	return (0);
 //}

@@ -19,6 +19,31 @@ bool	is_executable(char **cmd)
 	return (true);
 }
 
+void	execve_command_create_process(t_cmd_data *until_redirection,
+											int *end_status, char **envp)
+{
+	pid_t	pid;
+
+	signal(SIGINT, sigint_handler_child);
+	signal(SIGQUIT, sigquit_handler_child);
+	pid = fork();
+	if (pid == -1)
+		perror("fork");
+	else if (pid == 0)
+	{
+		execve_command(until_redirection, envp);
+	}
+	else
+	{
+		waitpid(pid, end_status, 0);
+		ft_signal();
+		if (WIFEXITED(*end_status))
+			*end_status = WEXITSTATUS(*end_status);
+		else if (WIFSIGNALED(*end_status))
+			*end_status = 128 + WTERMSIG(*end_status);
+	}
+}
+
 void	execve_command(t_cmd_data *until_redirection, char **envp)
 {
 	if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
@@ -62,5 +87,4 @@ void	builtin_command(char **cmd, t_env *env_lst,
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		*end_status = unset(&cmd[1], env_lst);
 	dup2(fd.pure_stdout, STDOUT_FILENO);
-	exit(*end_status);
 }

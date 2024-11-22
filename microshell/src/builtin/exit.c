@@ -54,6 +54,7 @@ static bool	ft_isnum(char *arg)
 	}
 	return (true);
 }
+
 static unsigned char	ex_atoi(char *arg)
 {
 	int		i;

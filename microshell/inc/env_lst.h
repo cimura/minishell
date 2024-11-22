@@ -26,9 +26,8 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-void	free_env_node(t_env *node);
 void	env_lstadd_back(t_env **lst, t_env *new);
-void	env_lstclear(t_env **lst, void (*del)(t_env *));
+void	env_lstclear(t_env **lst);
 
 t_env	*create_env_lst(char *envp[]);
 

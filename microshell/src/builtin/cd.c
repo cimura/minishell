@@ -87,6 +87,6 @@ int	cd(char **args, t_env *env_lst)
 //	old_pwd = get_node_from_key(env_lst, "OLDPWD")->value;
 //	new_pwd = get_node_from_key(env_lst, "PWD")->value;
 //	printf("OLD_PWD: %s, PWD: %s\n", old_pwd, new_pwd);
-//	env_lstclear(&env_lst, free_env_node);
+//	env_lstclear(&env_lst);
 //	return (status);
 //}

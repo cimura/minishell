@@ -28,9 +28,8 @@ typedef struct s_token
 t_list	*create_token_lst(char *line);
 
 // *** lexer_util.c ***
-void	token_lst_clear(t_token **lst, void (*del)(char **));
+void	token_lstclear(t_token **lst);
 void	token_lstadd_back(t_token **lst, t_token *new);
-void	free_commands(char **commands);
 void	d_print_token_lst(t_token *token);
 
 // *** lexer.c ***
