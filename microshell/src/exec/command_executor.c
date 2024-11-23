@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   new_command_executor.c                             :+:      :+:    :+:   */
+/*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 20:01:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/23 15:18:33 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,16 @@ int	run_command_with_redirect(t_token *token, t_env *env_lst,
 	if (is_builtin(until_redirection->cmd))
 		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
 	else if (is_executable(until_redirection->cmd))
-		execve_command(until_redirection, env_array);
+		execve_command(until_redirection, end_status, env_array);
 	free_cmd_data(until_redirection);
 	free_ptr_array(env_array);
 	return (0);
+}
+
+void	close_purefd(t_file_descripter fd)
+{
+	close(fd.pure_stdin);
+	close(fd.pure_stdout);
 }
 
 int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
@@ -57,6 +63,7 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[1]);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
+		close_purefd(*fd);
 		exit(*end_status);
 	}
 	else
@@ -90,6 +97,7 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[1]);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
+		close_purefd(*fd);
 		exit(*end_status);
 	}
 	else
@@ -119,6 +127,7 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	{
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
+		close_purefd(*fd);
 		exit(*end_status);
 	}
 	else
@@ -162,7 +171,7 @@ int	one_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	if (is_builtin(until_redirection->cmd))
 		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
 	else if (is_executable(until_redirection->cmd))
-		execve_command_create_process(until_redirection, end_status, env_array);
+		execve_command_create_process(until_redirection, *fd, end_status, env_array);
 	free_cmd_data(until_redirection);
 	free_ptr_array(env_array);
 	return (0);

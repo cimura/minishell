@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/20 14:59:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/23 15:16:57 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ int		here_doc(char *eof, t_env *env_lst,
 // *** exec_and_bltin.c ***
 bool	is_executable(char **cmd);
 void	execve_command_create_process(t_cmd_data *until_redirection,
-											int *end_status, char **envp);
-void	execve_command(t_cmd_data *until_redirection, char **envp);
+			t_file_descripter fd, int *end_status, char **envp);
+void	execve_command(t_cmd_data *until_redirection, int *end_status, char **envp);
 bool	is_builtin(char **cmd);
 void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd, int *end_status);
 

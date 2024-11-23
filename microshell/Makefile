@@ -43,7 +43,7 @@ LIBFT_DIR := src/libft
 LIBFT := $(LIBFT_DIR)/libft.a
 
 CC := cc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -g
 #DEBUG_FLAGS := -g -fsanitize=address
 LDFLAGS := -lreadline
 IFLAGS := -I$(LIBFT_DIR)/include/ -I$(INC_DIR)

@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/23 14:45:07 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/23 14:59:43 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*line;
 	int		status = 0;
 
-	int pure_STDIN = dup(STDIN_FILENO);
+	//int pure_STDIN = dup(STDIN_FILENO);
 
 	(void)argv;
 
@@ -62,7 +62,7 @@ int	main(int argc, char **argv, char **envp)
 
 	while (1)
 	{
-		dup2(pure_STDIN, STDIN_FILENO);
+	//	dup2(pure_STDIN, STDIN_FILENO);
 		line = readline("minishell> ");
 		if (line == NULL)
 		{

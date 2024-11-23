@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helper.c                                           :+:      :+:    :+:   */
+/*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 15:27:16 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/23 15:22:34 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	is_executable(char **cmd)
 }
 
 void	execve_command_create_process(t_cmd_data *until_redirection,
-											int *end_status, char **envp)
+								t_file_descripter fd, int *end_status, char **envp)
 {
 	pid_t	pid;
 
@@ -31,7 +31,10 @@ void	execve_command_create_process(t_cmd_data *until_redirection,
 		perror("fork");
 	else if (pid == 0)
 	{
-		execve_command(until_redirection, envp);
+		close(fd.pure_stdin);
+		close(fd.pure_stdout);
+		execve_command(until_redirection, end_status, envp);
+		exit(*end_status);
 	}
 	else
 	{
@@ -44,14 +47,15 @@ void	execve_command_create_process(t_cmd_data *until_redirection,
 	}
 }
 
-void	execve_command(t_cmd_data *until_redirection, char **envp)
+void	execve_command(t_cmd_data *until_redirection, int *end_status, char **envp)
 {
 	if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 	{
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	}
-	exit(127);
+	*end_status = 127;
+//	exit(127);
 }
 
 bool	is_builtin(char **cmd)
