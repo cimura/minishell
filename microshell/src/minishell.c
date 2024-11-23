@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/23 14:59:43 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/23 19:44:52 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
 {
 	int		i;
 	char	*expand;
-
 	while (per_pipe != NULL)
 	{
 		i = 0;
@@ -47,6 +46,7 @@ int	main(int argc, char **argv, char **envp)
 	t_env	*env_lst;
 	t_token	*token;
 	char	*line;
+	int		syntax_result;
 	int		status = 0;
 
 	//int pure_STDIN = dup(STDIN_FILENO);
@@ -72,22 +72,34 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strlen(line) == 0)
 		{
 			free(line);
-			continue;
+			continue ;
 		}
-    if (check_syntax_before_lexer(line) == 1)
-    {
-      status = 2;
-      continue;
-    }
+		else if (ft_strlen(line) > 0)
+			add_history(line);
+
+		if (check_syntax_before_lexer(line) == 1)
+		{
+		  status = 2;
+		  free(line);
+		  continue ;
+		}
 		token = lexer(line);
 		if (token == NULL)
 			return (env_lstclear(&env_lst), 1);
-    if (check_syntax(env_lst, token) != 0)
-    {
-      status = 2;
-      continue;
-    }
 		if (pass_token_to_expand(env_lst, token, status) != 0)
+		{
+			env_lstclear(&env_lst);
+			token_lstclear(&token);
+			return (1);
+		}
+		syntax_result = check_syntax(token, env_lst);
+		if (syntax_result != 0)
+		{
+			status = syntax_result;
+			token_lstclear(&token);
+			continue ;
+		}
+		if (stash_token_empty_ptrs(token) == 1)
 		{
 			env_lstclear(&env_lst);
 			token_lstclear(&token);
@@ -97,7 +109,8 @@ int	main(int argc, char **argv, char **envp)
 		// debug
 		//d_print_token_lst(token);
 
-		if (ft_strncmp(token->command_line[0], "exit", 5 ) == 0 && token->next == NULL)
+		if (token->command_line[0] != NULL &&
+			ft_strncmp(token->command_line[0], "exit", 5 ) == 0 && token->next == NULL)
 		{
 			if (ft_exit(&token->command_line[1], &status) == 1)
 			{
@@ -118,9 +131,7 @@ int	main(int argc, char **argv, char **envp)
 			return (1);
 		}
 		token_lstclear(&token);
-		if (ft_strlen(line) > 0)
-			add_history(line);
-	}
+		}
 	env_lstclear(&env_lst);
 	return (status);
 }

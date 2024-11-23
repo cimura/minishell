@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/22 16:50:23 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/23 19:13:18 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,48 @@ int check_syntax_before_lexer(char *line)
   return (0);
 }
 
+int	check_permission(t_token *token)
+{
+	struct stat	st;
+
+	if (ft_strchr(token->command_line[0], '/') == NULL)
+		return (0);
+//	printf("%s\nstrchr=%s\n", token->command_line[0], ft_strchr(token->command_line[0], '/'));
+	if (stat(token->command_line[0], &st) == 0)
+	{
+//		printf("stat OK\n");
+		if (S_ISDIR(st.st_mode))
+		{
+			ft_putstr_fd(token->command_line[0], 2);
+			ft_putstr_fd(": ", 2);
+			ft_putendl_fd("Is a directory", 2);
+			return (126);
+		}
+		else if (access(token->command_line[0], X_OK) != 0)
+		{
+			ft_putstr_fd(token->command_line[0], 2);
+			ft_putstr_fd(": ", 2);
+			ft_putendl_fd("Permission denied", 2);
+			return (126);
+		}
+	}
+	if (access(token->command_line[0], F_OK) != 0)
+	{
+		ft_putstr_fd(token->command_line[0], 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd("No such file or directory", 2);
+		return (127);
+	}
+	return (0);
+}
+
 // TODO
 // case1: " echo hi |   |  "
 // case2: " echo hi |  "|" " の区別
-int check_syntax(t_env *env_lst, t_token *token)
+int check_syntax(t_token *token, t_env *env_lst)
 {
   int i;
+  int	permission_result;
   (void)env_lst;
 
   while (token != NULL)
@@ -109,22 +145,25 @@ int check_syntax(t_env *env_lst, t_token *token)
     if (token->command_line[0] == NULL)
     {
       ft_putendl_fd("syntax error", STDERR_FILENO);
-      return (1);
+      return (2);
     }
+	permission_result = check_permission(token);
+	if (permission_result != 0)
+		return (permission_result);
     while (token->command_line[i] != NULL)
     {
       // リダイレクト先がない　ex)" echo > "
       if (is_redirection(token->command_line[i]) && token->command_line[i + 1] == NULL)
       {
         ft_putendl_fd("syntax error", STDERR_FILENO);
-        return (1);
+        return (2);
       }
       // 変なやつ　ex) " echo >>> out "
       // <<<　みたいなのはあるっぽいから入れてない
       if (ft_strncmp(token->command_line[i], ">>>", 3) == 0)
       {
         ft_putendl_fd("syntax error", STDERR_FILENO);
-        return (1);
+        return (2);
       }
       if (ft_strncmp(token->command_line[i], ">|", 2) == 0
           || ft_strncmp(token->command_line[i], "<|", 2) == 0
@@ -132,7 +171,7 @@ int check_syntax(t_env *env_lst, t_token *token)
           || ft_strncmp(token->command_line[i], "|>", 2) == 0)
       {
         ft_putendl_fd("syntax error", STDERR_FILENO);
-        return (1);
+        return (2);
       }
       i++;
     }
