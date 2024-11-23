@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 14:54:04 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/23 14:45:07 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "lexer.h"
 #include "signal_handler.h"
 #include "utils.h"
+#include "syntax.h"
 #include "libft.h"
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
@@ -73,9 +74,19 @@ int	main(int argc, char **argv, char **envp)
 			free(line);
 			continue;
 		}
+    if (check_syntax_before_lexer(line) == 1)
+    {
+      status = 2;
+      continue;
+    }
 		token = lexer(line);
 		if (token == NULL)
 			return (env_lstclear(&env_lst), 1);
+    if (check_syntax(env_lst, token) != 0)
+    {
+      status = 2;
+      continue;
+    }
 		if (pass_token_to_expand(env_lst, token, status) != 0)
 		{
 			env_lstclear(&env_lst);
