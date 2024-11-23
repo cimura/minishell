@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/23 19:13:18 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 01:54:05 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ int check_quotation(char *line)
 
 int check_syntax_before_lexer(char *line)
 {
-  // int   i;
-  // pipe単体 ex) "|"
   if (line[0] == '|' && (line[1] == '\0' || white_space(line[1])))
   {
     ft_putendl_fd("syntax error", STDERR_FILENO);
@@ -74,22 +72,6 @@ int check_syntax_before_lexer(char *line)
     ft_putendl_fd("syntax error", STDERR_FILENO);
     return (1);
   }
-  // i = 0;
-  // while (line[i] != '\0')
-  // {
-    // トークンの中身がカラ
-    // ex) "echo | | "
-    // if (line[i] == '|')
-    // {
-    //   while(white_space(line[i]))
-    //     i++;
-    //   if (line[i] == '|')
-    //   {
-    //      ft_putendl_fd("syntax error", STDERR_FILENO);
-    //     return (1);
-    //   }
-  //   i++;
-  // }
   return (0);
 }
 
@@ -99,7 +81,6 @@ int	check_permission(t_token *token)
 
 	if (ft_strchr(token->command_line[0], '/') == NULL)
 		return (0);
-//	printf("%s\nstrchr=%s\n", token->command_line[0], ft_strchr(token->command_line[0], '/'));
 	if (stat(token->command_line[0], &st) == 0)
 	{
 //		printf("stat OK\n");
@@ -134,6 +115,7 @@ int	check_permission(t_token *token)
 int check_syntax(t_token *token, t_env *env_lst)
 {
   int i;
+  int j;
   int	permission_result;
   (void)env_lst;
 
@@ -160,24 +142,25 @@ int check_syntax(t_token *token, t_env *env_lst)
       }
       // 変なやつ　ex) " echo >>> out "
       // <<<　みたいなのはあるっぽいから入れてない
-      if (ft_strncmp(token->command_line[i], ">>>", 3) == 0)
+      j = 0;
+      while (token->command_line[i][j] != '\0')
       {
-        ft_putendl_fd("syntax error", STDERR_FILENO);
-        return (2);
-      }
-      if (ft_strncmp(token->command_line[i], ">|", 2) == 0
-          || ft_strncmp(token->command_line[i], "<|", 2) == 0
-          || ft_strncmp(token->command_line[i], "|<", 2) == 0
-          || ft_strncmp(token->command_line[i], "|>", 2) == 0)
-      {
-        ft_putendl_fd("syntax error", STDERR_FILENO);
-        return (2);
+        if (ft_strncmp(&token->command_line[i][j], ">|", 2) == 0
+            || ft_strncmp(&token->command_line[i][j], "<|", 2) == 0
+            || ft_strncmp(&token->command_line[i][j], "|<", 2) == 0
+            || ft_strncmp(&token->command_line[i][j], "|>", 2) == 0
+            || ft_strncmp(&token->command_line[i][j], ">>>", 3) == 0
+            || ft_strncmp(&token->command_line[i][j], "<>", 2) == 0
+            || ft_strncmp(&token->command_line[i][j], "><", 2) == 0)
+        {
+          ft_putendl_fd("syntax error", STDERR_FILENO);
+          return (2);
+        }
+        j++;
       }
       i++;
     }
     token = token->next;
-    // if (token->command_line[0] == NULL && token != NULL)
-    //   return (1);
   }
   return (0);
 }

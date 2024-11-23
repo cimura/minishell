@@ -33,6 +33,46 @@ mkdir ./outfiles
 mkdir ./mini_outfiles
 mkdir ./bash_outfiles
 
+setup_permission_tests() {
+    mkdir -p ./test_files
+
+    touch ./test_files/_file
+    touch ./test_files/r_file
+    touch ./test_files/rw_file
+    touch ./test_files/re_file
+    touch ./test_files/w_file
+    touch ./test_files/we_file
+    touch ./test_files/e_file
+    touch ./test_files/rxe_file
+
+    mkdir ./test_files/_dir
+    mkdir ./test_files/r_dir
+    mkdir ./test_files/rw_dir
+    mkdir ./test_files/re_dir
+    mkdir ./test_files/w_dir
+    mkdir ./test_files/we_dir
+    mkdir ./test_files/e_dir
+    mkdir ./test_files/rxe_dir
+}
+
+cleanup_permission_tests() {
+    chmod 600 ./test_files/rw_file  # 読み取りと書き込み
+    chmod 500 ./test_files/re_file  # 読み取りと実行
+    chmod 200 ./test_files/w_file   # 書き込みのみ
+    chmod 300 ./test_files/we_file  # 書き込みと実行
+    chmod 100 ./test_files/e_file   # 実行のみ
+    chmod 700 ./test_files/rxe_file # 読み取り・書き込み・実行
+
+    chmod 000 ./test_files/_dir     # 読み取り・書き込み・実行なし
+    chmod 400 ./test_files/r_dir    # 読み取りのみ
+    chmod 600 ./test_files/rw_dir   # 読み取りと書き込み
+    chmod 500 ./test_files/re_dir   # 読み取りと実行
+    chmod 200 ./test_files/w_dir    # 書き込みのみ
+    chmod 300 ./test_files/we_dir   # 書き込みと実行
+    chmod 100 ./test_files/e_dir    # 実行のみ
+    chmod 700 ./test_files/rxe_dir  # 読み取り・書き込み・実行
+}
+
 printf $RED
 echo "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥";
 echo "                                                                                             ";
@@ -108,7 +148,7 @@ for testfile in ${test_lists[*]}; do
 	done < $testfile
 done
 
-chmod 666 ./test_files/invalid_permission
+# chmod 666 ./test_files/invalid_permission
 rm -rf ./outfiles
 rm -rf ./mini_outfiles
 rm -rf ./bash_outfiles

@@ -1,0 +1,49 @@
+||
+|
+| echo hi | |
+| | |
+echo hi ||
+echo hi | | echo bye
+| >
+| >>
+<
+<|
+<||
+>|
+<|
+>>|
+<>>
+<|>
+echo hi > >
+echo hi < <
+"echo hi
+'echo hi
+echo hi | "echo bye
+echo hi | 'echo bye
+echo hi | echo \"bye
+echo hi | echo 'bye
+echo hi | echo "\""
+echo hi | echo '\''
+echo "hi | echo bye
+echo "hi > file"
+echo $
+echo $USER | echo $SHELL
+echo hi | echo $HOME > | file
+echo "$USER | echo hi"
+|
+>
+<
+>|<<
+ |<>
+"cat ./test_files/_file"
+"cat ./test_files/r_file"
+"cat ./test_files/rw_file"
+"cat ./test_files/re_file"
+"echo 'text' > ./test_files/r_file"
+"echo 'text' > ./test_files/rw_file"
+"./test_files/rxe_file"
+"ls ./test_files/_dir"
+"ls ./test_files/r_dir"
+"touch ./test_files/rw_dir/new_file"
+"rm -r ./test_files/re_dir"
+"cd ./test_files/e_dir | ls"
