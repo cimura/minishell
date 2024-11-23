@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_empty.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 19:13:57 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/23 19:59:08 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/23 20:28:54 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,26 @@ static int	count_valid_words(char **command_line)
 	return (c);
 }
 
-static char	**set_new_cmdline(char **command_line, char **new_cmdline)
+char	**create_new_cmdline(char **old_cmdline)
 {
-	int	i;
-	int	ni;
+	int		i;
+	char	**new_cmdline;
+	int		ni;
 
+	new_cmdline = malloc((count_valid_words(old_cmdline) + 1)
+			* sizeof(char *));
+	if (new_cmdline == NULL)
+		return (NULL);
 	i = 0;
 	ni = 0;
-	while (command_line[i] != NULL)
+	while (old_cmdline[i] != NULL)
 	{
-		if (command_line[i][0] == '\0')
+		if (old_cmdline[i][0] == '\0')
 		{
 			i++;
 			continue ;
 		}
-		new_cmdline[ni] = ft_strdup(command_line[i]);
+		new_cmdline[ni] = ft_strdup(old_cmdline[i]);
 		if (new_cmdline[ni] == NULL)
 			return (free_ptr_array(new_cmdline), NULL);
 		i++;
@@ -59,11 +64,7 @@ int	stash_token_empty_ptrs(t_token *token)
 
 	while (token != NULL)
 	{
-		new_cmdline = malloc(count_valid_words(token->command_line)
-				* sizeof(char *));
-		if (new_cmdline == NULL)
-			return (1);
-		new_cmdline = set_new_cmdline(token->command_line, new_cmdline);
+		new_cmdline = create_new_cmdline(token->command_line);
 		if (new_cmdline == NULL)
 			return (1);
 		free_ptr_array(token->command_line);
