@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/24 15:14:23 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 17:33:52 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,16 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
 		i = 0;
 		while (per_pipe->command_line[i] != NULL)
 		{
+			if (per_pipe->command_line[i + 1] != NULL
+				&& ft_strncmp(per_pipe->command_line[i], "<<", 3) == 0)
+			{
+				i += 2;
+				continue ;
+			}
 			expand = expander(env_lst, per_pipe->command_line[i], end_status);
 			if (expand == NULL)
 				return (1);
+			if (ft_strncmp(expand, "<<", 3))
 			free(per_pipe->command_line[i]);
 			per_pipe->command_line[i] = expand;
 			i++;

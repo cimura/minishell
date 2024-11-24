@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 19:13:57 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/23 20:28:54 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 17:36:13 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ char	**create_new_cmdline(char **old_cmdline)
 	ni = 0;
 	while (old_cmdline[i] != NULL)
 	{
-		if (old_cmdline[i][0] == '\0')
-		{
-			i++;
-			continue ;
-		}
+		// if (old_cmdline[i][0] == '\0')
+		// {
+		// 	i++;
+		// 	continue ;
+		// }
 		new_cmdline[ni] = ft_strdup(old_cmdline[i]);
 		if (new_cmdline[ni] == NULL)
 			return (free_ptr_array(new_cmdline), NULL);

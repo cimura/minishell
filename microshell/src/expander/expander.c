@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/20 15:05:18 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 17:34:49 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@ static t_expand_lst	*create_quoted_lst(char *line)
 	t_expand_lst	*new;
 	t_expand_lst	*head;
 
-	// if (str_count(line, "\'") % 2 != 0
-	// 	|| str_count(line, "\"") % 2 != 0)
-	// 	return (NULL);
 	head = NULL;
 	i = 0;
 	while (line[i])
@@ -120,8 +117,6 @@ char	*expander(t_env *env_lst, char *line, int end_status)
 		return (NULL);
 	if (*line == '\0')
 		return (ft_strdup("\0"));
-//	if (ft_strncmp(line, "$?", 3) == 0)
-//		return (ft_strdup(ft_itoa(g_status)));
 	expand_lst = create_quoted_lst(line);
 	if (expand_lst == NULL)
 		return (NULL);
