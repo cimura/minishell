@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/20 15:12:58 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 19:18:50 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,37 @@ static int	register_new_env(char *arg, t_env *env_lst)
 	return (0);
 }
 
-int	export(char **args, t_env *env_lst)
+void	no_args(t_env *env_lst)
+{
+	int		i;
+	t_env	*min_env_lst;
+	char	*old_min;
+	char	*max;
+	t_env	*head;
+
+	head = env_lst;
+	max = get_max_key(env_lst);
+	env_lst = head;
+	old_min = "\0";
+	i = 0;
+	while (i < count_env_lst(env_lst))
+	{
+		min_env_lst->key = max;
+		while (env_lst != NULL)
+		{
+			if (ft_strncmp(env_lst->key, old_min, 4096) > 0
+				&& ft_strncmp(env_lst->key, min_env_lst->key, 4096) < 0)
+				min_env_lst = env_lst;
+			env_lst = env_lst->next;
+		}
+		print_with_format(min_env_lst);
+		env_lst = head;
+		old_min = min_env_lst->key;
+		i++;
+	}
+}
+
+int	with_args(char **args, t_env *env_lst)
 {
 	int	i;
 	int	status;
@@ -112,6 +142,33 @@ int	export(char **args, t_env *env_lst)
 			return (1);
 		i++;
 	}
+	return (status);
+}
+
+int	export(char **args, t_env *env_lst)
+{
+	int	i;
+	int	status;
+
+	i = 0;
+	status = 0;
+	if (args[0] == NULL)
+		no_args(env_lst);
+	else
+		status = with_args(args, env_lst);
+	// while (args[i] != NULL)
+	// {
+	// 	if (parse_argument(args[i], &status) == 1)
+	// 	{
+	// 		if (status == 1)
+	// 			ft_putendl_fd(" not a valid identifier", STDERR_FILENO);
+	// 		i++;
+	// 		continue ;
+	// 	}
+	// 	if (register_new_env(args[i], env_lst) == 1)
+	// 		return (1);
+	// 	i++;
+	// }
 	return (status);
 }
 

@@ -5,7 +5,7 @@ INC_DIR     := inc/
 
 # ソースファイルとオブジェクトファイルの設定
 BUILTIN_DIR := src/builtin/
-BUILTIN_SRCS := cd.c echo.c env.c exit.c export.c pwd.c unset.c
+BUILTIN_SRCS := cd.c echo.c env.c exit.c export.c export_util.c pwd.c unset.c
 BUILTIN := $(addprefix $(OBJ_DIR)builtin/, $(BUILTIN_SRCS:.c=.o))
 
 ENV_DIR := src/env/
