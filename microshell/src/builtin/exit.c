@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/20 16:13:33 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 15:26:58 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static unsigned char	ex_atoi(char *arg)
 {
 	int		i;
 	int		sign;
-	int		result;
+	unsigned long long		result;
 
 	i = 0;
 	sign = decide_sign(arg, &i);
@@ -72,6 +72,12 @@ static unsigned char	ex_atoi(char *arg)
 	while (arg[i] <= '9' && arg[i] >= '0')
 	{
 		result = result * 10 + (arg[i] - '0');
+		if ((result > __LONG_LONG_MAX__ && sign == 1)
+			|| (result > ((unsigned long long)__LONG_LONG_MAX__ + 1) && sign == -1))
+		{
+			ft_putendl_fd(" numeric argument required", STDERR_FILENO);
+			return (2);
+		}
 		i++;
 	}
 	return ((unsigned char)result * sign);

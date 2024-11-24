@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/17 17:01:49 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 15:21:06 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include <limits.h>
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <readline/readline.h>
