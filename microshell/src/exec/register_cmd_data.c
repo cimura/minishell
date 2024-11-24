@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/24 16:29:50 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/24 19:26:09 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ static char	**register_cmd(char **head_cmdline)
 	ri = 0;
 	while (i < size)
 	{
-		// fprintf(stderr, "%s\n", head_cmdline[i]);
 		if (is_redirection(head_cmdline[i]))
 		{
 			i += 2;

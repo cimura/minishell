@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/24 19:06:59 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/24 19:42:26 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	cd(char **args, t_env *env_lst);
 int	pwd(void);
 int	ft_exit(char **args, int *status);
 
-char	*get_max_key(t_env *env_lst);
+t_env	*get_max_key(t_env *env_lst);
 int		count_env_lst(t_env *env_lst);
 void	print_with_format(t_env *env_lst);
 

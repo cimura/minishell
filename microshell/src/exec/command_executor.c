@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/24 16:29:13 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/24 19:31:47 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ int	one_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	until_redirection = register_cmd_data(token, env_lst);
 	if (until_redirection == NULL)
 		return (free_ptr_array(env_array), 1);
+	// fprintf(stderr, "before redirect\n");
 	if (is_builtin(until_redirection->cmd))
 		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
 	else if (is_executable(until_redirection->cmd))

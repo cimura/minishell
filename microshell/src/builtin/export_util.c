@@ -6,24 +6,28 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:55:45 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/24 19:25:04 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/24 19:42:11 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-char	*get_max_key(t_env *env_lst)
+t_env	*get_max_key(t_env *env_lst)
 {
 	char	*max;
+	t_env	*save;
 
 	max = "";
 	while (env_lst != NULL)
 	{
 		if (ft_strncmp(env_lst->key, max, 4096) > 0)
+		{
 			max = env_lst->key;
+			save = env_lst;
+		}
 		env_lst = env_lst->next;
 	}
-	return (max);
+	return (save);
 }
 
 int	count_env_lst(t_env *env_lst)
