@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/23 20:22:26 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 16:28:59 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	redirect(t_token *token, t_env *env_lst,
 		if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
 		{
 			if (here_doc(token->command_line[i + 1],
-					env_lst, fd, *end_status) == 0)
+					env_lst, fd, *end_status) == 1)
 				return (1);
 		}
 		i++;

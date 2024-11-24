@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/23 20:19:49 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 16:29:13 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,10 @@ int	one_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		return (1);
 	local_status = redirect(token, env_lst, *fd, end_status);
 	if (local_status == 1 || local_status == -1)
+	{
+		// fprintf(stderr, "%d\n", local_status);
 		return (free_ptr_array(env_array), local_status);
+	}
 	until_redirection = register_cmd_data(token, env_lst);
 	if (until_redirection == NULL)
 		return (free_ptr_array(env_array), 1);

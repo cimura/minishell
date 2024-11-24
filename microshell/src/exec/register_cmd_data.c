@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helper.c                                           :+:      :+:    :+:   */
+/*   register_cmd_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 15:27:16 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/24 16:29:50 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static char	**register_cmd(char **head_cmdline)
 	ri = 0;
 	while (i < size)
 	{
+		// fprintf(stderr, "%s\n", head_cmdline[i]);
 		if (is_redirection(head_cmdline[i]))
 		{
 			i += 2;
@@ -116,5 +117,6 @@ t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
 	cmd_data->cmd = register_cmd(&token->command_line[0]);
 	if (cmd_data->cmd == NULL)
 		return (free(cmd_data->path), free(cmd_data), NULL);
+	// d_print_char_array(cmd_data->cmd);
 	return (cmd_data);
 }
