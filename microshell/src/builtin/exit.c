@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/24 15:26:58 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/25 23:37:08 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static bool	ft_isnum(char *arg)
 	i = 0;
 	while (arg[i] != '\0')
 	{
-		if (!ft_isdigit(arg[i]))
+		if (!ft_isdigit(arg[i]) && !white_space(arg[i]))
 			return (false);
 		i++;
 	}

@@ -47,3 +47,7 @@ echo "$USER | echo hi"
 "touch ./test_files/rw_dir/new_file"
 "rm -r ./test_files/re_dir"
 "cd ./test_files/e_dir | ls"
+""
+''
+"$EMPTY"
+'$EMPTY'

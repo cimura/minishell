@@ -107,7 +107,7 @@ void	no_args(t_env *env_lst)
 	i = 0;
 	while (i < count_env_lst(env_lst))
 	{
-		min_env_lst->key = max_node;
+		min_env_lst->key = max_node->key;
 		while (env_lst != NULL)
 		{
 			if (ft_strncmp(env_lst->key, old_min, 4096) > 0
@@ -147,10 +147,8 @@ int	with_args(char **args, t_env *env_lst)
 
 int	export(char **args, t_env *env_lst)
 {
-	int	i;
 	int	status;
 
-	i = 0;
 	status = 0;
 	if (args[0] == NULL)
 		no_args(env_lst);
