@@ -3,54 +3,72 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:55:45 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/24 19:42:11 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:37:30 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-t_env	*get_max_key(t_env *env_lst)
+static bool	is_plus_exist(char *arg)
 {
-	char	*max;
-	t_env	*save;
+	int	i;
 
-	max = "";
-	while (env_lst != NULL)
+	i = 0;
+	while (arg[i] != '\0' && arg[i] != '=')
 	{
-		if (ft_strncmp(env_lst->key, max, 4096) > 0)
-		{
-			max = env_lst->key;
-			save = env_lst;
-		}
-		env_lst = env_lst->next;
+		if (arg[i] == '+' && arg[i + 1] == '=')
+			return (true);
+		i++;
 	}
-	return (save);
+	return (false);
 }
 
-int	count_env_lst(t_env *env_lst)
+char	*generate_new_value(char *old_value, char *arg)
 {
-	int	size;
+	char	*new_value;
 
-	size = 0;
-	while (env_lst != NULL)
-	{
-		size++;
-		env_lst = env_lst->next;
-	}
-	return (size);
+	if (is_plus_exist(arg))
+		new_value = ft_strjoin(old_value, ft_strchr(arg, '=') + 1);
+	else
+		new_value = ft_strdup(ft_strchr(arg, '=') + 1);
+	free(old_value);
+	if (new_value == NULL)
+		return (NULL);
+	return (new_value);
 }
 
-void	print_with_format(t_env *env_lst)
+static int	count_keylen(char *str)
 {
-	if (ft_strncmp(env_lst->key, "_", 2) == 0)
-		return ;
-	ft_putstr_fd("declare -x ", STDOUT_FILENO);
-	ft_putstr_fd(env_lst->key, STDOUT_FILENO);
-	ft_putstr_fd("=", STDOUT_FILENO);
-	ft_putstr_fd("\"", STDOUT_FILENO);
-	ft_putstr_fd(env_lst->value, STDOUT_FILENO);
-	ft_putendl_fd("\"", STDOUT_FILENO);
+	int	c;
+
+	c = 0;
+	while (str[c] != '\0' && str[c] != '+' & str[c] != '=')
+		c++;
+	return (c);
 }
+
+t_env	*create_new_env_node(char *arg)
+{
+	t_env	*new;
+	int		klen;
+	int		vlen;
+
+	new = malloc(sizeof(t_env));
+	if (new == NULL)
+		return (NULL);
+	klen = count_keylen(arg);
+	vlen = ft_strlen(ft_strchr(arg, '=') + 1);
+	new->key = ft_strndup(arg, klen);
+	if (new->key == NULL)
+		return (free(new), NULL);
+	new->value = ft_strndup(ft_strchr(arg, '=') + 1, vlen);
+	if (new->value == NULL)
+		return (free(new->key), NULL);
+	new->next = NULL;
+	return (new);
+}
+
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:05:59 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/15 17:52:08 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:07:24 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,6 @@ int	unset(char **args, t_env *env_lst)
 	}
 	return (0);
 }
-
-//t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
-//{
-//	while (env_lst != NULL)
-//	{
-//		if (ft_strncmp(arg, env_lst->key, ft_strlen(env_lst->key)) == 0)
-//			return (env_lst);
-//		env_lst = env_lst->next;
-//	}
-//	return (NULL);
-//}
 
 // int	main(int argc, char *argv[], char *envp[])
 // {

@@ -1,6 +1,4 @@
 #include "utils.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 void	free_ptr_array(char **ptr)
 {
@@ -17,6 +15,29 @@ void	free_ptr_array(char **ptr)
 	}
 	free(ptr);
 	ptr = NULL;
+}
+
+char	*ft_strndup(const char *str, size_t n)
+{
+	char	*result;
+	size_t	str_len;
+	size_t	i;
+
+	i = 0;
+	str_len = ft_strlen((char *)str);
+	if (n < str_len)
+		result = malloc(sizeof(char) * (n + 1));
+	else
+		result = malloc(sizeof(char) * (str_len + 1));
+	if (result == NULL)
+		return (NULL);
+	while (str[i] != '\0' && n > i)
+	{
+		result[i] = str[i];
+		i++;
+	}
+	result[i] = '\0';
+	return (result);
 }
 
 int	count_char_array_words(char **ptr)

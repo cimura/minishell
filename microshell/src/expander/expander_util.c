@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_util.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:32:36 by sshimura          #+#    #+#             */
-/*   Updated: 2024/10/23 18:01:07 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:53:52 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,29 +63,6 @@ int	str_count(char *line, char *meta_char)
 		i++;
 	}
 	return (count);
-}
-
-char	*ft_strndup(const char *str, size_t n)
-{
-	char	*result;
-	size_t	str_len;
-	size_t	i;
-
-	i = 0;
-	str_len = ft_strlen((char *)str);
-	if (n < str_len)
-		result = malloc(sizeof(char) * (n + 1));
-	else
-		result = malloc(sizeof(char) * (str_len + 1));
-	if (result == NULL)
-		return (NULL);
-	while (str[i] != '\0' && n > i)
-	{
-		result[i] = str[i];
-		i++;
-	}
-	result[i] = '\0';
-	return (result);
 }
 
 int	count_until_char(char *line, char *needle)
