@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/10/23 19:32:59 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/26 16:20:06 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ t_env	*create_env_lst(char *envp[])
 		env_lstadd_back(&head, new);
 		i++;
 	}
+	if (head == NULL)
+		exit(1);
 	return (head);
 }
 

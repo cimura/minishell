@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:26:27 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/15 17:51:10 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:50:23 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ int	echo(char **args)
 		is_option = 1;
 	if (is_option)
 		i++;
+
 	while (args[i] != NULL)
 	{
+		// printf("args[%d]: %s\n", i, args[i]);
 		ft_putstr_fd(args[i], STDOUT_FILENO);
 		if (args[i + 1] != NULL)
 			ft_putstr_fd(" ", STDOUT_FILENO);

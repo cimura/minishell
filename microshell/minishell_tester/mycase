@@ -60,5 +60,4 @@ echo "" "" | cat -e
 echo > $A
 cat | ls
 unset A=
-cat <<"" > fsg > fsdfh
-cat << EOF
+cat <<""

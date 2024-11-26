@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:55:45 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/24 19:42:11 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:26:31 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,24 @@ t_env	*get_max_key(t_env *env_lst)
 		if (ft_strncmp(env_lst->key, max, 4096) > 0)
 		{
 			max = env_lst->key;
+			save = env_lst;
+		}
+		env_lst = env_lst->next;
+	}
+	return (save);
+}
+
+t_env	*get_min_key(t_env *env_lst)
+{
+	char	*min;
+	t_env	*save;
+
+	min = get_max_key(env_lst)->key;
+	while (env_lst != NULL)
+	{
+		if (ft_strncmp(env_lst->key, min, 4096) < 0)
+		{
+			min = env_lst->key;
 			save = env_lst;
 		}
 		env_lst = env_lst->next;

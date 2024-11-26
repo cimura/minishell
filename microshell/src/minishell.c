@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/24 19:22:13 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:21:15 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,31 @@
 #include "utils.h"
 #include "syntax.h"
 #include "libft.h"
+
+#define CONTINUE 3
+
+static	void	clear_exit(t_env *env_lst, t_token *token, int exit_status)
+{
+	env_lstclear(&env_lst);
+	token_lstclear(&token);
+	exit(exit_status);
+}
+
+static int	no_pipe_exit(t_env *env_lst, t_token *token, int *status)
+{
+	if (token->command_line[0] != NULL &&
+		ft_strncmp(token->command_line[0], "exit", 5) == 0 && token->next == NULL)
+	{
+		if (ft_exit(&token->command_line[1], status) == 1)
+		{
+			token_lstclear(&token);
+			return (CONTINUE);
+		}
+		else
+			clear_exit(env_lst, token, *status);
+	}
+	return (0);
+}
 
 int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
 {
@@ -47,142 +72,72 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
 	return (0);
 }
 
+static int	preprocess_command(t_env *env_lst, t_token **token, char *line, int *status)
+{
+	int	syntax_result;
+
+	if (check_syntax_before_lexer(line) == 1)
+	{
+		*status = 2;
+		free(line);
+		return (CONTINUE);
+	}
+	*token = lexer(line);
+	if (*token == NULL)
+		clear_exit(env_lst, *token, 1);
+	if (pass_token_to_expand(env_lst, *token, *status) != 0)
+		clear_exit(env_lst, *token, 1);
+	syntax_result = check_syntax(*token, env_lst);
+	if (syntax_result != 0)
+	{
+		*status = syntax_result;
+		token_lstclear(token);
+		return (CONTINUE);
+	}
+	return (0);
+}
+
+static int	process_input_line(char **line)
+{
+	*line = readline("minishell> ");
+	if (*line == NULL)
+	{
+		printf("exit\n");
+		exit(1);
+	}
+	if (ft_strlen(*line) == 0)
+	{
+		free(*line);
+		return (CONTINUE);
+	}
+	else if (ft_strlen(*line) > 0)
+		add_history(*line);
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
+	(void)argv;
+	(void)argc;
 	t_env	*env_lst;
 	t_token	*token;
 	char	*line;
-	int		syntax_result;
-	int		status = 0;
-
-	//int pure_STDIN = dup(STDIN_FILENO);
-
-	(void)argv;
-
+	int		status;
+	
 	ft_signal();
-	if (argc > 2)
-		return (printf("No need arguments\n"), 1);
+	status = 0;
 	env_lst = create_env_lst(envp);
-	if (env_lst == NULL)
-		return (1);
-
 	while (1)
 	{
-	//	dup2(pure_STDIN, STDIN_FILENO);
-		line = readline("minishell> ");
-		if (line == NULL)
-		{
-			printf("exit\n");
-			break ;
-		}
-		if (ft_strlen(line) == 0)
-		{
-			free(line);
+		if (process_input_line(&line) == CONTINUE)
 			continue ;
-		}
-		else if (ft_strlen(line) > 0)
-			add_history(line);
-
-		if (check_syntax_before_lexer(line) == 1)
-		{
-		  status = 2;
-		  free(line);
-		  continue ;
-		}
-		token = lexer(line);
-		if (token == NULL)
-			return (env_lstclear(&env_lst), 1);
-		if (pass_token_to_expand(env_lst, token, status) != 0)
-		{
-			env_lstclear(&env_lst);
-			token_lstclear(&token);
-			return (1);
-		}
-		syntax_result = check_syntax(token, env_lst);
-		if (syntax_result != 0)
-		{
-			status = syntax_result;
-			token_lstclear(&token);
+		if (preprocess_command(env_lst, &token, line, &status) == CONTINUE)
 			continue ;
-		}
-		if (stash_token_empty_ptrs(token) == 1)
-		{
-			env_lstclear(&env_lst);
-			token_lstclear(&token);
-			return (1);
-		}
-
-
-		// debug
-		//d_print_token_lst(token);
-
-		if (token->command_line[0] != NULL &&
-			ft_strncmp(token->command_line[0], "exit", 5 ) == 0 && token->next == NULL)
-		{
-			if (ft_exit(&token->command_line[1], &status) == 1)
-			{
-				token_lstclear(&token);
-				continue ;
-			}
-			else
-			{
-				token_lstclear(&token);
-				break ;
-			}
-		}
+		if (no_pipe_exit(env_lst, token, &status) == CONTINUE)
+			continue ;
 		if (execute_command_line(token, env_lst, &status) == 1)
-		{
-			// system error
-			env_lstclear(&env_lst);
-			token_lstclear(&token);
-			return (1);
-		}
-		token_lstclear(&token);
-		}
+			clear_exit(env_lst, token, 1);
+	}
 	env_lstclear(&env_lst);
 	return (status);
 }
-
-
-// int main(int argc, char **argv, char **envp)
-// {
-// 	(void)argv;
-// 	(void)argc;
-// 	char *line = NULL;
-
-// 		while (1)
-// 		{
-// 				line = readline("minishell> ");
-
-// 				if (!line)
-// 				{
-// 					printf("exit\n");
-// 					break;
-// 				}
-// 				if (strlen(line) == 0)
-// 				{
-// 					free(line);
-// 					continue;
-// 				}
-// 					// <command> <redirect> <command>の実行
-// 				if (include_redirect(line))
-// 					redirect(line, envp);
-// 				else
-// 				{
-// 					char **command = ft_split(line, ' ');
-
-// 					if (command == NULL)
-// 					{
-// 						free(line);
-// 							printf("exit\n");
-// 							break;
-// 					}
-// 					do_command(command, envp);
-// 					free_command(command);
-// 				}
-// 				if (strlen(line) > 0)
-// 						add_history(line);
-// 				free(line); // Free memory allocated by readline
-// 		}
-// 		return 0;
-// }

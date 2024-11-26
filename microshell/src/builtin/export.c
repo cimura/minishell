@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/24 19:45:09 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:38:29 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,18 +96,17 @@ void	no_args(t_env *env_lst)
 {
 	int		i;
 	char	*old_min;
-	t_env	*max_node;
 	t_env	*head;
+	t_env	*max_node;
 	t_env	*min_env_lst;
 
 	head = env_lst;
-	min_env_lst = env_lst;
 	max_node = get_max_key(env_lst);
 	old_min = "\0";
 	i = 0;
 	while (i < count_env_lst(env_lst))
 	{
-		min_env_lst->key = max_node->key;
+		min_env_lst = get_min_key(env_lst);
 		while (env_lst != NULL)
 		{
 			if (ft_strncmp(env_lst->key, old_min, 4096) > 0
