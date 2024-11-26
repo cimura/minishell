@@ -51,3 +51,14 @@ echo "$USER | echo hi"
 ''
 "$EMPTY"
 '$EMPTY'
+echo -n -n -n aaa
+ <test
+ >test
+ >>test
+ <<test
+echo "" "" | cat -e
+echo > $A
+cat | ls
+unset A=
+cat <<"" > fsg > fsdfh
+cat << EOF
