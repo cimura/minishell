@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/26 15:18:42 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:30:10 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	check_permission(t_token *token)
 {
 	struct stat	st;
 
-	if (ft_strchr(token->command_line[0], '/') == NULL)
+	if (token->command_line[0]  == NULL || ft_strchr(token->command_line[0], '/') == NULL)
 		return (0);
 	if (stat(token->command_line[0], &st) == 0)
 	{

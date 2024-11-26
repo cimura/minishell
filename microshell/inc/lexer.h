@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:28:30 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 17:54:50 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:38:05 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ void	token_lstadd_back(t_token **lst, t_token *new);
 void	d_print_token_lst(t_token *token);
 
 // *** lexer.c ***
-t_token	*lexer(char	*line);
+t_token	*lexer(char	*line, int *null_char_flag);
 
 #endif

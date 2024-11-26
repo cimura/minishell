@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/23 14:44:15 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/26 19:38:36 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,22 @@ static t_token	*create_pipe_lst(t_list *normal)
 	return (head);
 }
 
-t_token	*lexer(char	*line)
+t_token	*lexer(char	*line, int *null_char_flag)
 {
 	t_list	*normal;
 	t_token	*per_pipe;
 
+
+	if (line[0] == '\0')
+	{
+		char **tmp = malloc(sizeof(char *));
+		tmp[0] = "";
+		per_pipe = malloc(sizeof(t_token));
+		per_pipe->command_line = tmp;
+		per_pipe->next = NULL;
+		*null_char_flag = 3;
+		return (per_pipe);
+	}
 	normal = create_token_lst(line);
 	if (normal == NULL)
 		return (NULL);

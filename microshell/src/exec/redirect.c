@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/24 16:28:59 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:24:53 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ int	redirect(t_token *token, t_env *env_lst,
 			t_file_descripter fd, int *end_status)
 {
 	int	i;
+	int	local_status;
 
+	local_status = 0;
 	i = 0;
 	while (token->command_line[i] != NULL)
 	{
@@ -63,13 +65,14 @@ int	redirect(t_token *token, t_env *env_lst,
 			*end_status = 1;
 			return (-1);
 		}
-		if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
+		else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
 		{
-			if (here_doc(token->command_line[i + 1],
-					env_lst, fd, *end_status) == 1)
+			local_status = here_doc(token->command_line[i + 1],
+					env_lst, fd, end_status);
+			if (local_status == 1)
 				return (1);
 		}
 		i++;
 	}
-	return (0);
+	return (local_status);
 }

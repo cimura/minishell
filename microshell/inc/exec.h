@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/23 15:16:57 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/26 17:16:48 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ int		redirect(t_token *token, t_env *env_lst,
 			t_file_descripter fd, int *end_status);
 
 // *** heredoc.c ***
-int		here_doc(char *eof, t_env *env_lst,
-			t_file_descripter fd, int end_status);
+int	here_doc(char *eof, t_env *env_lst,
+	t_file_descripter fd, int *end_status);
 
 // *** exec_and_bltin.c ***
 bool	is_executable(char **cmd);

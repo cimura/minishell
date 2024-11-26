@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helper.c                                           :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 15:27:16 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/26 17:20:44 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	tmpfile_to_readfrom(char *tmp_file, int fd_tmp,
 #define BREAK 3
 
 static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
-								int fd_tmp, int end_status)
+								int fd_tmp, int *end_status)
 {
 	char	*line;
 	char	*expanded;
@@ -57,12 +57,13 @@ static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 	if (g_global == 1)
 	{
 		g_global = 0;
+		*end_status = 130;
 		free(line);
 		return (SIGINT_RECEIVED);
 	}
 	if (line == NULL || ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
 		return (BREAK);
-	expanded = expand_env_variable(env_lst, line, end_status);
+	expanded = expand_env_variable(env_lst, line, *end_status);
 	free(line);
 	if (expanded == NULL)
 		return (1);
@@ -73,7 +74,7 @@ static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 }
 
 int	here_doc(char *eof, t_env *env_lst,
-	t_file_descripter fd, int end_status)
+	t_file_descripter fd, int *end_status)
 {
 	int		fd_tmp;
 	char	*tmp_file;
@@ -89,7 +90,7 @@ int	here_doc(char *eof, t_env *env_lst,
 		local_status = append_readline_to_tmpfile(eof, env_lst,
 				fd_tmp, end_status);
 		if (local_status == SIGINT_RECEIVED)
-			return (close(fd_tmp), 0);
+			return (close(fd_tmp), -1);
 		else if (local_status == 1)
 			return (close(fd_tmp), 1);
 		else if (local_status == BREAK)

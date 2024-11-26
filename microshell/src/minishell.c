@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/26 16:21:15 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:37:17 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,19 @@ static int	preprocess_command(t_env *env_lst, t_token **token, char *line, int *
 {
 	int	syntax_result;
 
+	syntax_result = 0;
 	if (check_syntax_before_lexer(line) == 1)
 	{
 		*status = 2;
 		free(line);
 		return (CONTINUE);
 	}
-	*token = lexer(line);
+	char *expanded = expand_env_variable(env_lst, line, *status);
+	*token = lexer(expanded, &syntax_result);
 	if (*token == NULL)
 		clear_exit(env_lst, *token, 1);
+	if (syntax_result == CONTINUE)
+		return (CONTINUE);
 	if (pass_token_to_expand(env_lst, *token, *status) != 0)
 		clear_exit(env_lst, *token, 1);
 	syntax_result = check_syntax(*token, env_lst);

@@ -51,6 +51,7 @@ echo "$USER | echo hi"
 ''
 "$EMPTY"
 '$EMPTY'
+$EMPTY
 echo -n -n -n aaa
  <test
  >test

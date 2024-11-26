@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/20 15:35:13 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/26 19:22:49 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,24 @@ static char	*non_expandble_str(char *new, char *line_ptr)
 	new = tmp;
 	return (new);
 }
+
+// static char	*non_expandble_str2(char *new, char *line_ptr)
+// {
+// 	char	*to_dollar;
+// 	char	*tmp;
+
+// 	to_dollar = ft_strndup(line_ptr, count_until_char(line_ptr, "\'"));
+// 	if (to_dollar == NULL)
+// 		return (free(new), new = NULL, NULL);
+// 	tmp = ft_strjoin(new, to_dollar);
+// 	if (tmp == NULL)
+// 		return (free(to_dollar), to_dollar = NULL, free(new), new = NULL, NULL);
+// 	free(to_dollar);
+// 	to_dollar = NULL;
+// 	free(new);
+// 	new = tmp;
+// 	return (new);
+// }
 
 char	*expand_env_variable(t_env *env_lst, char *lst_line, int end_status)
 {

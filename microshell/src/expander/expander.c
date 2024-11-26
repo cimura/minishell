@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/24 17:34:49 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/26 18:52:50 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,26 +63,26 @@ static t_expand_lst	*create_quoted_lst(char *line)
 	return (head);
 }
 
-static int	handle_doller_expand(t_env *env_lst, t_expand_lst *expand_lst,
-	int end_status)
-{
-	char	*old;
+// static int	handle_doller_expand(t_env *env_lst, t_expand_lst *expand_lst,
+// 	int end_status)
+// {
+// 	char	*old;
 
-	while (expand_lst != NULL)
-	{
-		if (expand_lst->status != SINGLE)
-		{
-			old = expand_lst->str;
-			expand_lst->str = expand_env_variable(env_lst, expand_lst->str, end_status);
-			if (expand_lst->str == NULL)
-				return (free(old), old = NULL, 1);
-			free(old);
-			old = NULL;
-		}
-		expand_lst = expand_lst->next;
-	}
-	return (0);
-}
+// 	while (expand_lst != NULL)
+// 	{
+// 		if (expand_lst->status != SINGLE)
+// 		{
+// 			old = expand_lst->str;
+// 			expand_lst->str = expand_env_variable(env_lst, expand_lst->str, end_status);
+// 			if (expand_lst->str == NULL)
+// 				return (free(old), old = NULL, 1);
+// 			free(old);
+// 			old = NULL;
+// 		}
+// 		expand_lst = expand_lst->next;
+// 	}
+// 	return (0);
+// }
 
 // hello -> wo -> world
 // 最初の要素だけコピーしてあとはjoin, NULLチェックは必要
@@ -113,6 +113,8 @@ char	*expander(t_env *env_lst, char *line, int end_status)
 	t_expand_lst	*expand_lst;
 	char			*result;
 
+	(void)end_status;
+	(void)env_lst;
 	if (line == NULL)
 		return (NULL);
 	if (*line == '\0')
@@ -120,11 +122,11 @@ char	*expander(t_env *env_lst, char *line, int end_status)
 	expand_lst = create_quoted_lst(line);
 	if (expand_lst == NULL)
 		return (NULL);
-	if (handle_doller_expand(env_lst, expand_lst, end_status) == 1)
-	{
-		expand_lstclear(&expand_lst);
-		return (NULL);
-	}
+	// if (handle_doller_expand(env_lst, expand_lst, end_status) == 1)
+	// {
+	// 	expand_lstclear(&expand_lst);
+	// 	return (NULL);
+	// }
 	result = join_lst(expand_lst);
 	expand_lstclear(&expand_lst);
 	return (result);

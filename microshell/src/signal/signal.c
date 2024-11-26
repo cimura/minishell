@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:16:02 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/19 19:59:02 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/26 17:44:19 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,18 @@
 
 void	sigint_handler_child(int signum)
 {
-	printf("sigint child handler\n");
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	(void)signum;
 }
 
 void	sigquit_handler_child(int signum)
 {
-	printf("sigquit child handler\n");
 	ft_putstr_fd("Quit\n", STDOUT_FILENO);
 	(void)signum;
 }
 
 void	sigint_handler(int signum)
 {
-	printf("sigint handler\n");
 	rl_on_new_line();
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_replace_line("", 0);
