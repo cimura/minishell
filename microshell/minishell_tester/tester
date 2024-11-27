@@ -4,18 +4,27 @@ MINISHELL_PATH="../minishell"
 
 # Run a specific test if the file name was specified
 if [[ $1 ]]; then
-	test_lists=(
-		$1
-	)
+    if [[ -d $1 ]]; then
+        test_lists=()
+        for file in "$1"/*; do
+            # 各ファイルをリストに追加（ディレクトリを含めたい場合は変更可能）
+            test_lists+=("$file")
+        done
+    else
+        # 引数が単一のテスト名の場合、そのテストだけをリストに追加
+        test_lists=(
+            "$1"
+        )
+    fi
 else
-	test_lists=(
-		"builtins"
-		"pipes"
-		"redirects"
-		"extras"
-	)
+    # デフォルトのテストリスト
+    test_lists=(
+        "builtins"
+        "pipes"
+        "redirects"
+        "extras"
+    )
 fi
-
 if [[ $1 == "wildcards"  || $1 == "bonus" ]]; then
 	MINISHELL_PATH="../minishell_bonus"
 fi
