@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/26 17:24:53 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:15:31 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,19 @@ static int	handle_redirect(char **command_line, int i, t_file_descripter fd)
 	if (ft_strncmp(command_line[i], ">", 2) == 0)
 	{
 		if (ft_open(command_line[i + 1],
-				O_CREAT | O_WRONLY | O_TRUNC, fd.write_to) == -1)
+				O_CREAT | O_WRONLY | O_TRUNC, fd.now_out) == -1)
 			return (-1);
 	}
 	else if (ft_strncmp(command_line[i], ">>", 3) == 0)
 	{
 		if (ft_open(command_line[i + 1],
-				O_CREAT | O_WRONLY | O_APPEND, fd.write_to) == -1)
+				O_CREAT | O_WRONLY | O_APPEND, fd.now_out) == -1)
 			return (-1);
 	}
 	else if (ft_strncmp(command_line[i], "<", 2) == 0)
 	{
 		if (ft_open(command_line[i + 1],
-				O_RDONLY, fd.read_from) == -1)
+				O_RDONLY, fd.now_in) == -1)
 			return (-1);
 	}
 	return (0);

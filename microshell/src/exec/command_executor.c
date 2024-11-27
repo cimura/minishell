@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/26 17:53:46 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:49:02 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	signal(SIGQUIT, sigquit_handler_child);
 	if (pipe(pipe_fd) == -1)
 		perror("pipe");
+
+  fd->prev_in = pipe_fd[0];
+  fd->prev_out = pipe_fd[1];
 	pid = fork();
 	if (pid == -1)
 		perror("fork");
@@ -68,13 +71,13 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	}
 	else
 	{
-		close(pipe_fd[1]);
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[0]);
-		if (WIFEXITED(*end_status))
-			*end_status = WEXITSTATUS(*end_status);
-		else if (WIFSIGNALED(*end_status))
-			*end_status = 128 + WTERMSIG(*end_status);
+		// close(pipe_fd[1]);
+		// dup2(pipe_fd[0], STDIN_FILENO);
+		// close(pipe_fd[0]);
+		// if (WIFEXITED(*end_status))
+		// 	*end_status = WEXITSTATUS(*end_status);
+		// else if (WIFSIGNALED(*end_status))
+		// 	*end_status = 128 + WTERMSIG(*end_status);
 	}
 	return (0);
 }
@@ -85,13 +88,20 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	int		pipe_fd[2];
 	pid_t	pid;
 
+  // close(fd->read_from);
+  close(fd->prev_out);
 	if (pipe(pipe_fd) == -1)
 		perror("pipe");
+  fd->now_in = pipe_fd[0];
+  // fd->prev_in = pipe_fd[0];
+  fd->now_out = pipe_fd[1];
 	pid = fork();
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
 	{
+    dup2(fd->prev_in, STDIN_FILENO);
+    close(fd->prev_in);
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
@@ -102,13 +112,15 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	}
 	else
 	{
-		close(pipe_fd[1]);
-		dup2(pipe_fd[0], STDIN_FILENO);
-		close(pipe_fd[0]);
-		if (WIFEXITED(*end_status))
-			*end_status = WEXITSTATUS(*end_status);
-		else if (WIFSIGNALED(*end_status))
-			*end_status = 128 + WTERMSIG(*end_status);
+    fd->prev_in = fd->now_in;
+    fd->prev_out = fd->now_out;
+		// close(pipe_fd[1]);
+		// dup2(pipe_fd[0], STDIN_FILENO);
+		// close(pipe_fd[0]);
+		// if (WIFEXITED(*end_status))
+		// 	*end_status = WEXITSTATUS(*end_status);
+		// else if (WIFSIGNALED(*end_status))
+		// 	*end_status = 128 + WTERMSIG(*end_status);
 	}
 	return (0);
 }
@@ -119,12 +131,17 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	int		status;
 	pid_t	pid;
 
+  // close(fd->read_from);
+  close(fd->prev_out);
 	status = 0;
 	pid = fork();
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
 	{
+    // close(fd->write_to);
+    dup2(fd->prev_in, STDIN_FILENO);
+    close(fd->prev_in);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
 		close_purefd(*fd);
@@ -132,13 +149,16 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	}
 	else
 	{
-		while (waitpid(pid, end_status, 0) > 0)
-		{}
-		ft_signal();
-		if (WIFEXITED(*end_status))
-			*end_status = WEXITSTATUS(*end_status);
-		else if (WIFSIGNALED(*end_status))
-			*end_status = 128 + WTERMSIG(*end_status);
+    // dup2(fd->read_from, STDIN_FILENO);
+    close(fd->prev_in);
+    // close(fd->write_to);
+		// while (waitpid(pid, end_status, 0) > 0)
+		// {}
+		// ft_signal();
+		// if (WIFEXITED(*end_status))
+		// 	*end_status = WEXITSTATUS(*end_status);
+		// else if (WIFSIGNALED(*end_status))
+		// 	*end_status = 128 + WTERMSIG(*end_status);
 	}
 	return (status);
 }
@@ -147,8 +167,8 @@ void	initialize_fd(t_file_descripter *fd)
 {
 	fd->pure_stdin = dup(STDIN_FILENO);
 	fd->pure_stdout = dup(STDOUT_FILENO);
-	fd->read_from = STDIN_FILENO;
-	fd->write_to = STDOUT_FILENO;
+	fd->now_in = STDIN_FILENO;
+	fd->now_out = STDOUT_FILENO;
 }
 
 
@@ -223,6 +243,14 @@ int	branch(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		if (last_command(token, env_lst, fd, end_status))
 				return (1);
 	}
+  while (wait(end_status) > 0)
+  {
+  }
+  if (WIFEXITED(*end_status))
+		*end_status = WEXITSTATUS(*end_status);
+  // else if (WIFSIGNALED(*end_status))
+	// 	*end_status = 128 + WTERMSIG(*end_status);
+  ft_signal();
 	return (0);
 }
 

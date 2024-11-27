@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_executor.c                                 :+:      :+:    :+:   */
+/*   old_command_executor.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 17:47:41 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:21:25 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 void	setup_and_exec(t_cmd_data *until_redirection, char **envp,
 												t_file_descripter fd)
 {
-	if (fd.read_from != STDIN_FILENO)
+	if (fd.now_in != STDIN_FILENO)
 	{
-		dup2(fd.read_from, STDIN_FILENO);
-		close(fd.read_from);
+		dup2(fd.now_in, STDIN_FILENO);
+		close(fd.now_in);
 	}
 	// else
-	// 	close(fd.read_from);
-	if (fd.write_to != STDOUT_FILENO)
+	// 	close(fd.now_in);
+	if (fd.now_out != STDOUT_FILENO)
 	{
-		dup2(fd.write_to, STDOUT_FILENO);
-		close(fd.write_to);
+		dup2(fd.now_out, STDOUT_FILENO);
+		close(fd.now_out);
 	}
 	// else
-	// 	close(fd.write_to);
+	// 	close(fd.now_out);
 	if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 	{
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
@@ -53,9 +53,9 @@ void	execve_command(t_cmd_data *until_redirection, char **envp,
 	}
 	else if (pid > 0)
 	{
-		// close(fd.write_to);
-		// if (fd.read_from != STDIN_FILENO)
-		// 	close(fd.read_from);
+		// close(fd.now_out);
+		// if (fd.now_in != STDIN_FILENO)
+		// 	close(fd.now_in);
 		waitpid(pid, end_status, 0);
 		ft_signal();
 		if (WIFEXITED(*end_status))
@@ -69,8 +69,8 @@ void	initialize_fd(t_file_descripter *fd)
 {
 	fd->pure_stdin = dup(STDIN_FILENO);
 	fd->pure_stdout = dup(STDOUT_FILENO);
-	fd->read_from = STDIN_FILENO;
-	fd->write_to = STDOUT_FILENO;
+	fd->now_in = STDIN_FILENO;
+	fd->now_out = STDOUT_FILENO;
 }
 
 bool	is_executable(char **cmd)
@@ -108,10 +108,10 @@ int	case_no_pipe_ahead(t_token *token, t_env *env_lst, t_file_descripter *fd,
 {
 	int	local_status;
 
-	fd->write_to = dup(STDOUT_FILENO);
+	fd->now_out = dup(STDOUT_FILENO);
 	local_status = run_command_with_redirect(token, env_lst, fd, end_status);
-	close(fd->read_from);
-	close(fd->write_to);
+	close(fd->now_in);
+	close(fd->now_out);
 	return (local_status);
 }
 
@@ -126,13 +126,13 @@ int	case_pipe_ahead(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		perror("pipe");
 		return (-1);
 	}
-	fd->write_to = dup(pipe_fd[1]);
+	fd->now_out = dup(pipe_fd[1]);
 	close(pipe_fd[1]);
 	local_status = run_command_with_redirect(token, env_lst, fd, end_status);
-	close(fd->write_to);
-	if (fd->read_from != STDIN_FILENO)
-		close(fd->read_from);
-	fd->read_from = dup(pipe_fd[0]);
+	close(fd->now_out);
+	if (fd->now_in != STDIN_FILENO)
+		close(fd->now_in);
+	fd->now_in = dup(pipe_fd[0]);
 	close(pipe_fd[0]);
 	return (local_status);
 }

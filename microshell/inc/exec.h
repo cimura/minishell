@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/26 17:16:48 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:14:59 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ typedef struct	s_file_descripter
 {
 	int	pure_stdin;
 	int	pure_stdout;
-	int	read_from;
-	int	write_to;
+	int	prev_out;
+	int	prev_in;
+  int now_out;
+  int now_in;
 }	t_file_descripter;
 
 // *** command_executor.c ***

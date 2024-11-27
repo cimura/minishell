@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/23 19:44:40 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:22:18 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ bool	is_builtin(char **cmd)
 void	builtin_command(char **cmd, t_env *env_lst,
 				t_file_descripter fd, int *end_status)
 {
-	if (fd.write_to != STDOUT_FILENO)
-		dup2(fd.write_to, STDOUT_FILENO);
+	if (fd.now_out != STDOUT_FILENO)
+		dup2(fd.now_out, STDOUT_FILENO);
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		*end_status = cd(&cmd[1], env_lst);
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)

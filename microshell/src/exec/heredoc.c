@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/26 17:20:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/27 12:21:53 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	tmpfile_to_readfrom(char *tmp_file, int fd_tmp,
 		perror("open");
 		return (1);
 	}
-	dup2(fd_tmp, fd.read_from);
+	dup2(fd_tmp, fd.now_in);
 	close(fd_tmp);
 	return (0);
 }
