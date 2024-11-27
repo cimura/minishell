@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:28:30 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/26 19:38:05 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/27 13:22:06 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ typedef struct s_token
 {
 	char			**command_line;
 	struct s_token	*next;
+  pid_t pid;
 }	t_token;
 
 // *** lexer_helper.c ***

@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 12:49:02 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/27 13:46:54 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
   fd->prev_in = pipe_fd[0];
   fd->prev_out = pipe_fd[1];
 	pid = fork();
+  token->pid = pid;
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
@@ -96,6 +97,7 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
   // fd->prev_in = pipe_fd[0];
   fd->now_out = pipe_fd[1];
 	pid = fork();
+  token->pid = pid;
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
@@ -135,6 +137,7 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
   close(fd->prev_out);
 	status = 0;
 	pid = fork();
+  token->pid = pid;
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
@@ -219,6 +222,7 @@ int	branch(t_token *token, t_env *env_lst, t_file_descripter *fd,
 {
 	int	count;
 	count = token_lstsize(token);
+  t_token *head = token;
 	if (count == 1)
 		one_command(token, env_lst, fd, end_status);
 	else if (count == 2)
@@ -243,13 +247,17 @@ int	branch(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		if (last_command(token, env_lst, fd, end_status))
 				return (1);
 	}
-  while (wait(end_status) > 0)
+  while (head != NULL && count != 1)
   {
+    if (head->pid > 0)
+      waitpid(head->pid, end_status, 0);
+    if (WIFEXITED(*end_status))
+		  *end_status = WEXITSTATUS(*end_status);
+    else if (WIFSIGNALED(*end_status))
+		  *end_status = 128 + WTERMSIG(*end_status);
+    // fprintf(stderr, "\tpid(%s) end_status(last): %d\n", head->command_line[0], *end_status);
+    head = head->next;
   }
-  if (WIFEXITED(*end_status))
-		*end_status = WEXITSTATUS(*end_status);
-  // else if (WIFSIGNALED(*end_status))
-	// 	*end_status = 128 + WTERMSIG(*end_status);
   ft_signal();
 	return (0);
 }
