@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 13:33:21 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/27 16:06:53 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	preprocess_command(t_env *env_lst, t_token **token, char *line, int *
 	int	syntax_result;
 
 	syntax_result = 0;
-	if (check_syntax_before_lexer(line) == 1)
+	if (check_syntax_before_lexer(line) != 0)
 	{
 		*status = 2;
 		free(line);
@@ -91,7 +91,7 @@ static int	preprocess_command(t_env *env_lst, t_token **token, char *line, int *
 		return (CONTINUE);
 	if (pass_token_to_expand(env_lst, *token, *status) != 0)
 		clear_exit(env_lst, *token, 1);
-	syntax_result = check_syntax(*token, env_lst);
+	syntax_result = check_syntax(*token);
 	if (syntax_result != 0)
 	{
 		*status = syntax_result;
@@ -127,7 +127,7 @@ int	main(int argc, char **argv, char **envp)
 	t_token	*token;
 	char	*line;
 	int		status;
-	
+
 	ft_signal();
 	status = 0;
 	env_lst = create_env_lst(envp);

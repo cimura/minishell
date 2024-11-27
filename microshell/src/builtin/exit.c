@@ -6,20 +6,11 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/25 23:37:08 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/27 16:11:42 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-
-static int	white_space(char check_chr)
-{
-	if (check_chr == ' ' || check_chr == '\t' || check_chr == '\n' || \
-		check_chr == '\v' || check_chr == '\f' || check_chr == '\r')
-		return (1);
-	else
-		return (0);
-}
 
 static int	decide_sign(const char *str, int *indx)
 {

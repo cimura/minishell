@@ -52,6 +52,15 @@ int	count_char_array_words(char **ptr)
 	return (c);
 }
 
+int	white_space(char check_chr)
+{
+	if (check_chr == ' ' || check_chr == '\t' || check_chr == '\n' || \
+		check_chr == '\v' || check_chr == '\f' || check_chr == '\r')
+		return (1);
+	else
+		return (0);
+}
+
 void	d_print_char_array(char **array)
 {
 	int	i;
