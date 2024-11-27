@@ -40,6 +40,24 @@ char	*ft_strndup(const char *str, size_t n)
 	return (result);
 }
 
+char	*ft_strmerge(char *s1, char *s2)
+{
+	char	*new;
+
+	if (s1 == NULL || s2 == NULL)
+	{
+		if (s1)
+			free(s1);
+		if (s2)
+			free(s2);
+		return (NULL);
+	}
+	new = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (new);
+}
+
 int	count_char_array_words(char **ptr)
 {
 	int	c;

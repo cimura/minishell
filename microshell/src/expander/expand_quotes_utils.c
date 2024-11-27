@@ -46,35 +46,3 @@ void	expand_lstadd_back(t_expand_lst **lst, t_expand_lst *new)
 	}
 	last->next = new;
 }
-
-int	str_count(char *line, char *meta_char)
-{
-	int		i;
-	int		count;
-
-	count = 0;
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (ft_strchr(meta_char, line[i]))
-		{
-			count++;
-		}
-		i++;
-	}
-	return (count);
-}
-
-int	count_until_char(char *line, char *needle)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (ft_strchr(needle, line[i]) != NULL)
-			return (i);
-		i++;
-	}
-	return (i);
-}

@@ -17,7 +17,7 @@ EXEC_SRCS := command_executor.c register_cmd_data.c redirect.c heredoc.c exec_an
 EXEC := $(addprefix $(OBJ_DIR)exec/, $(EXEC_SRCS:.c=.o))
 
 EXPANDER_DIR := src/expander/
-EXPANDER_SRCS := expander_helper.c expander_util.c expander.c
+EXPANDER_SRCS := expand_dollar.c expand_dollar_utils.c expand_quotes.c expand_quotes_utils.c
 EXPANDER := $(addprefix $(OBJ_DIR)expander/, $(EXPANDER_SRCS:.c=.o))
 
 LEXER_DIR := src/lexer/

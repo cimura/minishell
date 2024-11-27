@@ -45,7 +45,7 @@ static int	count_keylen(char *str)
 	int	c;
 
 	c = 0;
-	while (str[c] != '\0' && str[c] != '+' & str[c] != '=')
+	while (str[c] != '\0' && str[c] != '+' && str[c] != '=')
 		c++;
 	return (c);
 }

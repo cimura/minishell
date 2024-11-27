@@ -33,18 +33,20 @@ typedef struct s_expand_lst
 	struct s_expand_lst	*next;
 }	t_expand_lst;
 
-// *** expander_util.c ***
-int				str_count(char *line, char *meta_char);
-void			expand_lstclear(t_expand_lst **lst);
-void			expand_lstadd_back(t_expand_lst **lst, t_expand_lst *new);
-char			*ft_strndup(const char *str, size_t n);
-int				count_until_char(char *line, char *needle);
 
-// *** expander_helper.c ***
-char			*expand_env_variable(t_env *env_lst, char *lst_line, int end_status);
-char			*get_value_from_key(t_env *env_lst, char *key);
+// *** expand_dollar.c ***
+char	*expand_env_variable(t_env *env_lst, char *lst_line, int end_status);
 
-// *** expander.c ***
+// ** expand_dollar_utils.c ***
+int		count_until_char(char *line, char *needle);
+int		count_key_size(char *line_ptr);
+char	*get_value_from_key(t_env *env_lst, char *key);
+
+// *** expand_quotes.c ***
 char	*expander(t_env *env_lst, char *line, int end_status);
+
+// *** expand_quotes_util.c ***
+void	expand_lstclear(t_expand_lst **lst);
+void	expand_lstadd_back(t_expand_lst **lst, t_expand_lst *new);
 
 #endif

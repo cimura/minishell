@@ -20,6 +20,7 @@
 void	free_ptr_array(char **ptr);
 int		count_char_array_words(char **ptr);
 char	*ft_strndup(const char *str, size_t n);
+char	*ft_strmerge(char *s1, char *s2);;
 int		white_space(char check_chr);
 
 // Debug
