@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:55:45 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 17:47:01 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 19:33:10 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "utils.h"
 
 static bool	is_plus_exist(char *arg)
 {
