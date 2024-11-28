@@ -6,12 +6,12 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/26 19:38:36 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 14:55:50 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-// #include "expander.h"
+// #include "expand_quotes.h"
 
 static int	count_token_until_pipe(t_list *lst)
 {
@@ -80,7 +80,6 @@ t_token	*lexer(char	*line, int *null_char_flag)
 {
 	t_list	*normal;
 	t_token	*per_pipe;
-
 
 	if (line[0] == '\0')
 	{

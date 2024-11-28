@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 16:06:53 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 15:59:21 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
 {
 	int		i;
 	char	*expand;
+	char	*tmp;
+
 	while (per_pipe != NULL)
 	{
 		i = 0;
@@ -57,12 +59,19 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
 			if (per_pipe->command_line[i + 1] != NULL
 				&& ft_strncmp(per_pipe->command_line[i], "<<", 3) == 0)
 			{
-				i += 2;
-				continue ;
+				i++;
+				expand = expand_quotes(env_lst, per_pipe->command_line[i], end_status);
+				if (expand == NULL)
+					return (1);
 			}
-			expand = expander(env_lst, per_pipe->command_line[i], end_status);
-			if (expand == NULL)
-				return (1);
+			else
+			{
+				tmp = expand_env_variable(env_lst, per_pipe->command_line[i], end_status);
+				expand = expand_quotes(env_lst, tmp, end_status);
+				free(tmp);
+				if (expand == NULL)
+					return (1);
+			}
 			free(per_pipe->command_line[i]);
 			per_pipe->command_line[i] = expand;
 			i++;
@@ -83,8 +92,7 @@ static int	preprocess_command(t_env *env_lst, t_token **token, char *line, int *
 		free(line);
 		return (CONTINUE);
 	}
-	char *expanded = expand_env_variable(env_lst, line, *status);
-	*token = lexer(expanded, &syntax_result);
+	*token = lexer(line, &syntax_result);
 	if (*token == NULL)
 		clear_exit(env_lst, *token, 1);
 	if (syntax_result == CONTINUE)

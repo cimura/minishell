@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
+/*   expand_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/26 18:52:50 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:58:50 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,29 +63,6 @@ static t_expand_lst	*create_quoted_lst(char *line)
 	return (head);
 }
 
-// static int	handle_doller_expand(t_env *env_lst, t_expand_lst *expand_lst,
-// 	int end_status)
-// {
-// 	char	*old;
-
-// 	while (expand_lst != NULL)
-// 	{
-// 		if (expand_lst->status != SINGLE)
-// 		{
-// 			old = expand_lst->str;
-// 			expand_lst->str = expand_env_variable(env_lst, expand_lst->str, end_status);
-// 			if (expand_lst->str == NULL)
-// 				return (free(old), old = NULL, 1);
-// 			free(old);
-// 			old = NULL;
-// 		}
-// 		expand_lst = expand_lst->next;
-// 	}
-// 	return (0);
-// }
-
-// hello -> wo -> world
-// 最初の要素だけコピーしてあとはjoin, NULLチェックは必要
 static char	*join_lst(t_expand_lst *expand_lst)
 {
 	char	*result;
@@ -107,14 +84,13 @@ static char	*join_lst(t_expand_lst *expand_lst)
 	return (result);
 }
 
-// この関数を呼べば展開されて返ってくる
-char	*expander(t_env *env_lst, char *line, int end_status)
+char	*expand_quotes(t_env *env_lst, char *line, int end_status)
 {
 	t_expand_lst	*expand_lst;
 	char			*result;
 
-	(void)end_status;
 	(void)env_lst;
+	(void)end_status;
 	if (line == NULL)
 		return (NULL);
 	if (*line == '\0')
@@ -122,11 +98,6 @@ char	*expander(t_env *env_lst, char *line, int end_status)
 	expand_lst = create_quoted_lst(line);
 	if (expand_lst == NULL)
 		return (NULL);
-	// if (handle_doller_expand(env_lst, expand_lst, end_status) == 1)
-	// {
-	// 	expand_lstclear(&expand_lst);
-	// 	return (NULL);
-	// }
 	result = join_lst(expand_lst);
 	expand_lstclear(&expand_lst);
 	return (result);
@@ -141,7 +112,7 @@ char	*expander(t_env *env_lst, char *line, int end_status)
 //   char	*com;
 //	t_env	*env_lst = create_env_lst(envp);
 //
-//	char *result_line = expander(env_lst, line);
+//	char *result_line = expand_quotes(env_lst, line);
 //   if (result_line == NULL)
 //   {
 //   	env_lstclear(&env_lst);

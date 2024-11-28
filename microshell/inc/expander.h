@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.h                                         :+:      :+:    :+:   */
+/*   expand_quotes.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -38,12 +38,15 @@ typedef struct s_expand_lst
 char	*expand_env_variable(t_env *env_lst, char *lst_line, int end_status);
 
 // ** expand_dollar_utils.c ***
+
+char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status);
+char	*non_expandble_str(char *new, char *line_ptr, char *stopper);
 int		count_until_char(char *line, char *needle);
 int		count_key_size(char *line_ptr);
 char	*get_value_from_key(t_env *env_lst, char *key);
 
 // *** expand_quotes.c ***
-char	*expander(t_env *env_lst, char *line, int end_status);
+char	*expand_quotes(t_env *env_lst, char *line, int end_status);
 
 // *** expand_quotes_util.c ***
 void	expand_lstclear(t_expand_lst **lst);

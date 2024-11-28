@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 12:21:53 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 15:56:42 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,33 @@ static int	tmpfile_to_readfrom(char *tmp_file, int fd_tmp,
 	return (0);
 }
 
+static char	*expand_dollar(t_env *env_lst, char *line, int end_status)
+{
+	int		i;
+	char	*new;
+
+	i = 0;
+	new = ft_strdup("");
+	if (new == NULL)
+		return (NULL);
+	while (line[i])
+	{
+		if (line[i] == '$')
+		{
+			new = env_query(env_lst, new, &line[++i], end_status);
+			i += count_key_size(&line[i]);
+		}
+		else
+		{
+			new = non_expandble_str(new, &line[i], "$");
+			i += count_until_char(&line[i], "$");
+		}
+		if (new == NULL)
+			return (NULL);
+	}
+	return (new);
+}
+
 #define SIGINT_RECEIVED 2
 #define BREAK 3
 
@@ -63,7 +90,7 @@ static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 	}
 	if (line == NULL || ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
 		return (BREAK);
-	expanded = expand_env_variable(env_lst, line, *end_status);
+	expanded = expand_dollar(env_lst, line, *end_status);
 	free(line);
 	if (expanded == NULL)
 		return (1);
