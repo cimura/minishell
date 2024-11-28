@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 11:45:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/07/20 01:09:48 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 17:25:24 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strchr(const char *s, int c)
 			return ((char *)&s[i]);
 		i++;
 	}
-	if (uc == '\0'/* || uc > 255*/)
+	if (uc == '\0')
 		return ((char *)&s[i]);
 	return (NULL);
 }
