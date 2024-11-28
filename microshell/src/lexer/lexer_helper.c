@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_helper.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:26:46 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/21 11:39:29 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 17:30:52 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ static int	add_node_from_storage(t_list **head, char *storage)
 	return (1);
 }
 
-static int	case_meta(char *storage, char *line, int i)
+static int	case_meta(char *storage, char *line)
 {
+	int	i;
 	int	si;
 
+	i = 0;
 	si = 0;
 	while (line[i] != '\0' && ft_strchr("|&;()<>", line[i]) != NULL)
 	{
@@ -45,22 +47,25 @@ static int	case_meta(char *storage, char *line, int i)
 	return (i);
 }
 
-static int	case_whitespace(char *line, int i)
+static int	case_whitespace(char *line)
 {
-	while (line[i] != '\0' && ft_strchr(" \t", line[i]) != NULL)
-	{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0' && ft_strchr(" \t\v\r\f\n", line[i]) != NULL)
 		i++;
-	}
 	return (i);
 }
 
-static int	case_normal(char *storage, char *line, int i)
+static int	case_normal(char *storage, char *line)
 {
+	int		i;
 	int		si;
 	char	in_quote;
 
-	in_quote = 0;
+	i = 0;
 	si = 0;
+	in_quote = 0;
 	while (line[i] != '\0')
 	{
 		if (!in_quote && ft_strchr("\"\'", line[i]))
@@ -91,11 +96,11 @@ t_list	*create_token_lst(char *line)
 	while (line[i] != '\0')
 	{
 		if (ft_strchr("|&;()<>", line[i]) != NULL)
-			i = case_meta(storage, line, i);
+			i += case_meta(storage, &line[i]);
 		else if (ft_strchr(" \t\v\r\f\n", line[i]) != NULL)
-			i = case_whitespace(line, i);
+			i += case_whitespace(&line[i]);
 		else
-			i = case_normal(storage, line, i);
+			i += case_normal(storage, &line[i]);
 		if (!add_node_from_storage(&head, storage))
 			return (free(storage), storage = NULL, NULL);
 	}
