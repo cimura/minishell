@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 16:00:29 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 17:20:21 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,15 @@ int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
 		{
 			if (per_pipe->command_line[i + 1] != NULL
 				&& ft_strncmp(per_pipe->command_line[i], "<<", 3) == 0)
-			{
-				i++;
-				expand = expand_quotes(env_lst, per_pipe->command_line[i], end_status);
-				if (expand == NULL)
-					return (1);
-			}
+				expand = expand_quotes(env_lst, per_pipe->command_line[++i], end_status);
 			else
 			{
 				tmp = expand_env_variable(env_lst, per_pipe->command_line[i], end_status);
 				expand = expand_quotes(env_lst, tmp, end_status);
 				free(tmp);
-				if (expand == NULL)
-					return (1);
 			}
+			if (expand == NULL)
+				return (1);
 			free(per_pipe->command_line[i]);
 			per_pipe->command_line[i] = expand;
 			i++;

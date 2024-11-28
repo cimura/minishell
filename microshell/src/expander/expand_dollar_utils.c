@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:32:36 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 15:58:25 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 17:19:09 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*get_value_from_key(t_env *env_lst, char *key)
 		longer = ft_strlen(env_lst->key);
 	while (env_lst != NULL)
 	{
-		if (ft_strncmp(key, env_lst->key, longer) == 0)
+		if (ft_strncmp(key, env_lst->key, longer) == 0 && env_lst->value != NULL)
 			return (env_lst->value);
 		env_lst = env_lst->next;
 	}

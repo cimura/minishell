@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 15:45:47 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:51:24 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	parse_argument(char *arg, int *status)
 		&& !(arg[0] >= 'a' && arg[0] <= 'z'))
 		return (*status = 1, 1);
 	i = 0;
-	while (arg[i] != '\0' && arg[i] != '=' && arg[i] != '+')
+	while (arg[i] != '\0' && arg[i] != '=')
 	{
 		if (arg[i] == '+' && arg[i + 1] == '=')
 		{
