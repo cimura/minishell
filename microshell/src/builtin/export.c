@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 16:51:24 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 18:18:39 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ static int	parse_argument(char *arg, int *status)
 			return (*status = 1, 1);
 		i++;
 	}
-	if (arg[0] == '\0' || ft_strchr(arg, '=') == NULL)
-		return (1);
 	return (0);
 }
 
@@ -41,13 +39,7 @@ static int	register_new_env(char *arg, t_env *env_lst)
 {
 	t_env	*target;
 
-	target = env_lst;
-	while (target != NULL)
-	{
-		if (ft_strncmp(arg, target->key, ft_strlen(target->key)) == 0)
-			break ;
-		target = target->next;
-	}
+	target = get_node_having_same_key(arg, env_lst);
 	if (target == NULL)
 	{
 		target = create_new_env_node(arg);
@@ -57,8 +49,7 @@ static int	register_new_env(char *arg, t_env *env_lst)
 	}
 	else
 	{
-		target->value = generate_new_value(target->value, arg);
-		if (target->value == NULL)
+		if (generate_new_value(target, arg) == 1)
 			return (1);
 	}
 	return (0);

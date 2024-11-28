@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 15:44:13 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:19:14 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int	execute_single_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
-	int *end_status)
+int	execute_single_command(t_token *token, t_env *env_lst,
+	t_file_descripter *fd, int *end_status)
 {
 	t_cmd_data	*until_redirection;
 	char		**env_array;

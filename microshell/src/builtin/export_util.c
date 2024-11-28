@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:55:45 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 15:55:46 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 17:47:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,23 @@ static bool	is_plus_exist(char *arg)
 	return (false);
 }
 
-char	*generate_new_value(char *old_value, char *arg)
+int	generate_new_value(t_env *old_node, char *arg)
 {
 	char	*new_value;
 
+	if (ft_strchr(arg, '=') == NULL)
+	{
+		return (0);
+	}
 	if (is_plus_exist(arg))
-		new_value = ft_strjoin(old_value, ft_strchr(arg, '=') + 1);
+		new_value = ft_strjoin(old_node->value, ft_strchr(arg, '=') + 1);
 	else
 		new_value = ft_strdup(ft_strchr(arg, '=') + 1);
-	free(old_value);
 	if (new_value == NULL)
-		return (NULL);
-	return (new_value);
+		return (1);
+	free(old_node->value);
+	old_node->value = new_value;
+	return (0);
 }
 
 static int	count_keylen(char *str)
@@ -60,13 +65,18 @@ t_env	*create_new_env_node(char *arg)
 	if (new == NULL)
 		return (NULL);
 	klen = count_keylen(arg);
-	vlen = ft_strlen(ft_strchr(arg, '=') + 1);
 	new->key = ft_strndup(arg, klen);
 	if (new->key == NULL)
 		return (free(new), NULL);
+	new->next = NULL;
+	if (ft_strchr(arg, '=') == NULL)
+	{
+		new->value = NULL;
+		return (new);
+	}
+	vlen = ft_strlen(ft_strchr(arg, '=') + 1);
 	new->value = ft_strndup(ft_strchr(arg, '=') + 1, vlen);
 	if (new->value == NULL)
 		return (free(new->key), NULL);
-	new->next = NULL;
 	return (new);
 }

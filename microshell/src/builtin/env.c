@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 17:32:43 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 17:15:42 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 17:40:33 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@ int	env(t_env *env_lst)
 {
 	while (env_lst != NULL)
 	{
-		ft_putstr_fd(env_lst->key, STDOUT_FILENO);
-		ft_putstr_fd("=", STDOUT_FILENO);
-		ft_putstr_fd(env_lst->value, STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		if (env_lst->value)
+		{
+			ft_putstr_fd(env_lst->key, STDOUT_FILENO);
+			ft_putstr_fd("=", STDOUT_FILENO);
+			ft_putstr_fd(env_lst->value, STDOUT_FILENO);
+			ft_putstr_fd("\n", STDOUT_FILENO);
+		}
 		env_lst = env_lst->next;
 	}
 	return (0);

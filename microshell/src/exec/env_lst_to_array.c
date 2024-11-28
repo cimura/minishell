@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst_to_array.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/13 23:54:11 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 18:02:16 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ static int	env_lstsize(t_env *env_lst)
 	size = 0;
 	while (env_lst != NULL)
 	{
-		size++;
+		if (env_lst->key && env_lst->value)
+			size++;
 		env_lst = env_lst->next;
 	}
 	return (size);
@@ -50,6 +51,11 @@ char	**env_lst_to_array(t_env *env_lst)
 	i = 0;
 	while (env_lst != NULL)
 	{
+		if (env_lst->value == NULL)
+		{
+			env_lst = env_lst->next;
+			continue ;
+		}
 		env_array[i] = generate_key_value_str(*env_lst);
 		if (env_array[i] == NULL)
 			return (free_ptr_array(env_array), NULL);

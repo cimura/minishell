@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 15:49:46 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:12:37 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "env_lst.h"
+# include "expander.h"
 # include "libft.h"
 # include "utils.h"
 
@@ -37,7 +38,7 @@ int	pwd(void);
 int	ft_exit(char **args, int *status);
 
 // *** export_util.c ***
-char	*generate_new_value(char *old_value, char *arg);
+int		generate_new_value(t_env *old_node, char *arg);
 t_env	*create_new_env_node(char *arg);
 
 // *** export_util2.c ***

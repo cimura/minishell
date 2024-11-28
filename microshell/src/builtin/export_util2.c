@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_util2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:34:41 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 15:46:19 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:16:18 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
 {
 	while (env_lst != NULL)
 	{
-		if (ft_strncmp(arg, env_lst->key, ft_strlen(env_lst->key)) == 0)
+		if (ft_strncmp(arg, env_lst->key, ft_strlen(env_lst->key)) == 0
+			&& (size_t)count_key_size(arg) == ft_strlen(env_lst->key))
 			return (env_lst);
 		env_lst = env_lst->next;
 	}
@@ -58,8 +59,12 @@ void	print_with_format(t_env *env_lst)
 		return ;
 	ft_putstr_fd("declare -x ", STDOUT_FILENO);
 	ft_putstr_fd(env_lst->key, STDOUT_FILENO);
-	ft_putstr_fd("=", STDOUT_FILENO);
-	ft_putstr_fd("\"", STDOUT_FILENO);
-	ft_putstr_fd(env_lst->value, STDOUT_FILENO);
-	ft_putendl_fd("\"", STDOUT_FILENO);
+	if (env_lst->value)
+	{
+		ft_putstr_fd("=", STDOUT_FILENO);
+		ft_putstr_fd("\"", STDOUT_FILENO);
+		ft_putstr_fd(env_lst->value, STDOUT_FILENO);
+		ft_putstr_fd("\"", STDOUT_FILENO);
+	}
+	ft_putstr_fd("\n", STDOUT_FILENO);
 }
