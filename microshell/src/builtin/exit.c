@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 18:27:27 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 19:22:53 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "utils.h"
 
 #define ULONGLONG_MAX (unsigned long long)__LONG_LONG_MAX__ 
 
@@ -21,7 +22,7 @@ static int	decide_sign(const char *str, int *indx)
 
 	i = *indx;
 	sign = 1;
-	while (white_space(str[i]))
+	while (is_whitespace(str[i]))
 		i++;
 	if (str[i] == '-')
 	{
@@ -41,7 +42,7 @@ static bool	ft_isnum(char *arg)
 	i = 0;
 	while (arg[i] != '\0')
 	{
-		if (!ft_isdigit(arg[i]) && !white_space(arg[i]))
+		if (!ft_isdigit(arg[i]) && !is_whitespace(arg[i]))
 			return (false);
 		i++;
 	}

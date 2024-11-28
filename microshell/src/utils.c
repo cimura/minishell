@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:36:17 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 19:06:14 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:22:21 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,13 @@ int	count_char_array_words(char **ptr)
 	return (c);
 }
 
-int	white_space(char check_chr)
+bool	is_whitespace(char check_chr)
 {
 	if (check_chr == ' ' || check_chr == '\t' || check_chr == '\n' || \
 		check_chr == '\v' || check_chr == '\f' || check_chr == '\r')
-		return (1);
+		return (true);
 	else
-		return (0);
+		return (false);
 }
 
 // void	d_print_char_array(char **array)

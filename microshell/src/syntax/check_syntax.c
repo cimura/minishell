@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 16:24:06 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 19:23:33 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_syntax_before_lexer(char *line)
 {
-	if (line[0] == '|' && (line[1] == '\0' || white_space(line[1])))
+	if (line[0] == '|' && (line[1] == '\0' || is_whitespace(line[1])))
 	{
 		ft_putendl_fd("syntax error", STDERR_FILENO);
 		return (2);

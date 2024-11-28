@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 16:59:11 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 19:29:43 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-// #include "expand_quotes.h"
+#include "utils.h"
 
 static int	count_token_until_pipe(t_list *lst)
 {
@@ -76,21 +76,31 @@ static t_token	*create_pipe_lst(t_list *normal)
 	return (head);
 }
 
+static t_token	*create_empty_token(int *null_char_flag)
+{
+	t_token	*empty_token;
+	char	**tmp;
+
+	tmp = malloc(sizeof(char *));
+	if (tmp == NULL)
+		return (NULL);
+	tmp[0] = "";
+	empty_token = malloc(sizeof(t_token));
+	if (empty_token == NULL)
+		return (NULL);
+	empty_token->command_line = tmp;
+	empty_token->next = NULL;
+	*null_char_flag = 3;
+	return (empty_token);
+}
+
 t_token	*lexer(char	*line, int *null_char_flag)
 {
 	t_list	*normal;
 	t_token	*per_pipe;
 
 	if (line[0] == '\0')
-	{
-		char **tmp = malloc(sizeof(char *));
-		tmp[0] = "";
-		per_pipe = malloc(sizeof(t_token));
-		per_pipe->command_line = tmp;
-		per_pipe->next = NULL;
-		*null_char_flag = 3;
-		return (per_pipe);
-	}
+		return (create_empty_token(null_char_flag));
 	normal = create_token_lst(line);
 	if (normal == NULL)
 		return (NULL);

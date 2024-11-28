@@ -6,26 +6,34 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 19:05:43 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:31:35 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
-#define UTILS_H
+# define UTILS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "libft.h"
-#include "env_lst.h"
+# include <stdio.h>
+# include <stdbool.h>
+# include <stdlib.h>
+# include "libft.h"
+# include "env_lst.h"
+# include "lexer.h"
 
+// *** utils.c ***
 void	free_ptr_array(char **ptr);
 int		count_char_array_words(char **ptr);
 char	*ft_strndup(const char *str, size_t n);
 char	*ft_strmerge(char *s1, char *s2);;
-int		white_space(char check_chr);
+bool	is_whitespace(char check_chr);
+
+// *** utils2.c ***
 int		count_key_size(char *line_ptr);
 
-// Debug
-// void	d_print_char_array(char **array);
+// *** main_helper.c ***
+void	clear_exit(t_env *env_lst, t_token *token, int exit_status);
+int		handle_quotes_env_variable(t_env *env_lst,
+			char **command_line, int end_status);
+int		pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status);
 
 #endif

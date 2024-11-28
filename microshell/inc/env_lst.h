@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:27:28 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 19:05:38 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:17:10 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include "libft.h"
-# include "utils.h"
 
 typedef struct s_env
 {

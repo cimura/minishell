@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:53 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 16:23:10 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 19:16:12 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,5 @@ int		check_quotation(char *line);
 int		dir_permission(char *arg);
 int		pipe_redirect_combination_error(char *arg, char *next);
 int		check_permission(t_token *token);
+
 #endif

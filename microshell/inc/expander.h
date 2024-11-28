@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_quotes.h                                         :+:      :+:    :+:   */
+/*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/17 17:21:45 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 19:30:06 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ typedef struct s_expand_lst
 	int					status;
 	struct s_expand_lst	*next;
 }	t_expand_lst;
-
 
 // *** expand_dollar.c ***
 char	*expand_env_variable(t_env *env_lst, char *lst_line, int end_status);

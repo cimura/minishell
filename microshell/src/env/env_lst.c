@@ -6,11 +6,12 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 19:05:59 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:17:19 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env_lst.h"
+#include "utils.h"
 
 void	env_lstclear(t_env **lst)
 {

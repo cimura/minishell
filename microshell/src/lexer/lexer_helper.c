@@ -6,11 +6,12 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:26:46 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 17:30:52 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:23:23 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "utils.h"
 
 static int	add_node_from_storage(t_list **head, char *storage)
 {
@@ -52,7 +53,7 @@ static int	case_whitespace(char *line)
 	int	i;
 
 	i = 0;
-	while (line[i] != '\0' && ft_strchr(" \t\v\r\f\n", line[i]) != NULL)
+	while (line[i] != '\0' && is_whitespace(line[i]))
 		i++;
 	return (i);
 }

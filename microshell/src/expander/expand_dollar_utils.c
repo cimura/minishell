@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_dollar_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:32:36 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 18:47:07 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 19:23:14 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status)
 		return (free(new), NULL);
 	if (to_expand[0] == '?')
 		env_value = ft_itoa(end_status);
-	else if (line_ptr[0] == '\0' || white_space(line_ptr[0]) == 1)
+	else if (line_ptr[0] == '\0' || is_whitespace(line_ptr[0]))
 		env_value = ft_strdup("$");
 	else
 		env_value = ft_strdup(get_value_from_key(env_lst, to_expand));

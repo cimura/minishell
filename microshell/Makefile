@@ -33,7 +33,7 @@ SYNTAX_SRC := syntax_util.c check_syntax.c check_empty.c
 SYNTAX := $(addprefix $(OBJ_DIR)syntax/, $(SYNTAX_SRC:.c=.o))
 
 MINISHELL_DIR := src/
-MINISHELL_SRC := minishell.c utils.c utils2.c
+MINISHELL_SRC := main.c main_helper.c utils.c utils2.c
 MINISHELL := $(addprefix $(OBJ_DIR), $(MINISHELL_SRC:.c=.o))
 
 # オブジェクトファイルをまとめる
