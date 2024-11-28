@@ -44,7 +44,7 @@ LIBFT := $(LIBFT_DIR)/libft.a
 
 CC := cc
 CFLAGS := -Wall -Wextra -Werror -g
-#DEBUG_FLAGS := -g -fsanitize=address
+DEBUG_FLAGS := -g -fsanitize=address
 LDFLAGS := -lreadline
 IFLAGS := -I$(LIBFT_DIR)/include/ -I$(INC_DIR)
 LFLAGS := -L$(LIBFT_DIR) -lft
