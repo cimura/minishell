@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:24:44 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/02 17:38:39 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 18:48:39 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,17 @@ void	token_lstadd_back(t_token **lst, t_token *new)
 }
 
 // debug
-void	d_print_token_lst(t_token *token)
-{
-	printf("-token-\n");
-	while (token != NULL)
-	{
-		d_print_char_array(token->command_line);
-		token = token->next;
-		if (token != NULL)
-			printf("-------------pipe------------\n");
-	}
-}
+// void	d_print_token_lst(t_token *token)
+// {
+// 	printf("-token-\n");
+// 	while (token != NULL)
+// 	{
+// 		d_print_char_array(token->command_line);
+// 		token = token->next;
+// 		if (token != NULL)
+// 			printf("-------------pipe------------\n");
+// 	}
+// }
 
 //void	print_commands(char **commands)
 //{

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/28 18:46:25 by ttakino           #+#    #+#             */
+/*   Updated: 2024/11/28 18:46:28 by ttakino          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "utils.h"
 
 void	free_ptr_array(char **ptr)
@@ -79,14 +91,14 @@ int	white_space(char check_chr)
 		return (0);
 }
 
-void	d_print_char_array(char **array)
-{
-	int	i;
+// void	d_print_char_array(char **array)
+// {
+// 	int	i;
 
-	i = 0;
-	while (array[i] != NULL)
-	{
-		fprintf(stderr, "%s\n", array[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (array[i] != NULL)
+// 	{
+// 		fprintf(stderr, "%s\n", array[i]);
+// 		i++;
+// 	}
+// }
