@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/27 16:11:42 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 15:55:12 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+
+#define ULONGLONG_MAX (unsigned long long)__LONG_LONG_MAX__ 
 
 static int	decide_sign(const char *str, int *indx)
 {
@@ -48,9 +50,9 @@ static bool	ft_isnum(char *arg)
 
 static unsigned char	ex_atoi(char *arg)
 {
-	int		i;
-	int		sign;
-	unsigned long long		result;
+	int					i;
+	int					sign;
+	unsigned long long	result;
 
 	i = 0;
 	sign = decide_sign(arg, &i);
@@ -64,7 +66,7 @@ static unsigned char	ex_atoi(char *arg)
 	{
 		result = result * 10 + (arg[i] - '0');
 		if ((result > __LONG_LONG_MAX__ && sign == 1)
-			|| (result > ((unsigned long long)__LONG_LONG_MAX__ + 1) && sign == -1))
+			|| (result > (ULONGLONG_MAX + 1) && sign == -1))
 		{
 			ft_putendl_fd(" numeric argument required", STDERR_FILENO);
 			return (2);

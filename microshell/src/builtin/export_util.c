@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 18:55:45 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/26 16:41:43 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:55:46 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,3 @@ t_env	*create_new_env_node(char *arg)
 	new->next = NULL;
 	return (new);
 }
-
-

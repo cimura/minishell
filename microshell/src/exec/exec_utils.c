@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.c                                             :+:      :+:    :+:   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:54:54 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/20 20:00:02 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:30:36 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-void	print_commands(char **commands)
-{
-	int	i;
+// void	print_commands(char **commands)
+// {
+// 	int	i;
 
-	i = 0;
-	while (commands[i])
-	{
-		printf("%s\n", commands[i++]);
-	}
-}
+// 	i = 0;
+// 	while (commands[i])
+// 	{
+// 		printf("%s\n", commands[i++]);
+// 	}
+// }
 
 void	free_cmd_data(t_cmd_data *data)
 {

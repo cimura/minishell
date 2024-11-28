@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_helper.c                                  :+:      :+:    :+:   */
+/*   expand_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/26 19:22:49 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:00:12 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,6 @@ char	*expand_env_variable(t_env *env_lst, char *line, int end_status)
 		if (new == NULL)
 		return (NULL);
 	}
-	printf("new: %s\n", new);
+	// printf("new: %s\n", new);
 	return (new);
 }

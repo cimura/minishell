@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 16:06:53 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 15:39:03 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (no_pipe_exit(env_lst, token, &status) == CONTINUE)
 			continue ;
-		if (execute_command_line(token, env_lst, &status) == 1)
+		if (executor(token, env_lst, &status) == 1)
 			clear_exit(env_lst, token, 1);
 	}
 	env_lstclear(&env_lst);
