@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 18:18:39 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 18:42:25 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	register_new_env(char *arg, t_env *env_lst)
 {
 	t_env	*target;
 
-	target = get_node_having_same_key(arg, env_lst);
+	target = get_node_from_key(env_lst, arg);
 	if (target == NULL)
 	{
 		target = create_new_env_node(arg);
@@ -76,7 +76,7 @@ void	no_args(t_env *env_lst)
 				now_min = env_lst->key;
 			env_lst = env_lst->next;
 		}
-		print_with_format(get_node_having_same_key(now_min, head));
+		print_with_format(get_node_from_key(head, now_min));
 		old_min = now_min;
 		i++;
 	}

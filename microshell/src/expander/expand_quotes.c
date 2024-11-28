@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 15:58:50 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 18:50:14 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static char	*join_lst(t_expand_lst *expand_lst)
 	return (result);
 }
 
-char	*expand_quotes(t_env *env_lst, char *line, int end_status)
+char	*remove_quotes(t_env *env_lst, char *line, int end_status)
 {
 	t_expand_lst	*expand_lst;
 	char			*result;

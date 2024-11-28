@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/26 16:20:06 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:40:47 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,17 @@ static int	set_key_value(t_env *new, char *line)
 	new->value = ft_memmove(new->value, &line[klen + 1], vlen);
 	new->value[vlen] = '\0';
 	return (1);
+}
+
+t_env	*get_node_from_key(t_env *env_lst, char *key)
+{
+	while (env_lst != NULL)
+	{
+		if (ft_strncmp(key, env_lst->key, ft_strlen(env_lst->key)) == 0)
+			return (env_lst);
+		env_lst = env_lst->next;
+	}
+	return (NULL);
 }
 
 t_env	*create_env_lst(char *envp[])

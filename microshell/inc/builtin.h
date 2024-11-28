@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 18:12:37 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 18:41:00 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include "env_lst.h"
 # include "expander.h"
 # include "libft.h"
-# include "utils.h"
+// # include "utils.h"
 
 int	env(t_env *env_lst);
 int	export(char **args, t_env *env_lst);
@@ -43,7 +43,7 @@ t_env	*create_new_env_node(char *arg);
 
 // *** export_util2.c ***
 char	*get_max_key(t_env *env_lst);
-t_env	*get_node_having_same_key(char *arg, t_env *env_lst);
+// t_env	*get_node_having_same_key(char *arg, t_env *env_lst);
 int		count_env_lst(t_env *env_lst);
 void	print_with_format(t_env *env_lst);
 

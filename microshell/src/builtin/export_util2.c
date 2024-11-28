@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_util2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:34:41 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 18:16:18 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 18:37:00 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ char	*get_max_key(t_env *env_lst)
 	return (max);
 }
 
-t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
-{
-	while (env_lst != NULL)
-	{
-		if (ft_strncmp(arg, env_lst->key, ft_strlen(env_lst->key)) == 0
-			&& (size_t)count_key_size(arg) == ft_strlen(env_lst->key))
-			return (env_lst);
-		env_lst = env_lst->next;
-	}
-	return (NULL);
-}
+// t_env	*get_node_having_same_key(char *arg, t_env *env_lst)
+// {
+// 	while (env_lst != NULL)
+// 	{
+// 		if (ft_strncmp(arg, env_lst->key, ft_strlen(env_lst->key)) == 0
+// 			&& (size_t)count_key_size(arg) == ft_strlen(env_lst->key))
+// 			return (env_lst);
+// 		env_lst = env_lst->next;
+// 	}
+// 	return (NULL);
+// }
 
 int	count_env_lst(t_env *env_lst)
 {

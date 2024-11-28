@@ -6,24 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/15 16:31:03 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:35:59 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #define OLD "OLDPWD"
 #define NEW "PWD"
-
-static t_env	*get_node_from_key(t_env *env_lst, char *key)
-{
-	while (env_lst != NULL)
-	{
-		if (ft_strncmp(key, env_lst->key, ft_strlen(env_lst->key)) == 0)
-			return (env_lst);
-		env_lst = env_lst->next;
-	}
-	return (NULL);
-}
 
 static int	set_pwd(t_env *env_lst, char *flag)
 {

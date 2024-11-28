@@ -46,7 +46,7 @@ int		count_key_size(char *line_ptr);
 char	*get_value_from_key(t_env *env_lst, char *key);
 
 // *** expand_quotes.c ***
-char	*expand_quotes(t_env *env_lst, char *line, int end_status);
+char	*remove_quotes(t_env *env_lst, char *line, int end_status);
 
 // *** expand_quotes_util.c ***
 void	expand_lstclear(t_expand_lst **lst);

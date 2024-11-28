@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 17:53:57 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 18:59:44 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static	void	clear_exit(t_env *env_lst, t_token *token, int exit_status)
 
 static int	no_pipe_exit(t_env *env_lst, t_token *token, int *status)
 {
-	if (token->command_line[0] != NULL &&
-		ft_strncmp(token->command_line[0], "exit", 5) == 0 && token->next == NULL)
+	if (token->command_line[0] != NULL && token->next == NULL
+		&& ft_strncmp(token->command_line[0], "exit", 5) == 0)
 	{
 		if (ft_exit(&token->command_line[1], status) == 1)
 		{
@@ -45,38 +45,48 @@ static int	no_pipe_exit(t_env *env_lst, t_token *token, int *status)
 	return (0);
 }
 
-int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
+static int	handle_quotes_env_variable(t_env *env_lst,
+	char **command_line, int end_status)
 {
 	int		i;
 	char	*expand;
 	char	*tmp;
 
+	i = 0;
+	while (command_line[i] != NULL)
+	{
+		if (command_line[i + 1] != NULL
+			&& ft_strncmp(command_line[i], "<<", 3) == 0)
+			expand = remove_quotes(env_lst, command_line[++i], end_status);
+		else
+		{
+			tmp = expand_env_variable(env_lst, command_line[i], end_status);
+			expand = remove_quotes(env_lst, tmp, end_status);
+			free(tmp);
+		}
+		if (expand == NULL)
+			return (1);
+		free(command_line[i]);
+		command_line[i] = expand;
+		i++;
+	}
+	return (0);
+}
+
+int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
+{
 	while (per_pipe != NULL)
 	{
-		i = 0;
-		while (per_pipe->command_line[i] != NULL)
-		{
-			if (per_pipe->command_line[i + 1] != NULL
-				&& ft_strncmp(per_pipe->command_line[i], "<<", 3) == 0)
-				expand = expand_quotes(env_lst, per_pipe->command_line[++i], end_status);
-			else
-			{
-				tmp = expand_env_variable(env_lst, per_pipe->command_line[i], end_status);
-				expand = expand_quotes(env_lst, tmp, end_status);
-				free(tmp);
-			}
-			if (expand == NULL)
-				return (1);
-			free(per_pipe->command_line[i]);
-			per_pipe->command_line[i] = expand;
-			i++;
-		}
+		if (handle_quotes_env_variable(env_lst, per_pipe->command_line,
+				end_status) == 1)
+			return (1);
 		per_pipe = per_pipe->next;
 	}
 	return (0);
 }
 
-static int	preprocess_command(t_env *env_lst, t_token **token, char *line, int *status)
+static int	preprocess_command(t_env *env_lst, t_token **token,
+	char *line, int *status)
 {
 	int	syntax_result;
 
@@ -109,7 +119,7 @@ static int	process_input_line(char **line)
 	*line = readline("minishell> ");
 	if (*line == NULL)
 	{
-		printf("exit\n");
+		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(1);
 	}
 	if (ft_strlen(*line) == 0)
