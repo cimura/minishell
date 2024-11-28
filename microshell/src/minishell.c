@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 15:59:21 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 16:00:29 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (no_pipe_exit(env_lst, token, &status) == CONTINUE)
 			continue ;
-		if (execute_command_line(token, env_lst, &status) == 1)
+		if (executor(token, env_lst, &status) == 1)
 			clear_exit(env_lst, token, 1);
 	}
 	env_lstclear(&env_lst);

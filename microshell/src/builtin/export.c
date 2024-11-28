@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/26 16:41:32 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 15:45:47 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ static int	parse_argument(char *arg, int *status)
 
 	if (!(arg[0] >= 'A' && arg[0] <= 'Z') && arg[0] != '_'
 		&& !(arg[0] >= 'a' && arg[0] <= 'z'))
-	{
-		*status = 1;
-		return (1);
-	}
+		return (*status = 1, 1);
 	i = 0;
 	while (arg[i] != '\0' && arg[i] != '=' && arg[i] != '+')
 	{
@@ -32,10 +29,7 @@ static int	parse_argument(char *arg, int *status)
 		if (!(arg[i] >= 'A' && arg[i] <= 'Z') && arg[i] != '_'
 			&& !(arg[i] >= 'a' && arg[i] <= 'z')
 			&& !(arg[i] >= '0' && arg[i] <= '9'))
-		{
-			*status = 1;
-			return (1);
-		}
+			return (*status = 1, 1);
 		i++;
 	}
 	if (arg[0] == '\0' || ft_strchr(arg, '=') == NULL)

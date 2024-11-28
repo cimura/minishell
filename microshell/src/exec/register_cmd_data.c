@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/24 19:26:09 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:28:10 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ static int	set_cmd_in_path(char *cmd, char **com_sep, char **path)
 	return (0);
 }
 
-// /bin/cat Makefile| /usr/bin/grep all
-// TODO: /bin/cat Makefile| /usr/bin/grep all > out
 static int	register_path(char *cmd, char **path, t_env *env_lst)
 {
 	char	*env_path;
@@ -103,7 +101,6 @@ static char	**register_cmd(char **head_cmdline)
 	return (result);
 }
 
-// /bin/cat Makefile > out1 > out2
 t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
 {
 	t_cmd_data	*cmd_data;
@@ -116,6 +113,5 @@ t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
 	cmd_data->cmd = register_cmd(&token->command_line[0]);
 	if (cmd_data->cmd == NULL)
 		return (free(cmd_data->path), free(cmd_data), NULL);
-	// d_print_char_array(cmd_data->cmd);
 	return (cmd_data);
 }

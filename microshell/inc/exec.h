@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/27 12:14:59 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 15:38:56 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,43 +38,60 @@ typedef struct s_cmd_data
 	char	**cmd;
 }	t_cmd_data;
 
-typedef struct	s_file_descripter
+typedef struct s_file_descripter
 {
 	int	pure_stdin;
 	int	pure_stdout;
 	int	prev_out;
 	int	prev_in;
-  int now_out;
-  int now_in;
+	int	now_in;
+	int	now_out;
 }	t_file_descripter;
 
 // *** command_executor.c ***
-int		execute_command_line(t_token *token, t_env *env_lst, int *end_status);
+int			executor(t_token *token, t_env *env_lst, int *end_status);
+
+// *** command_executor_util.c ***
+void		close_purefd(t_file_descripter fd);
+void		initialize_fd(t_file_descripter *fd);
+int			token_lstsize(t_token *token);
+void		wait_all_commands(t_token *head, int *end_status);
+
+// *** commands.c ***
+int			first_command(t_token *token, t_env *env_lst,
+				t_file_descripter *fd, int *end_status);
+int			middle_command(t_token *token, t_env *env_lst,
+				t_file_descripter *fd, int *end_status);
+int			last_command(t_token *token, t_env *env_lst,
+				t_file_descripter *fd, int *end_status);
+int			run_command_with_redirect(t_token *token, t_env *env_lst,
+				t_file_descripter *fd, int *end_status);
 
 // *** register_cmd_data.c ***
 t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst);
 
 // *** redirect.c ***
-int		redirect(t_token *token, t_env *env_lst,
-			t_file_descripter fd, int *end_status);
+int			redirect(t_token *token, t_env *env_lst,
+				t_file_descripter fd, int *end_status);
 
 // *** heredoc.c ***
-int	here_doc(char *eof, t_env *env_lst,
-	t_file_descripter fd, int *end_status);
+int			here_doc(char *eof, t_env *env_lst,
+				t_file_descripter fd, int *end_status);
 
 // *** exec_and_bltin.c ***
-bool	is_executable(char **cmd);
-void	execve_command_create_process(t_cmd_data *until_redirection,
-			t_file_descripter fd, int *end_status, char **envp);
-void	execve_command(t_cmd_data *until_redirection, int *end_status, char **envp);
-bool	is_builtin(char **cmd);
-void	builtin_command(char **cmd, t_env *env_lst, t_file_descripter fd, int *end_status);
+bool		is_executable(char **cmd);
+bool		is_builtin(char **cmd);
+void		execve_command_create_process(t_cmd_data *until_redirection,
+				t_file_descripter fd, int *end_status, char **envp);
+void		execve_command(t_cmd_data *until_redirection,
+				int *end_status, char **envp);
+void		builtin_command(char **cmd, t_env *env_lst,
+				t_file_descripter fd, int *end_status);
 
 // *** env_lst_to_array.c ***
-char	**env_lst_to_array(t_env *env_lst);
+char		**env_lst_to_array(t_env *env_lst);
 
 // *** utils.c ***
-void	print_commands(char **commands);
-void	free_cmd_data(t_cmd_data *data);
+void		free_cmd_data(t_cmd_data *data);
 
 #endif

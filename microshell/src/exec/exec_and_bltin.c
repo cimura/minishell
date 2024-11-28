@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 12:22:18 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/28 15:32:55 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,21 @@ bool	is_executable(char **cmd)
 	return (true);
 }
 
+bool	is_builtin(char **cmd)
+{
+	if (cmd == NULL || cmd[0] == NULL)
+		return (false);
+	return (ft_strncmp(cmd[0], "cd", 3) == 0
+		||ft_strncmp(cmd[0], "echo", 5) == 0
+		||ft_strncmp(cmd[0], "env", 4) == 0
+		||ft_strncmp(cmd[0], "exit", 5) == 0
+		||ft_strncmp(cmd[0], "export", 6) == 0
+		||ft_strncmp(cmd[0], "pwd", 4) == 0
+		||ft_strncmp(cmd[0], "unset", 6) == 0);
+}
+
 void	execve_command_create_process(t_cmd_data *until_redirection,
-								t_file_descripter fd, int *end_status, char **envp)
+		t_file_descripter fd, int *end_status, char **envp)
 {
 	pid_t	pid;
 
@@ -47,7 +60,8 @@ void	execve_command_create_process(t_cmd_data *until_redirection,
 	}
 }
 
-void	execve_command(t_cmd_data *until_redirection, int *end_status, char **envp)
+void	execve_command(t_cmd_data *until_redirection,
+		int *end_status, char **envp)
 {
 	if (execve(until_redirection->path, until_redirection->cmd, envp) == -1)
 	{
@@ -55,20 +69,6 @@ void	execve_command(t_cmd_data *until_redirection, int *end_status, char **envp)
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	}
 	*end_status = 127;
-//	exit(127);
-}
-
-bool	is_builtin(char **cmd)
-{
-	if (cmd == NULL || cmd[0] == NULL)
-		return (false);
-	return (ft_strncmp(cmd[0], "cd", 3) == 0
-		||ft_strncmp(cmd[0], "echo", 5) == 0
-		||ft_strncmp(cmd[0], "env", 4) == 0
-		||ft_strncmp(cmd[0], "exit", 5) == 0
-		||ft_strncmp(cmd[0], "export", 6) == 0
-		||ft_strncmp(cmd[0], "pwd", 4) == 0
-		||ft_strncmp(cmd[0], "unset", 6) == 0);
 }
 
 void	builtin_command(char **cmd, t_env *env_lst,
