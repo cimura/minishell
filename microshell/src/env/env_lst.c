@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 18:40:47 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:05:59 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,24 +54,28 @@ void	env_lstadd_back(t_env **lst, t_env *new)
 // PATH=/usr/bin -> "/usr/bin"	(value)
 static int	set_key_value(t_env *new, char *line)
 {
-	int	len;
-	int	klen;
-	int	vlen;
+	char	*value_ptr;
+	int		klen;
+	int		vlen;
 
-	len = ft_strlen(line);
-	vlen = ft_strlen(ft_strchr(line, '=') + 1);
-	klen = len - vlen - 1;
-	new->key = malloc(klen + 1);
-	if (!new->key)
-		return (0);
-	new->value = malloc(vlen + 1);
-	if (!new->value)
-		return (free(new->key), new->key = NULL, 0);
-	new->key = ft_memmove(new->key, line, klen);
-	new->key[klen] = '\0';
-	new->value = ft_memmove(new->value, &line[klen + 1], vlen);
-	new->value[vlen] = '\0';
-	return (1);
+	value_ptr = ft_strchr(line, '=') + 1;
+	klen = count_key_size(line);
+	vlen = ft_strlen(value_ptr);
+	new->key = ft_strndup(line, klen);
+	if (new->key == NULL)
+		return (1);
+	if (ft_strncmp("SHLVL", new->key, ft_strlen("SHLVL")) == 0)
+	{
+		if (ft_atoi(value_ptr) >= 999)
+			new->value = ft_strdup("0");
+		else
+			new->value = ft_itoa(ft_atoi(value_ptr) + 1);
+	}
+	else
+		new->value = ft_strndup(value_ptr, vlen);
+	if (new->value == NULL)
+		return (free(new->key), 1);
+	return (0);
 }
 
 t_env	*get_node_from_key(t_env *env_lst, char *key)
@@ -98,7 +102,7 @@ t_env	*create_env_lst(char *envp[])
 		new = malloc(sizeof(t_env));
 		if (!new)
 			return (NULL);
-		if (!set_key_value(new, envp[i]))
+		if (set_key_value(new, envp[i]) == 1)
 			return (free(new), new = NULL,
 				env_lstclear(&head), NULL);
 		new->next = NULL;

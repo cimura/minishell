@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:32:36 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 18:19:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/28 18:47:07 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,6 @@ int	count_until_char(char *line, char *needle)
 		i++;
 	}
 	return (i);
-}
-
-int	count_key_size(char *line_ptr)
-{
-	int	size;
-
-	size = 0;
-	if (line_ptr[0] == '?')
-		return (1);
-	if (!(line_ptr[0] >= 'A' && line_ptr[0] <= 'Z') && line_ptr[0] != '_'
-		&& !(line_ptr[0] >= 'a' && line_ptr[0] <= 'z'))
-		return (size);
-	while (line_ptr[size] != '\0' && line_ptr[size] != '=')
-	{
-		if (!(line_ptr[size] >= 'A' && line_ptr[size] <= 'Z')
-			&& line_ptr[size] != '_'
-			&& !(line_ptr[size] >= 'a' && line_ptr[size] <= 'z')
-			&& !(line_ptr[size] >= '0' && line_ptr[size] <= '9'))
-			return (size);
-		size++;
-	}
-	return (size);
 }
 
 char	*get_value_from_key(t_env *env_lst, char *key)

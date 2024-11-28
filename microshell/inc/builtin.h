@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 18:41:00 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:05:31 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "env_lst.h"
-# include "expander.h"
 # include "libft.h"
 // # include "utils.h"
 
