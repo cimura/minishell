@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:21:00 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 15:25:50 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:02:51 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
+		close_purefd(*fd);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
-		close_purefd(*fd);
 		exit(*end_status);
 	}
 	return (0);
@@ -94,9 +94,9 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	if (pid == 0)
 	{
 		connect_pipe_middle_command(fd->prev_in, fd->now_in, fd->now_out);
+		close_purefd(*fd);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
-		close_purefd(*fd);
 		exit(*end_status);
 	}
 	fd->prev_in = pipe_fd[0];
@@ -120,9 +120,9 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	{
 		dup2(fd->prev_in, STDIN_FILENO);
 		close(fd->prev_in);
+		close_purefd(*fd);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
-		close_purefd(*fd);
 		exit(*end_status);
 	}
 	close(fd->prev_in);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 15:32:55 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:05:21 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,7 @@ void	execve_command_create_process(t_cmd_data *until_redirection,
 		perror("fork");
 	else if (pid == 0)
 	{
-		close(fd.pure_stdin);
-		close(fd.pure_stdout);
+		close_purefd(fd);
 		execve_command(until_redirection, end_status, envp);
 		exit(*end_status);
 	}

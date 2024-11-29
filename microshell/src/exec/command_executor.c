@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 18:19:14 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 15:06:47 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ int	executor(t_token *token, t_env *env_lst, int *end_status)
 		return (1);
 	dup2(fd.pure_stdin, STDIN_FILENO);
 	dup2(fd.pure_stdout, STDOUT_FILENO);
-	close(fd.pure_stdin);
-	close(fd.pure_stdout);
+	close_purefd(fd);
 	return (0);
 }
 

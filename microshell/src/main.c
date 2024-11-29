@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 19:25:42 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:55:51 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (executor(token, env_lst, &status) == 1)
 			clear_exit(env_lst, token, 1);
+		token_lstclear(&token);
 	}
 	env_lstclear(&env_lst);
 	return (status);
