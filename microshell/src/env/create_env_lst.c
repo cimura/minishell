@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 14:52:29 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:30:10 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,20 @@ t_env	*create_env_lst(char *envp[])
 	{
 		new = malloc(sizeof(t_env));
 		if (new == NULL)
-			return (NULL);
+			exit(EXIT_FAILURE);
 		if (set_key_value(new, envp[i]) == 1)
-			return (free(new), new = NULL, env_lstclear(&head), NULL);
+		{
+			free(new);
+			new = NULL;
+			env_lstclear(&head);
+			exit(EXIT_FAILURE);
+		}
 		new->next = NULL;
 		env_lstadd_back(&head, new);
 		i++;
 	}
 	if (head == NULL)
-		exit(1);
+		exit(EXIT_FAILURE);
 	return (head);
 }
 

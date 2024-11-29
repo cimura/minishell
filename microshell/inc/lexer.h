@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:28:30 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 19:20:05 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:14:53 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	token_lstclear(t_token **lst);
 void	token_lstadd_back(t_token **lst, t_token *new);
 
 // *** lexer.c ***
-t_token	*lexer(char	*line, int *null_char_flag);
+t_token	*lexer(char	*line);
 
 // debug
 // void	d_print_token_lst(t_token *token);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 14:55:51 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 16:14:49 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,12 @@ static int	preprocess_command(t_env *env_lst, t_token **token,
 		free(line);
 		return (CONTINUE);
 	}
-	*token = lexer(line, &syntax_result);
+	*token = lexer(line);
+	free(line);
 	if (*token == NULL)
 		clear_exit(env_lst, *token, 1);
 	if (syntax_result == CONTINUE)
-		return (CONTINUE);
+		return (token_lstclear(token), CONTINUE);
 	if (pass_token_to_expand(env_lst, *token, *status) != 0)
 		clear_exit(env_lst, *token, 1);
 	syntax_result = check_syntax(*token);

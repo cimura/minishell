@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 14:46:51 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:35:57 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static bool	is_redirection(char *word)
 	return (false);
 }
 
-static char	**register_cmd(char **head_cmdline)
+static char	**filter_cmd_args(char **head_cmdline)
 {
 	int		i;
 	int		ri;
@@ -112,7 +112,7 @@ t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
 		return (NULL);
 	if (register_path(token->command_line[0], &(cmd_data->path), env_lst) != 0)
 		return (free(cmd_data), NULL);
-	cmd_data->cmd = register_cmd(&token->command_line[0]);
+	cmd_data->cmd = filter_cmd_args(&token->command_line[0]);
 	if (cmd_data->cmd == NULL)
 		return (free(cmd_data->path), free(cmd_data), NULL);
 	return (cmd_data);
