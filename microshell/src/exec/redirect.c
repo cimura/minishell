@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 15:34:43 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:36:32 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,24 @@ static int	ft_open(char *path, int oflag, int to_dup)
 	return (0);
 }
 
-static int	handle_redirect(char **command_line, int i, t_file_descripter fd)
+static int	handle_redirect(char **command_line, int i)
 {
 	if (ft_strncmp(command_line[i], ">", 2) == 0)
 	{
 		if (ft_open(command_line[i + 1],
-				O_CREAT | O_WRONLY | O_TRUNC, fd.now_out) == -1)
+				O_CREAT | O_WRONLY | O_TRUNC, STDOUT_FILENO) == -1)
 			return (-1);
 	}
 	else if (ft_strncmp(command_line[i], ">>", 3) == 0)
 	{
 		if (ft_open(command_line[i + 1],
-				O_CREAT | O_WRONLY | O_APPEND, fd.now_out) == -1)
+				O_CREAT | O_WRONLY | O_APPEND, STDOUT_FILENO) == -1)
 			return (-1);
 	}
 	else if (ft_strncmp(command_line[i], "<", 2) == 0)
 	{
 		if (ft_open(command_line[i + 1],
-				O_RDONLY, fd.now_in) == -1)
+				O_RDONLY, STDIN_FILENO) == -1)
 			return (-1);
 	}
 	return (0);
@@ -60,7 +60,7 @@ int	redirect(t_token *token, t_env *env_lst,
 	i = 0;
 	while (token->command_line[i] != NULL)
 	{
-		if (handle_redirect(token->command_line, i, fd) == -1)
+		if (handle_redirect(token->command_line, i) == -1)
 		{
 			*end_status = 1;
 			return (-1);

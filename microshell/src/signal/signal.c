@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:16:02 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/26 17:44:19 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 17:41:25 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signal_handler.h"
 
-void	sigint_handler_child(int signum)
+static void	sigint_handler_child(int signum)
 {
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	(void)signum;
 }
 
-void	sigquit_handler_child(int signum)
+static void	sigquit_handler_child(int signum)
 {
 	ft_putstr_fd("Quit\n", STDOUT_FILENO);
 	(void)signum;
 }
 
-void	sigint_handler(int signum)
+static void	sigint_handler(int signum)
 {
 	rl_on_new_line();
 	ft_putstr_fd("\n", STDOUT_FILENO);
@@ -37,6 +37,12 @@ void	ft_signal(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+void	ft_child_signal(void)
+{
+	signal(SIGINT, sigint_handler_child);
+	signal(SIGQUIT, sigquit_handler_child);
 }
 
 //int main(int argc, char **argv, char **envp)

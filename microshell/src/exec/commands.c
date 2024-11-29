@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:21:00 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 16:03:46 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:40:56 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,13 @@ int	run_command_with_redirect(t_token *token, t_env *env_lst,
 	return (0);
 }
 
-static void	connect_pipe_middle_command(int fd_previn,
-	int fd_nowin, int fd_nowout)
+static void	connect_pipe_middle_command(t_file_descripter *fd)
 {
-	dup2(fd_previn, STDIN_FILENO);
-	close(fd_previn);
-	close(fd_nowin);
-	dup2(fd_nowout, STDOUT_FILENO);
-	close(fd_nowout);
+	dup2(fd->prev_in, STDIN_FILENO);
+	close(fd->prev_in);
+	close(fd->now_in);
+	dup2(fd->now_out, STDOUT_FILENO);
+	close(fd->now_out);
 }
 
 int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
@@ -56,8 +55,7 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	int		pipe_fd[2];
 	pid_t	pid;
 
-	signal(SIGINT, sigint_handler_child);
-	signal(SIGQUIT, sigquit_handler_child);
+	ft_child_signal();
 	if (pipe(pipe_fd) == -1)
 		perror("pipe");
 	fd->prev_in = pipe_fd[0];
@@ -96,7 +94,7 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	token->pid = pid;
 	if (pid == 0)
 	{
-		connect_pipe_middle_command(fd->prev_in, fd->now_in, fd->now_out);
+		connect_pipe_middle_command(fd);
 		close_purefd(*fd);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);
@@ -124,6 +122,7 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	{
 		dup2(fd->prev_in, STDIN_FILENO);
 		close(fd->prev_in);
+		dup2(fd->pure_stdout, STDOUT_FILENO);
 		close_purefd(*fd);
 		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
 			return (1);

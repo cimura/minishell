@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 15:27:06 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:41:04 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ void	execute_external_command(t_cmd_data *until_redirection,
 {
 	pid_t	pid;
 
-	signal(SIGINT, sigint_handler_child);
-	signal(SIGQUIT, sigquit_handler_child);
+	ft_child_signal();
 	pid = fork();
 	if (pid == -1)
 		perror("fork");

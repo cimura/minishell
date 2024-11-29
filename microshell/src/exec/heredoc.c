@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 16:33:08 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:35:54 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ void	sigint_handler_in_heredoc(int signum)
 	close(pipefd[1]);
 }
 
-static int	tmpfile_to_readfrom(char *tmp_file, int fd_tmp,
-										t_file_descripter fd)
+static int	tmpfile_to_readfrom(char *tmp_file, int fd_tmp)
 {
 	fd_tmp = open(tmp_file, O_RDONLY);
 	if (fd_tmp == -1)
@@ -42,7 +41,7 @@ static int	tmpfile_to_readfrom(char *tmp_file, int fd_tmp,
 		perror("open");
 		return (1);
 	}
-	dup2(fd_tmp, fd.now_in);
+	dup2(fd_tmp, STDIN_FILENO);
 	close(fd_tmp);
 	return (0);
 }
@@ -126,5 +125,5 @@ int	here_doc(char *eof, t_env *env_lst,
 			break ;
 	}
 	close(fd_tmp);
-	return (tmpfile_to_readfrom(tmp_file, fd_tmp, fd));
+	return (tmpfile_to_readfrom(tmp_file, fd_tmp));
 }
