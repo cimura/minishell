@@ -29,7 +29,7 @@ SIGNAL_SRC := signal.c
 SIGNAL := $(addprefix $(OBJ_DIR)signal/, $(SIGNAL_SRC:.c=.o))
 
 SYNTAX_DIR := src/syntax/
-SYNTAX_SRC := syntax_util.c check_syntax.c check_empty.c
+SYNTAX_SRC := syntax_util.c check_syntax.c
 SYNTAX := $(addprefix $(OBJ_DIR)syntax/, $(SYNTAX_SRC:.c=.o))
 
 MINISHELL_DIR := src/

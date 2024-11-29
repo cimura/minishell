@@ -6,12 +6,11 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 14:48:29 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:33:08 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
-// #include "env_lst.h"
 #include "expander.h"
 #include "signal_handler.h"
 
@@ -92,7 +91,7 @@ static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 		return (SIGINT_RECEIVED);
 	}
 	if (line == NULL || ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)
-		return (BREAK);
+		return (free(line), BREAK);
 	expanded = expand_dollar(env_lst, line, *end_status);
 	free(line);
 	if (expanded == NULL)

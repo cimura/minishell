@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 14:04:35 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:21:22 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,31 +76,11 @@ static t_token	*create_pipe_lst(t_list *normal)
 	return (head);
 }
 
-static t_token	*create_empty_token(int *null_char_flag)
-{
-	t_token	*empty_token;
-	char	**tmp;
-
-	tmp = malloc(sizeof(char *));
-	if (tmp == NULL)
-		return (NULL);
-	tmp[0] = "";
-	empty_token = malloc(sizeof(t_token));
-	if (empty_token == NULL)
-		return (NULL);
-	empty_token->command_line = tmp;
-	empty_token->next = NULL;
-	*null_char_flag = 3;
-	return (empty_token);
-}
-
-t_token	*lexer(char	*line, int *null_char_flag)
+t_token	*lexer(char	*line)
 {
 	t_list	*normal;
 	t_token	*per_pipe;
 
-	if (line[0] == '\0')
-		return (create_empty_token(null_char_flag));
 	normal = create_token_lst(line);
 	if (normal == NULL)
 		return (NULL);
