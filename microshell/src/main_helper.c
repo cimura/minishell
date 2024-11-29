@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:12:06 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 16:54:53 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:56:21 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	handle_quotes_env_variable(t_env *env_lst,
 			expand = remove_quotes(command_line[++i]);
 		else
 		{
-			tmp = expand_env_variable(env_lst, command_line[i], end_status);
+			tmp = (env_lst, command_line[i], end_status);
 			expand = remove_quotes(tmp);
 			free(tmp);
 		}
