@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 16:54:37 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:58:41 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static size_t	non_quotes_len(char *line)
 	size_t	c;
 
 	c = 0;
-	while (*line)
+	while (*line != '\0')
 	{
 		if (*line != '\'' && *line != '\"')
 			c++;
@@ -61,6 +61,8 @@ char	*remove_quotes(char *line)
 	char	quote_flag;
 	int		i;
 
+	if (line == NULL)
+		return (NULL);
 	result = malloc(non_quotes_len(line) + 1);
 	if (result == NULL)
 		return (NULL);
