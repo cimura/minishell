@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 15:08:19 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 16:54:18 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,14 @@ int	handle_command_branch(t_token *token, t_env *env_lst,
 int	executor(t_token *token, t_env *env_lst, int *end_status)
 {
 	t_file_descripter	fd;
+	int					local_status;
 
 	initialize_fd(&fd);
-	if (handle_command_branch(token, env_lst, &fd, end_status) == 1)
-		return (1);
+	local_status = handle_command_branch(token, env_lst, &fd, end_status);
 	dup2(fd.pure_stdin, STDIN_FILENO);
 	dup2(fd.pure_stdout, STDOUT_FILENO);
 	close_purefd(fd);
-	return (0);
+	return (local_status);
 }
 
 // int	main(int argc, char **argv, char **envp)

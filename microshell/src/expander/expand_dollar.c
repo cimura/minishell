@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 16:00:19 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 16:31:34 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ static char	*double_quotes(t_env *env_lst, char *new,
 	{
 		if (line_ptr[i] == '$')
 		{
-			i++;
-			new = env_query(env_lst, new, &line_ptr[i], end_status);
+			new = env_query(env_lst, new, &line_ptr[++i], end_status);
 			i += count_key_size(&line_ptr[i]);
 		}
 		else
@@ -48,6 +47,7 @@ static char	*double_quotes(t_env *env_lst, char *new,
 		if (new == NULL)
 			return (NULL);
 	}
+	free(line_ptr);
 	new = ft_strmerge(new, ft_strdup("\""));
 	return (new);
 }
