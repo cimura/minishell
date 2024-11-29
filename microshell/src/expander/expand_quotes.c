@@ -3,101 +3,80 @@
 /*                                                        :::      ::::::::   */
 /*   expand_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 13:55:05 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:24:09 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
 
-static t_expand_lst	*create_quoted_node(char *line)
-{
-	t_expand_lst	*new;
-	char			*meta;
+#define SINGLE '\''
+#define DOUBLE '\"'
+#define OUT 0
 
-	new = malloc(sizeof(t_expand_lst));
-	if (new == NULL)
-		return (NULL);
-	if (*line == '\'')
-		meta = "'\'";
-	else if (*line == '\"')
-		meta = "\"";
-	else
-		meta = "\'\"";
-	if (*line == '\'')
-		new->status = SINGLE;
-	else if (*line == '\"')
-		new->status = DOUBLE;
-	else
-		new->status = OUT;
-	if (*line == '\'' || *line == '\"')
+static size_t	non_quotes_len(char *line)
+{
+	size_t	c;
+
+	c = 0;
+	while (*line)
+	{
+		if (*line != '\'' && *line != '\"')
+			c++;
 		line++;
-	new->str = ft_strndup(line, count_until_char(line, meta));
-	if (new->str == NULL)
-		return (free(new), new = NULL, NULL);
-	new->next = NULL;
-	return (new);
+	}
+	return (c);
 }
 
-static t_expand_lst	*create_quoted_lst(char *line)
+static bool	is_skip_quote(char line_chr, char *quote_flag)
 {
-	int				i;
-	t_expand_lst	*new;
-	t_expand_lst	*head;
-
-	head = NULL;
-	i = 0;
-	while (line[i])
+	if (*quote_flag == OUT && line_chr == SINGLE)
 	{
-		new = create_quoted_node(&line[i]);
-		if (new == NULL)
-			return (expand_lstclear(&head), NULL);
-		if (line[i] == '\'' || line[i] == '\"')
-			i += ft_strlen(new->str) + 2;
-		else
-			i += ft_strlen(new->str);
-		expand_lstadd_back(&head, new);
+		*quote_flag = SINGLE;
+		return (true);
 	}
-	return (head);
-}
-
-static char	*join_lst(t_expand_lst *expand_lst)
-{
-	char	*result;
-	char	*tmp;
-
-	result = ft_strdup(expand_lst->str);
-	if (result == NULL)
-		return (NULL);
-	expand_lst = expand_lst->next;
-	while (expand_lst != NULL)
+	else if (*quote_flag == OUT && line_chr == DOUBLE)
 	{
-		tmp = ft_strjoin(result, expand_lst->str);
-		if (tmp == NULL)
-			return (free(result), result = NULL, NULL);
-		free(result);
-		result = tmp;
-		expand_lst = expand_lst->next;
+		*quote_flag = DOUBLE;
+		return (true);
 	}
-	return (result);
+	if (*quote_flag == SINGLE && line_chr == SINGLE)
+	{
+		*quote_flag = OUT;
+		return (true);
+	}
+	else if (*quote_flag == DOUBLE && line_chr == DOUBLE)
+	{
+		*quote_flag = OUT;
+		return (true);
+	}
+	return (false);
 }
 
 char	*remove_quotes(char *line)
 {
-	t_expand_lst	*expand_lst;
-	char			*result;
+	char	*result;
+	char	quote_flag;
+	int		i;
 
-	if (line == NULL)
+	result = malloc(non_quotes_len(line) + 1);
+	if (result == NULL)
 		return (NULL);
-	if (*line == '\0')
-		return (ft_strdup("\0"));
-	expand_lst = create_quoted_lst(line);
-	if (expand_lst == NULL)
-		return (NULL);
-	result = join_lst(expand_lst);
-	expand_lstclear(&expand_lst);
+	quote_flag = OUT;
+	i = 0;
+	while (*line)
+	{
+		if (is_skip_quote(*line, &quote_flag) == true)
+		{
+			line++;
+			continue ;
+		}
+		result[i++] = *line;
+		line++;
+	}
+	result[i] = '\0';
 	return (result);
 }
 

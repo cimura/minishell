@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 13:54:51 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:24:44 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,5 @@ char	*get_value_from_key(t_env *env_lst, char *key);
 
 // *** expand_quotes.c ***
 char	*remove_quotes(char *line);
-
-// *** expand_quotes_util.c ***
-void	expand_lstclear(t_expand_lst **lst);
-void	expand_lstadd_back(t_expand_lst **lst, t_expand_lst *new);
 
 #endif
