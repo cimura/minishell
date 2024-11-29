@@ -6,11 +6,13 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 15:06:47 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 15:08:19 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "utils.h"
+#include "signal_handler.h"
 
 int	execute_single_command(t_token *token, t_env *env_lst,
 	t_file_descripter *fd, int *end_status)
@@ -29,9 +31,10 @@ int	execute_single_command(t_token *token, t_env *env_lst,
 	if (until_redirection == NULL)
 		return (free_ptr_array(env_array), 1);
 	if (is_builtin(until_redirection->cmd))
-		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
+		execute_builtin_command(until_redirection->cmd,
+			env_lst, *fd, end_status);
 	else if (is_executable(until_redirection->cmd))
-		execve_command_create_process(until_redirection,
+		execute_external_command(until_redirection,
 			*fd, end_status, env_array);
 	free_cmd_data(until_redirection);
 	free_ptr_array(env_array);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:46:20 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 18:47:12 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 14:49:19 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,13 @@ int	count_key_size(char *line_ptr)
 		size++;
 	}
 	return (size);
+}
+
+void	free_cmd_data(t_cmd_data *data)
+{
+	free(data->path);
+	data->path = NULL;
+	free_ptr_array(data->cmd);
+	free(data);
+	data = NULL;
 }

@@ -9,11 +9,11 @@ BUILTIN_SRCS := cd.c echo.c env.c exit.c export.c export_util.c export_util2.c p
 BUILTIN := $(addprefix $(OBJ_DIR)builtin/, $(BUILTIN_SRCS:.c=.o))
 
 ENV_DIR := src/env/
-ENV_SRCS := env_lst.c
+ENV_SRCS := create_env_lst.c env_lst_to_array.c env_lst_utils.c
 ENV := $(addprefix $(OBJ_DIR)env/, $(ENV_SRCS:.c=.o))
 
 EXEC_DIR := src/exec/
-EXEC_SRCS := commands.c command_executor_util.c command_executor.c register_cmd_data.c redirect.c heredoc.c exec_and_bltin.c env_lst_to_array.c exec_utils.c
+EXEC_SRCS := commands.c command_executor_util.c command_executor.c register_cmd_data.c redirect.c heredoc.c exec_and_bltin.c exec_utils.c
 EXEC := $(addprefix $(OBJ_DIR)exec/, $(EXEC_SRCS:.c=.o))
 
 EXPANDER_DIR := src/expander/

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst_to_array.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 18:02:16 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 14:35:08 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+#include "env_lst.h"
+#include "utils.h"
 
 static int	env_lstsize(t_env *env_lst)
 {

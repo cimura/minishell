@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 19:22:53 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:58:28 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static unsigned char	ex_atoi(char *arg)
 	while (arg[i] <= '9' && arg[i] >= '0')
 	{
 		result = result * 10 + (arg[i] - '0');
-		if ((result > __LONG_LONG_MAX__ && sign == 1)
+		if ((result > ULONGLONG_MAX && sign == 1)
 			|| (result > (ULONGLONG_MAX + 1) && sign == -1))
 		{
 			ft_putendl_fd(" numeric argument required", STDERR_FILENO);

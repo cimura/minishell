@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 19:30:06 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:54:51 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		count_key_size(char *line_ptr);
 char	*get_value_from_key(t_env *env_lst, char *key);
 
 // *** expand_quotes.c ***
-char	*remove_quotes(t_env *env_lst, char *line, int end_status);
+char	*remove_quotes(char *line);
 
 // *** expand_quotes_util.c ***
 void	expand_lstclear(t_expand_lst **lst);
