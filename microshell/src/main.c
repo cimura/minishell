@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 16:14:49 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:48:31 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	preprocess_command(t_env *env_lst, t_token **token,
 	if (syntax_result == CONTINUE)
 		return (token_lstclear(token), CONTINUE);
 	if (pass_token_to_expand(env_lst, *token, *status) != 0)
-		clear_exit(env_lst, *token, 1);
+		clear_exit(env_lst, *token, EXIT_FAILURE);
 	syntax_result = check_syntax(*token);
 	if (syntax_result != 0)
 	{
@@ -74,7 +74,7 @@ static int	process_input_line(char **line)
 	if (*line == NULL)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
-		exit(1);
+		exit(EXIT_SUCCESS);
 	}
 	if (ft_strlen(*line) == 0)
 	{
@@ -107,7 +107,7 @@ int	main(int argc, char **argv, char **envp)
 		if (no_pipe_exit(env_lst, token, &status) == CONTINUE)
 			continue ;
 		if (executor(token, env_lst, &status) == 1)
-			clear_exit(env_lst, token, 1);
+			clear_exit(env_lst, token, EXIT_FAILURE);
 		token_lstclear(&token);
 	}
 	env_lstclear(&env_lst);

@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 13:58:28 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:41:52 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static bool	ft_isnum(char *arg)
 	return (true);
 }
 
-static unsigned char	ex_atoi(char *arg)
+static int	ex_atoi(char *arg, int *status)
 {
 	int					i;
 	int					sign;
@@ -61,7 +61,7 @@ static unsigned char	ex_atoi(char *arg)
 	if (!ft_isnum(&arg[i]))
 	{
 		ft_putendl_fd(" numeric argument required", STDERR_FILENO);
-		return (2);
+		return (*status = 2, EXIT_FAILURE);
 	}
 	while (arg[i] <= '9' && arg[i] >= '0')
 	{
@@ -70,11 +70,12 @@ static unsigned char	ex_atoi(char *arg)
 			|| (result > (ULONGLONG_MAX + 1) && sign == -1))
 		{
 			ft_putendl_fd(" numeric argument required", STDERR_FILENO);
-			return (2);
+			return (*status = 2, EXIT_FAILURE);
 		}
 		i++;
 	}
-	return ((unsigned char)result * sign);
+	*status = (unsigned char)result * sign;
+	return (EXIT_SUCCESS);
 }
 
 int	ft_exit(char **args, int *status)
@@ -82,13 +83,13 @@ int	ft_exit(char **args, int *status)
 	ft_putendl_fd("exit", STDOUT_FILENO);
 	if (args == NULL || args[0] == NULL)
 		return (0);
-	else if (args[1] != NULL)
+	if (ex_atoi(args[0], status) == 1)
+		return (*status);
+	if (args[1] != NULL)
 	{
 		ft_putendl_fd(" too many arguments", STDERR_FILENO);
 		*status = 1;
 		return (1);
 	}
-	else
-		*status = (int)ex_atoi(args[0]);
 	return (*status);
 }
