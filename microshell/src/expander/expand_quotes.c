@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 18:50:14 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:55:05 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,11 @@ static char	*join_lst(t_expand_lst *expand_lst)
 	return (result);
 }
 
-char	*remove_quotes(t_env *env_lst, char *line, int end_status)
+char	*remove_quotes(char *line)
 {
 	t_expand_lst	*expand_lst;
 	char			*result;
 
-	(void)env_lst;
-	(void)end_status;
 	if (line == NULL)
 		return (NULL);
 	if (*line == '\0')

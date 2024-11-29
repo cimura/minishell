@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_lst.c                                          :+:      :+:    :+:   */
+/*   create_env_lst.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 22:49:34 by cimy             ###   ########.fr       */
+/*   Updated: 2024/11/29 14:52:29 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	env_lstadd_back(t_env **lst, t_env *new)
 	last->next = new;
 }
 
-// PATH=/usr/bin -> "PATH"		(key)	
-// PATH=/usr/bin -> "/usr/bin"	(value)
 static int	set_key_value(t_env *new, char *line)
 {
 	char	*value_ptr;
@@ -65,10 +63,10 @@ static int	set_key_value(t_env *new, char *line)
 	new->key = ft_strndup(line, klen);
 	if (new->key == NULL)
 		return (1);
-	if (ft_strncmp("SHLVL", new->key, ft_strlen("SHLVL")) == 0)
+	if (ft_strncmp("SHLVL", new->key, 6) == 0)
 	{
 		if (ft_atoi(value_ptr) >= 999)
-			new->value = ft_strdup("0");
+			new->value = ft_strdup("1");
 		else
 			new->value = ft_itoa(ft_atoi(value_ptr) + 1);
 	}
@@ -83,7 +81,8 @@ t_env	*get_node_from_key(t_env *env_lst, char *key)
 {
 	while (env_lst != NULL)
 	{
-		if (ft_strncmp(key, env_lst->key, ft_strlen(env_lst->key) + 1) == 0)
+		if (ft_strncmp(key, env_lst->key, count_key_size(key)) == 0
+			&& count_key_size(key) == count_key_size(env_lst->key))
 			return (env_lst);
 		env_lst = env_lst->next;
 	}
@@ -101,11 +100,10 @@ t_env	*create_env_lst(char *envp[])
 	while (envp[i])
 	{
 		new = malloc(sizeof(t_env));
-		if (!new)
+		if (new == NULL)
 			return (NULL);
 		if (set_key_value(new, envp[i]) == 1)
-			return (free(new), new = NULL,
-				env_lstclear(&head), NULL);
+			return (free(new), new = NULL, env_lstclear(&head), NULL);
 		new->next = NULL;
 		env_lstadd_back(&head, new);
 		i++;

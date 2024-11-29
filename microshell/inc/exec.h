@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 15:38:56 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:48:38 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,15 @@
 
 # include "lexer.h"
 # include "env_lst.h"
-# include "expander.h"
-# include "builtin.h"
-# include "signal_handler.h"
-# include "utils.h"
+// # include "expander.h"
+// # include "builtin.h"
+// # include "signal_handler.h"
+// # include "utils.h"
 
 # include <stdbool.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <errno.h>
-
-# define RESET   "\033[0m"   // リセット
-# define RED     "\033[31m"  // 赤
-# define GREEN   "\033[32m"  // 緑
-# define YELLOW  "\033[33m"  // 黄
-# define BLUE    "\033[34m"  // 青
 
 typedef struct s_cmd_data
 {
@@ -81,11 +75,11 @@ int			here_doc(char *eof, t_env *env_lst,
 // *** exec_and_bltin.c ***
 bool		is_executable(char **cmd);
 bool		is_builtin(char **cmd);
-void		execve_command_create_process(t_cmd_data *until_redirection,
+void		execute_external_command(t_cmd_data *until_redirection,
 				t_file_descripter fd, int *end_status, char **envp);
 void		execve_command(t_cmd_data *until_redirection,
 				int *end_status, char **envp);
-void		builtin_command(char **cmd, t_env *env_lst,
+void		execute_builtin_command(char **cmd, t_env *env_lst,
 				t_file_descripter fd, int *end_status);
 
 // *** env_lst_to_array.c ***

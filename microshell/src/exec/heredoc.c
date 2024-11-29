@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 15:56:42 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/11/29 14:48:29 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+// #include "env_lst.h"
+#include "expander.h"
+#include "signal_handler.h"
+
+#define SIGINT_RECEIVED 2
+#define BREAK 3
 
 int	g_global = 0;
 
@@ -68,9 +74,6 @@ static char	*expand_dollar(t_env *env_lst, char *line, int end_status)
 	}
 	return (new);
 }
-
-#define SIGINT_RECEIVED 2
-#define BREAK 3
 
 static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 								int fd_tmp, int *end_status)

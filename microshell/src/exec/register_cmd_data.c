@@ -6,11 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 15:28:10 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:46:51 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "env_lst.h"
+#include "utils.h"
 
 static int	set_cmd_in_path(char *cmd, char **com_sep, char **path)
 {

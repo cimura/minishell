@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 19:31:35 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:49:52 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include "libft.h"
 # include "env_lst.h"
 # include "lexer.h"
+# include "exec.h"
 
 // *** utils.c ***
 void	free_ptr_array(char **ptr);
@@ -29,6 +30,7 @@ bool	is_whitespace(char check_chr);
 
 // *** utils2.c ***
 int		count_key_size(char *line_ptr);
+void	free_cmd_data(t_cmd_data *data);
 
 // *** main_helper.c ***
 void	clear_exit(t_env *env_lst, t_token *token, int exit_status);

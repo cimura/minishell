@@ -6,11 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 15:32:55 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:48:50 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "signal_handler.h"
+#include "builtin.h"
 
 bool	is_executable(char **cmd)
 {
@@ -24,15 +26,15 @@ bool	is_builtin(char **cmd)
 	if (cmd == NULL || cmd[0] == NULL)
 		return (false);
 	return (ft_strncmp(cmd[0], "cd", 3) == 0
-		||ft_strncmp(cmd[0], "echo", 5) == 0
-		||ft_strncmp(cmd[0], "env", 4) == 0
-		||ft_strncmp(cmd[0], "exit", 5) == 0
-		||ft_strncmp(cmd[0], "export", 6) == 0
-		||ft_strncmp(cmd[0], "pwd", 4) == 0
-		||ft_strncmp(cmd[0], "unset", 6) == 0);
+		|| ft_strncmp(cmd[0], "echo", 5) == 0
+		|| ft_strncmp(cmd[0], "env", 4) == 0
+		|| ft_strncmp(cmd[0], "exit", 5) == 0
+		|| ft_strncmp(cmd[0], "export", 7) == 0
+		|| ft_strncmp(cmd[0], "pwd", 4) == 0
+		|| ft_strncmp(cmd[0], "unset", 6) == 0);
 }
 
-void	execve_command_create_process(t_cmd_data *until_redirection,
+void	execute_external_command(t_cmd_data *until_redirection,
 		t_file_descripter fd, int *end_status, char **envp)
 {
 	pid_t	pid;
@@ -71,7 +73,7 @@ void	execve_command(t_cmd_data *until_redirection,
 	*end_status = 127;
 }
 
-void	builtin_command(char **cmd, t_env *env_lst,
+void	execute_builtin_command(char **cmd, t_env *env_lst,
 				t_file_descripter fd, int *end_status)
 {
 	if (fd.now_out != STDOUT_FILENO)

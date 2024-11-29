@@ -6,11 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:21:00 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 15:25:50 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:36:32 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "signal_handler.h"
+#include "utils.h"
 
 int	run_command_with_redirect(t_token *token, t_env *env_lst,
 						t_file_descripter *fd, int *end_status)
@@ -29,7 +31,8 @@ int	run_command_with_redirect(t_token *token, t_env *env_lst,
 	if (until_redirection == NULL)
 		return (free_ptr_array(env_array), 1);
 	if (is_builtin(until_redirection->cmd))
-		builtin_command(until_redirection->cmd, env_lst, *fd, end_status);
+		execute_builtin_command(until_redirection->cmd,
+			env_lst, *fd, end_status);
 	else if (is_executable(until_redirection->cmd))
 		execve_command(until_redirection, end_status, env_array);
 	free_cmd_data(until_redirection);
