@@ -16,20 +16,6 @@
 #define DOUBLE '\"'
 #define OUT 0
 
-static size_t	non_quotes_len(char *line)
-{
-	size_t	c;
-
-	c = 0;
-	while (*line != '\0')
-	{
-		if (*line != '\'' && *line != '\"')
-			c++;
-		line++;
-	}
-	return (c);
-}
-
 static bool	is_skip_quote(char line_chr, char *quote_flag)
 {
 	if (*quote_flag == OUT && line_chr == SINGLE)
@@ -63,7 +49,7 @@ char	*remove_quotes(char *line)
 
 	if (line == NULL)
 		return (NULL);
-	result = malloc(non_quotes_len(line) + 1);
+	result = malloc(ft_strlen(line) + 1);
 	if (result == NULL)
 		return (NULL);
 	quote_flag = OUT;
