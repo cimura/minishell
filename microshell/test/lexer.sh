@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # レキサーの実行ファイル（レキサーがコンパイルされているものとします）
-LEXER="./lexer"
+parser="./parser"
 
 # テストケースのディレクトリと出力ディレクトリ
 TEST_DIR="./tests"
@@ -18,7 +18,7 @@ for test_file in "$TEST_DIR"/*.txt; do
     test_name=$(basename "$test_file" .txt)
     
     # レキサーを実行し、結果をファイルに保存
-    $LEXER "$test_file" > "$RESULTS_DIR/$test_name.result"
+    $parser "$test_file" > "$RESULTS_DIR/$test_name.result"
     
     # 期待される結果ファイル
     expected_file="$EXPECTED_DIR/$test_name.expected"
