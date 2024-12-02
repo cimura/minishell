@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   register_cmd_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 16:58:30 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 15:20:21 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,6 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	return (0);
 }
 
-static bool	is_redirection(char *word)
-{
-	if (ft_strncmp(word, ">", 2) == 0
-		|| ft_strncmp(word, ">>", 3) == 0
-		|| ft_strncmp(word, "<", 2) == 0
-		|| ft_strncmp(word, "<<", 3) == 0)
-		return (true);
-	return (false);
-}
-
 static char	**filter_cmd_args(char **head_cmdline)
 {
 	int		i;
@@ -103,16 +93,17 @@ static char	**filter_cmd_args(char **head_cmdline)
 	return (result);
 }
 
-t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst)
+t_cmd_data	*register_cmd_data(t_command_lst *per_pipe, t_env *env_lst)
 {
 	t_cmd_data	*cmd_data;
 
 	cmd_data = malloc(sizeof(t_cmd_data));
 	if (cmd_data == NULL)
 		return (NULL);
-	if (register_path(token->command_line[0], &(cmd_data->path), env_lst) != 0)
+	if (register_path(per_pipe->command_line[0],
+			&(cmd_data->path), env_lst) != 0)
 		return (free(cmd_data), NULL);
-	cmd_data->cmd = filter_cmd_args(&token->command_line[0]);
+	cmd_data->cmd = filter_cmd_args(&per_pipe->command_line[0]);
 	if (cmd_data->cmd == NULL)
 		return (free(cmd_data->path), free(cmd_data), NULL);
 	return (cmd_data);

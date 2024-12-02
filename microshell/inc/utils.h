@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 14:49:52 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:24:50 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdlib.h>
 # include "libft.h"
 # include "env_lst.h"
-# include "lexer.h"
+# include "parser.h"
 # include "exec.h"
 
 // *** utils.c ***
@@ -31,11 +31,9 @@ bool	is_whitespace(char check_chr);
 // *** utils2.c ***
 int		count_key_size(char *line_ptr);
 void	free_cmd_data(t_cmd_data *data);
+bool	is_redirection(char *arg);
 
 // *** main_helper.c ***
-void	clear_exit(t_env *env_lst, t_token *token, int exit_status);
-int		handle_quotes_env_variable(t_env *env_lst,
-			char **command_line, int end_status);
-int		pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status);
+void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status);
 
 #endif

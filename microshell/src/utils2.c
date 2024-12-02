@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:46:20 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 14:49:19 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:25:24 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,22 @@ void	free_cmd_data(t_cmd_data *data)
 	free_ptr_array(data->cmd);
 	free(data);
 	data = NULL;
+}
+
+bool	is_redirection(char *arg)
+{
+	if (ft_strncmp(arg, ">", 2) == 0
+		|| ft_strncmp(arg, ">>", 3) == 0
+		|| ft_strncmp(arg, "<", 2) == 0
+		|| ft_strncmp(arg, "<<", 3) == 0)
+		return (true);
+	else
+		return (false);
+}
+
+void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status)
+{
+	env_lstclear(&env_lst);
+	command_lstclear(&per_pipe);
+	exit(exit_status);
 }

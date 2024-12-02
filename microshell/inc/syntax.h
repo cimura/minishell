@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:53 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 19:16:12 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:25:27 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,17 @@
 # include <stdbool.h>
 # include <sys/stat.h>
 # include "env_lst.h"
-# include "lexer.h"
+# include "parser.h"
 # include "utils.h"
 
 // *** check_syntax.c ***
-int		stash_token_empty_ptrs(t_token *token);
-int		check_syntax_before_lexer(char *line);
-int		check_syntax(t_token *token);
+int		check_syntax_before_parser(char *line);
+int		check_syntax(t_command_lst *per_pipe);
 
-// *** check_syntax.c ***
+// *** syntax_utils.c ***
 bool	is_redirection(char *arg);
 int		check_quotation(char *line);
-int		dir_permission(char *arg);
 int		pipe_redirect_combination_error(char *arg, char *next);
-int		check_permission(t_token *token);
+int		check_permission(t_command_lst *per_pipe);
 
 #endif

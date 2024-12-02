@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 17:35:54 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:18:34 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int	g_global = 0;
 
-void	sigint_handler_in_heredoc(int signum)
+static void	sigint_handler_in_heredoc(int signum)
 {
 	int	pipefd[2];
 

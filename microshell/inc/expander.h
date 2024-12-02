@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 16:24:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 15:25:05 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,8 @@
 # include "env_lst.h"
 # include "utils.h"
 
-enum	e_status
-{
-	SINGLE,
-	DOUBLE,
-	OUT
-};
-
-typedef struct s_expand_lst
-{
-	char				*str;
-	int					status;
-	struct s_expand_lst	*next;
-}	t_expand_lst;
+// *** expander.c ***
+int		expander(t_env *env_lst, t_command_lst *per_pipe, int end_status);
 
 // *** expand_dollar.c ***
 char	*expand_env_variable(t_env *env_lst, char *lst_line, int end_status);

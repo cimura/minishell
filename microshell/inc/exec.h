@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 14:48:38 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:31:26 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,12 @@
 
 # define EXEC_H
 
-# include "lexer.h"
-# include "env_lst.h"
-// # include "expander.h"
-// # include "builtin.h"
-// # include "signal_handler.h"
-// # include "utils.h"
-
 # include <stdbool.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <errno.h>
+# include "parser.h"
+# include "env_lst.h"
 
 typedef struct s_cmd_data
 {
@@ -43,29 +38,27 @@ typedef struct s_file_descripter
 }	t_file_descripter;
 
 // *** command_executor.c ***
-int			executor(t_token *token, t_env *env_lst, int *end_status);
+int			executor(t_command_lst *per_pipe, t_env *env_lst, int *end_status);
 
 // *** command_executor_util.c ***
 void		close_purefd(t_file_descripter fd);
 void		initialize_fd(t_file_descripter *fd);
-int			token_lstsize(t_token *token);
-void		wait_all_commands(t_token *head, int *end_status);
+int			command_lstsize(t_command_lst *per_pipe);
+void		wait_all_commands(t_command_lst *head, int *end_status);
 
 // *** commands.c ***
-int			first_command(t_token *token, t_env *env_lst,
+int			first_command(t_command_lst *per_pipe, t_env *env_lst,
 				t_file_descripter *fd, int *end_status);
-int			middle_command(t_token *token, t_env *env_lst,
+int			middle_command(t_command_lst *per_pipe, t_env *env_lst,
 				t_file_descripter *fd, int *end_status);
-int			last_command(t_token *token, t_env *env_lst,
-				t_file_descripter *fd, int *end_status);
-int			run_command_with_redirect(t_token *token, t_env *env_lst,
+int			last_command(t_command_lst *per_pipe, t_env *env_lst,
 				t_file_descripter *fd, int *end_status);
 
 // *** register_cmd_data.c ***
-t_cmd_data	*register_cmd_data(t_token *token, t_env *env_lst);
+t_cmd_data	*register_cmd_data(t_command_lst *per_pipe, t_env *env_lst);
 
 // *** redirect.c ***
-int			redirect(t_token *token, t_env *env_lst,
+int			redirect(t_command_lst *per_pipe, t_env *env_lst,
 				t_file_descripter fd, int *end_status);
 
 // *** heredoc.c ***

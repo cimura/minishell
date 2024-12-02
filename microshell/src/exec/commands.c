@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:21:00 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 17:40:56 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:18:02 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "signal_handler.h"
 #include "utils.h"
 
-int	run_command_with_redirect(t_token *token, t_env *env_lst,
+static int	run_command_with_redirect(t_command_lst *per_pipe, t_env *env_lst,
 						t_file_descripter *fd, int *end_status)
 {
 	t_cmd_data	*until_redirection;
@@ -24,10 +24,10 @@ int	run_command_with_redirect(t_token *token, t_env *env_lst,
 	env_array = env_lst_to_array(env_lst);
 	if (env_array == NULL)
 		return (close_purefd(*fd), 1);
-	local_status = redirect(token, env_lst, *fd, end_status);
+	local_status = redirect(per_pipe, env_lst, *fd, end_status);
 	if (local_status == 1 || local_status == -1)
 		return (free_ptr_array(env_array), local_status);
-	until_redirection = register_cmd_data(token, env_lst);
+	until_redirection = register_cmd_data(per_pipe, env_lst);
 	if (until_redirection == NULL)
 		return (free_ptr_array(env_array), close_purefd(*fd), 1);
 	if (is_builtin(until_redirection->cmd))
@@ -49,7 +49,8 @@ static void	connect_pipe_middle_command(t_file_descripter *fd)
 	close(fd->now_out);
 }
 
-int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
+int	first_command(t_command_lst *per_pipe,
+	t_env *env_lst, t_file_descripter *fd,
 	int *end_status)
 {
 	int		pipe_fd[2];
@@ -61,7 +62,7 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	fd->prev_in = pipe_fd[0];
 	fd->prev_out = pipe_fd[1];
 	pid = fork();
-	token->pid = pid;
+	per_pipe->pid = pid;
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
@@ -70,14 +71,15 @@ int	first_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[1]);
 		close_purefd(*fd);
-		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
+		if (run_command_with_redirect(per_pipe, env_lst, fd, end_status) == 1)
 			return (1);
 		exit(*end_status);
 	}
 	return (0);
 }
 
-int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
+int	middle_command(t_command_lst *per_pipe,
+	t_env *env_lst, t_file_descripter *fd,
 	int *end_status)
 {
 	int		pipe_fd[2];
@@ -91,12 +93,12 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		perror("fork");
 	fd->now_in = pipe_fd[0];
 	fd->now_out = pipe_fd[1];
-	token->pid = pid;
+	per_pipe->pid = pid;
 	if (pid == 0)
 	{
 		connect_pipe_middle_command(fd);
 		close_purefd(*fd);
-		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
+		if (run_command_with_redirect(per_pipe, env_lst, fd, end_status) == 1)
 			return (1);
 		exit(*end_status);
 	}
@@ -106,7 +108,7 @@ int	middle_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	return (0);
 }
 
-int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
+int	last_command(t_command_lst *per_pipe, t_env *env_lst, t_file_descripter *fd,
 	int *end_status)
 {
 	int		status;
@@ -115,7 +117,7 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 	close(fd->prev_out);
 	status = 0;
 	pid = fork();
-	token->pid = pid;
+	per_pipe->pid = pid;
 	if (pid == -1)
 		perror("fork");
 	if (pid == 0)
@@ -124,7 +126,7 @@ int	last_command(t_token *token, t_env *env_lst, t_file_descripter *fd,
 		close(fd->prev_in);
 		dup2(fd->pure_stdout, STDOUT_FILENO);
 		close_purefd(*fd);
-		if (run_command_with_redirect(token, env_lst, fd, end_status) == 1)
+		if (run_command_with_redirect(per_pipe, env_lst, fd, end_status) == 1)
 			return (1);
 		exit(*end_status);
 	}

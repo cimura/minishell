@@ -1,33 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_helper.c                                      :+:      :+:    :+:   */
+/*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 19:12:06 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/02 14:15:00 by sshimura         ###   ########.fr       */
+/*   Created: 2024/12/02 15:24:16 by sshimura          #+#    #+#             */
+/*   Updated: 2024/12/02 15:24:30 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include "env_lst.h"
-#include "exec.h"
 #include "expander.h"
-#include "parser.h"
-#include "signal_handler.h"
-#include "utils.h"
-#include "syntax.h"
-#include "libft.h"
 
-void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status)
-{
-	env_lstclear(&env_lst);
-	command_lstclear(&per_pipe);
-	exit(exit_status);
-}
-
-int	handle_quotes_env_variable(t_env *env_lst,
+static int	handle_quotes_env_variable(t_env *env_lst,
 	char **command_line, int end_status)
 {
 	int		i;
