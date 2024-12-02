@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   register_cmd_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 20:59:31 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 01:10:01 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static int	set_cmd_in_path(char *cmd, char **com_sep, char **path)
 	char	*candidate;
 	int		i;
 
+	if (ft_strchr(cmd, '/') != NULL)
+		return (0);
 	i = 0;
 	while (com_sep[i])
 	{
@@ -56,7 +58,6 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	free_ptr_array(com_sep);
 	if (*path == NULL && access(cmd, X_OK) == 0)
 	{
-		printf("access\n");
 		*path = ft_strdup(cmd);
 		if (*path == NULL)
 			return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 20:55:32 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 01:09:01 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,21 +63,16 @@ void	execute_external_command(t_cmd_data *until_redirection,
 void	execve_command(t_cmd_data *until_redirection,
 		int *end_status, char **envp)
 {
-	printf("*path = %s\n", until_redirection->path);
-	printf("cmd[0] = %s\n", until_redirection->cmd[0]);
-	printf("cmd[1] = %s\n", until_redirection->cmd[1]);
 	if (until_redirection->path == NULL)
 	{
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 	}
 	else if (execve(until_redirection->path,
 			until_redirection->cmd, envp) == -1)
 	{
-		ft_putendl_fd("execve missed", 2);
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		perror("execve");
 	}
 	*end_status = 127;
 }
