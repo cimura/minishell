@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 20:45:40 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 20:55:32 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	execve_command(t_cmd_data *until_redirection,
 		int *end_status, char **envp)
 {
 	printf("*path = %s\n", until_redirection->path);
-	printf("cmd = %s\n", until_redirection->cmd[1]);
+	printf("cmd[0] = %s\n", until_redirection->cmd[0]);
+	printf("cmd[1] = %s\n", until_redirection->cmd[1]);
 	if (until_redirection->path == NULL)
 	{
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
@@ -76,6 +77,7 @@ void	execve_command(t_cmd_data *until_redirection,
 		ft_putendl_fd("execve missed", 2);
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		perror("execve");
 	}
 	*end_status = 127;
 }

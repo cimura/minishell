@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 20:33:34 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 20:59:31 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 		if (*path == NULL)
 			return (1);
 	}
-	printf("*path = %s\n", *path);
-	printf("cmd = %s\n", cmd);
 	return (0);
 }
 
