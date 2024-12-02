@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/02 15:17:41 by sshimura         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/02 14:18:32 by sshimura         ###   ########.fr       */
->>>>>>> 16168e0e5704f5652a75f04fe1e960e42bea8372
+/*   Updated: 2024/12/02 20:49:16 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +14,7 @@
 #include "utils.h"
 #include "signal_handler.h"
 
-<<<<<<< HEAD
 static int	execute_single_command(t_command_lst *per_pipe, t_env *env_lst,
-=======
-int	execute_single_command(t_command_lst *per_pipe, t_env *env_lst,
->>>>>>> 16168e0e5704f5652a75f04fe1e960e42bea8372
 	t_file_descripter *fd, int *end_status)
 {
 	t_cmd_data	*until_redirection;
