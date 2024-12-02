@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_helper.c                                     :+:      :+:    :+:   */
+/*   parser_helper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:26:46 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 17:02:54 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:36:39 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "parser.h"
 #include "utils.h"
 
 static int	add_node_from_storage(t_list **head, char *storage)

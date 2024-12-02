@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 17:03:11 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:37:55 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "parser.h"
 #include "utils.h"
 
 static int	count_token_until_pipe(t_list *lst)
@@ -76,7 +76,7 @@ static t_token	*create_pipe_lst(t_list *normal)
 	return (head);
 }
 
-t_token	*lexer(char	*line)
+t_token	*parser(char	*line)
 {
 	t_list	*normal;
 	t_token	*per_pipe;
@@ -99,7 +99,7 @@ t_token	*lexer(char	*line)
 
 // 	if (argc == 1)
 // 		return (0);
-//   words = lexer(argv[1]);
+//   words = parser(argv[1]);
 //   if (words == NULL)
 //     return (printf("Error\n"), 1);
 //   head = words;

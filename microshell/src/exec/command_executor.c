@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_executor.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 16:58:23 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 13:35:07 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	executor(t_token *token, t_env *env_lst, int *end_status)
 // 	env_lst = create_env_lst(envp);
 // 	if (env_lst == NULL)
 // 		return (1);
-// 	token = lexer(argv[1]);
+// 	token = parser(argv[1]);
 // 	if (token == NULL)
 // 		return (env_lstclear(&env_lst), 1);
 // 	if (pass_token_to_expand(env_lst, token, status) != 0)

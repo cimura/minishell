@@ -6,12 +6,12 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:28:30 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 16:14:53 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:35:34 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef PARSER_H
+# define PARSER_H
 
 # include <stdlib.h>
 # include <stdio.h>
@@ -25,15 +25,15 @@ typedef struct s_token
 	pid_t			pid;
 }	t_token;
 
-// *** lexer_helper.c ***
+// *** parser_helper.c ***
 t_list	*create_token_lst(char *line);
 
-// *** lexer_util.c ***
+// *** parser_util.c ***
 void	token_lstclear(t_token **lst);
 void	token_lstadd_back(t_token **lst, t_token *new);
 
-// *** lexer.c ***
-t_token	*lexer(char	*line);
+// *** parser.c ***
+t_token	*parser(char	*line);
 
 // debug
 // void	d_print_token_lst(t_token *token);

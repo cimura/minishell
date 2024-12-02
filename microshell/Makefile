@@ -3,9 +3,8 @@ NAME        := minishell
 OBJ_DIR     := obj/
 INC_DIR     := inc/
 
-# ソースファイルとオブジェクトファイルの設定
 BUILTIN_DIR := src/builtin/
-BUILTIN_SRCS := cd.c echo.c env.c exit.c export.c export_util.c export_util2.c pwd.c unset.c
+BUILTIN_SRCS := cd.c echo.c env.c exit.c export.c export_utils.c export_utils2.c pwd.c unset.c
 BUILTIN := $(addprefix $(OBJ_DIR)builtin/, $(BUILTIN_SRCS:.c=.o))
 
 ENV_DIR := src/env/
@@ -13,31 +12,30 @@ ENV_SRCS := create_env_lst.c env_lst_to_array.c env_lst_utils.c
 ENV := $(addprefix $(OBJ_DIR)env/, $(ENV_SRCS:.c=.o))
 
 EXEC_DIR := src/exec/
-EXEC_SRCS := commands.c command_executor_util.c command_executor.c register_cmd_data.c redirect.c heredoc.c exec_and_bltin.c exec_utils.c
+EXEC_SRCS := commands.c command_executor_utils.c command_executor.c register_cmd_data.c redirect.c heredoc.c exec_and_bltin.c
 EXEC := $(addprefix $(OBJ_DIR)exec/, $(EXEC_SRCS:.c=.o))
 
 EXPANDER_DIR := src/expander/
 EXPANDER_SRCS := expand_dollar.c expand_dollar_utils.c expand_quotes.c
 EXPANDER := $(addprefix $(OBJ_DIR)expander/, $(EXPANDER_SRCS:.c=.o))
 
-LEXER_DIR := src/lexer/
-LEXER_SRCS := lexer_helper.c lexer_util.c lexer.c
-LEXER := $(addprefix $(OBJ_DIR)lexer/, $(LEXER_SRCS:.c=.o))
+PARSER_DIR := src/parser/
+PARSER_SRCS := create_command_list.c parser_utils.c parser.c
+PARSER := $(addprefix $(OBJ_DIR)parser/, $(PARSER_SRCS:.c=.o))
 
 SIGNAL_DIR := src/signal/
 SIGNAL_SRC := signal.c
 SIGNAL := $(addprefix $(OBJ_DIR)signal/, $(SIGNAL_SRC:.c=.o))
 
 SYNTAX_DIR := src/syntax/
-SYNTAX_SRC := syntax_util.c check_syntax.c
+SYNTAX_SRC := syntax_utils.c check_syntax.c
 SYNTAX := $(addprefix $(OBJ_DIR)syntax/, $(SYNTAX_SRC:.c=.o))
 
 MINISHELL_DIR := src/
 MINISHELL_SRC := main.c main_helper.c utils.c utils2.c
 MINISHELL := $(addprefix $(OBJ_DIR), $(MINISHELL_SRC:.c=.o))
 
-# オブジェクトファイルをまとめる
-OBJS := $(BUILTIN) $(ENV) $(EXEC) $(EXPANDER) $(LEXER) $(SIGNAL) $(SYNTAX) $(MINISHELL)
+OBJS := $(BUILTIN) $(ENV) $(EXEC) $(EXPANDER) $(PARSER) $(SIGNAL) $(SYNTAX) $(MINISHELL)
 
 LIBFT_DIR := src/libft
 LIBFT := $(LIBFT_DIR)/libft.a
@@ -64,17 +62,14 @@ BLUE := \033[34m
 GREEN := \033[32m
 END := \033[0m
 
-# ディレクトリ作成
 DIRS := $(OBJ_DIR) $(OBJ_DIR)builtin $(OBJ_DIR)env $(OBJ_DIR)exec \
-		$(OBJ_DIR)expander $(OBJ_DIR)lexer $(OBJ_DIR)signal $(OBJ_DIR)syntax
+		$(OBJ_DIR)expander $(OBJ_DIR)parser $(OBJ_DIR)signal $(OBJ_DIR)syntax
 
 all: Makefile $(DIRS) $(NAME)
 
-# 必要なディレクトリを作成
 $(DIRS):
 	@mkdir -p $@
 
-# ソースファイルからオブジェクトファイルを生成
 $(OBJ_DIR)%.o: $(BUILTIN_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
@@ -91,7 +86,7 @@ $(OBJ_DIR)%.o: $(EXPANDER_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
-$(OBJ_DIR)%.o: $(LEXER_DIR)%.c
+$(OBJ_DIR)%.o: $(PARSER_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
@@ -107,29 +102,24 @@ $(OBJ_DIR)%.o: $(MINISHELL_DIR)%.c
 	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 	@printf "$(ERASE)$(BLUE) > Compilation :$(END) $<"
 
-# バイナリ生成ルール
 $(NAME): $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(IFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) -o $(NAME) $(LFLAGS)
 	@printf "$(ERASE)$(GREEN)$@ made\n$(END)"
 
-# libftのビルドルール
 $(LIBFT):
 	@$(MAKE) bonus -C $(LIBFT_DIR)
 
-# クリーンアップルール
 clean:
 	@rm -rf $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 	@printf "$(PINK)remove obj dir\n$(END)"
 
-# フルクリーンアップルール
 fclean:
 	@rm -rf $(OBJ_DIR)
 	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@printf "$(PINK)remove lib.a\n$(END)"
 
-# リビルドルール
 re: fclean all
 
 .PHONY: all clean fclean re

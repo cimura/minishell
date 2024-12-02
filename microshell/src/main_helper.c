@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:12:06 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 17:02:00 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:35:07 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "env_lst.h"
 #include "exec.h"
 #include "expander.h"
-#include "lexer.h"
+#include "parser.h"
 #include "signal_handler.h"
 #include "utils.h"
 #include "syntax.h"

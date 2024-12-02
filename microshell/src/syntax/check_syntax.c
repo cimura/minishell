@@ -6,13 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/28 19:23:33 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:35:07 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "syntax.h"
 
-int	check_syntax_before_lexer(char *line)
+int	check_syntax_before_parser(char *line)
 {
 	if (line[0] == '|' && (line[1] == '\0' || is_whitespace(line[1])))
 	{

@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 18:48:31 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:42:01 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "env_lst.h"
 #include "exec.h"
 #include "expander.h"
-#include "lexer.h"
+#include "parser.h"
 #include "signal_handler.h"
 #include "utils.h"
 #include "syntax.h"
@@ -44,13 +44,13 @@ static int	preprocess_command(t_env *env_lst, t_token **token,
 	int	syntax_result;
 
 	syntax_result = 0;
-	if (check_syntax_before_lexer(line) != 0)
+	if (check_syntax_before_parser(line) != 0)
 	{
 		*status = 2;
 		free(line);
 		return (CONTINUE);
 	}
-	*token = lexer(line);
+	*token = parser(line);
 	free(line);
 	if (*token == NULL)
 		clear_exit(env_lst, *token, 1);
@@ -68,13 +68,13 @@ static int	preprocess_command(t_env *env_lst, t_token **token,
 	return (0);
 }
 
-static int	process_input_line(char **line)
+static int	process_input_line(char **line, int status)
 {
 	*line = readline("minishell> ");
 	if (*line == NULL)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
-		exit(EXIT_SUCCESS);
+		exit(status);
 	}
 	if (ft_strlen(*line) == 0)
 	{
@@ -100,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 	env_lst = create_env_lst(envp);
 	while (1)
 	{
-		if (process_input_line(&line) == CONTINUE)
+		if (process_input_line(&line, status) == CONTINUE)
 			continue ;
 		if (preprocess_command(env_lst, &token, line, &status) == CONTINUE)
 			continue ;
