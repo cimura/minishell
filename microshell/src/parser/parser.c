@@ -6,14 +6,14 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/02 13:37:55 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:16:05 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "utils.h"
 
-static int	count_token_until_pipe(t_list *lst)
+static int	count_command_lst_until_pipe(t_list *lst)
 {
 	int	size;
 
@@ -47,26 +47,26 @@ static char	**create_until_pipe_array(t_list *normal, int size)
 	return (command_line);
 }
 
-static t_token	*create_pipe_lst(t_list *normal)
+static t_command_lst	*create_pipe_lst(t_list *normal)
 {
-	int		size;
-	t_token	*new;
-	t_token	*head;
+	int				size;
+	t_command_lst	*new;
+	t_command_lst	*head;
 
 	head = NULL;
 	while (normal != NULL)
 	{
 		if (ft_strncmp(normal->content, "|", 1) == 0)
 			normal = normal->next;
-		new = malloc(sizeof(t_token));
+		new = malloc(sizeof(t_command_lst));
 		if (new == NULL)
-			return (token_lstclear(&head), NULL);
-		size = count_token_until_pipe(normal);
+			return (command_lstclear(&head), NULL);
+		size = count_command_lst_until_pipe(normal);
 		new->command_line = create_until_pipe_array(normal, size);
 		if (new->command_line == NULL)
-			return (token_lstclear(&head), free(new), NULL);
+			return (command_lstclear(&head), free(new), NULL);
 		new->next = NULL;
-		token_lstadd_back(&head, new);
+		command_lstadd_back(&head, new);
 		while (size > 0)
 		{
 			normal = normal->next;
@@ -76,12 +76,12 @@ static t_token	*create_pipe_lst(t_list *normal)
 	return (head);
 }
 
-t_token	*parser(char	*line)
+t_command_lst	*parser(char	*line)
 {
-	t_list	*normal;
-	t_token	*per_pipe;
+	t_list			*normal;
+	t_command_lst	*per_pipe;
 
-	normal = create_token_lst(line);
+	normal = create_command_lst(line);
 	if (normal == NULL)
 		return (NULL);
 	per_pipe = create_pipe_lst(normal);
@@ -93,8 +93,8 @@ t_token	*parser(char	*line)
 
 // int	main(int argc, char **argv)
 // {
-// 	t_token	*head;
-// 	t_token	*words;
+// 	t_command_lst	*head;
+// 	t_command_lst	*words;
 // 	int	j;
 
 // 	if (argc == 1)
@@ -117,6 +117,6 @@ t_token	*parser(char	*line)
 //     if (words != NULL)
 //       printf("\n");
 //   }
-//   token_lstclear(&head);
+//   command_lstclear(&head);
 // 	return (0);
 // }

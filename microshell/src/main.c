@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 13:42:01 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:17:50 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,23 @@
 
 #define CONTINUE 3
 
-static int	no_pipe_exit(t_env *env_lst, t_token *token, int *status)
+static int	no_pipe_exit(t_env *env_lst, t_command_lst *per_pipe, int *status)
 {
-	if (token->command_line[0] != NULL && token->next == NULL
-		&& ft_strncmp(token->command_line[0], "exit", 5) == 0)
+	if (per_pipe->command_line[0] != NULL && per_pipe->next == NULL
+		&& ft_strncmp(per_pipe->command_line[0], "exit", 5) == 0)
 	{
-		if (ft_exit(&token->command_line[1], status) == 1)
+		if (ft_exit(&per_pipe->command_line[1], status) == 1)
 		{
-			token_lstclear(&token);
+			command_lstclear(&per_pipe);
 			return (CONTINUE);
 		}
 		else
-			clear_exit(env_lst, token, *status);
+			clear_exit(env_lst, per_pipe, *status);
 	}
 	return (0);
 }
 
-static int	preprocess_command(t_env *env_lst, t_token **token,
+static int	preprocess_command(t_env *env_lst, t_command_lst **per_pipe,
 	char *line, int *status)
 {
 	int	syntax_result;
@@ -50,19 +50,19 @@ static int	preprocess_command(t_env *env_lst, t_token **token,
 		free(line);
 		return (CONTINUE);
 	}
-	*token = parser(line);
+	*per_pipe = parser(line);
 	free(line);
-	if (*token == NULL)
-		clear_exit(env_lst, *token, 1);
+	if (*per_pipe == NULL)
+		clear_exit(env_lst, *per_pipe, 1);
 	if (syntax_result == CONTINUE)
-		return (token_lstclear(token), CONTINUE);
-	if (pass_token_to_expand(env_lst, *token, *status) != 0)
-		clear_exit(env_lst, *token, EXIT_FAILURE);
-	syntax_result = check_syntax(*token);
+		return (command_lstclear(per_pipe), CONTINUE);
+	if (expander(env_lst, *per_pipe, *status) != 0)
+		clear_exit(env_lst, *per_pipe, EXIT_FAILURE);
+	syntax_result = check_syntax(*per_pipe);
 	if (syntax_result != 0)
 	{
 		*status = syntax_result;
-		token_lstclear(token);
+		command_lstclear(per_pipe);
 		return (CONTINUE);
 	}
 	return (0);
@@ -88,10 +88,10 @@ static int	process_input_line(char **line, int status)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env	*env_lst;
-	t_token	*token;
-	char	*line;
-	int		status;
+	t_env			*env_lst;
+	t_command_lst	*per_pipe;
+	char			*line;
+	int				status;
 
 	(void)argv;
 	(void)argc;
@@ -102,13 +102,13 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (process_input_line(&line, status) == CONTINUE)
 			continue ;
-		if (preprocess_command(env_lst, &token, line, &status) == CONTINUE)
+		if (preprocess_command(env_lst, &per_pipe, line, &status) == CONTINUE)
 			continue ;
-		if (no_pipe_exit(env_lst, token, &status) == CONTINUE)
+		if (no_pipe_exit(env_lst, per_pipe, &status) == CONTINUE)
 			continue ;
-		if (executor(token, env_lst, &status) == 1)
-			clear_exit(env_lst, token, EXIT_FAILURE);
-		token_lstclear(&token);
+		if (executor(per_pipe, env_lst, &status) == 1)
+			clear_exit(env_lst, per_pipe, EXIT_FAILURE);
+		command_lstclear(&per_pipe);
 	}
 	env_lstclear(&env_lst);
 	return (status);

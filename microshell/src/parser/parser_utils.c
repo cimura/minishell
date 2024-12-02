@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_util.c                                       :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:24:44 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/02 13:36:05 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:13:24 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "utils.h"
 
-void	token_lstclear(t_token **lst)
+void	command_lstclear(t_command_lst **lst)
 {
-	t_token	*current;
-	t_token	*next;
+	t_command_lst	*current;
+	t_command_lst	*next;
 
 	if (lst == NULL)
 		return ;
@@ -31,9 +31,9 @@ void	token_lstclear(t_token **lst)
 	*lst = NULL;
 }
 
-void	token_lstadd_back(t_token **lst, t_token *new)
+void	command_lstadd_back(t_command_lst **lst, t_command_lst *new)
 {
-	t_token	*last;
+	t_command_lst	*last;
 
 	last = *lst;
 	if (*lst == NULL)
@@ -49,14 +49,14 @@ void	token_lstadd_back(t_token **lst, t_token *new)
 }
 
 // debug
-// void	d_print_token_lst(t_token *token)
+// void	d_print_command_lst_lst(t_command_lst *per_pipe)
 // {
-// 	printf("-token-\n");
-// 	while (token != NULL)
+// 	printf("-per_pipe-\n");
+// 	while (per_pipe != NULL)
 // 	{
-// 		d_print_char_array(token->command_line);
-// 		token = token->next;
-// 		if (token != NULL)
+// 		d_print_char_array(per_pipe->command_line);
+// 		per_pipe = per_pipe->next;
+// 		if (per_pipe != NULL)
 // 			printf("-------------pipe------------\n");
 // 	}
 // }

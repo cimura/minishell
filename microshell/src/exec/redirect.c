@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 17:36:32 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:13:15 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	handle_redirect(char **command_line, int i)
 	return (0);
 }
 
-int	redirect(t_token *token, t_env *env_lst,
+int	redirect(t_command_lst *per_pipe, t_env *env_lst,
 			t_file_descripter fd, int *end_status)
 {
 	int	i;
@@ -58,16 +58,16 @@ int	redirect(t_token *token, t_env *env_lst,
 
 	local_status = 0;
 	i = 0;
-	while (token->command_line[i] != NULL)
+	while (per_pipe->command_line[i] != NULL)
 	{
-		if (handle_redirect(token->command_line, i) == -1)
+		if (handle_redirect(per_pipe->command_line, i) == -1)
 		{
 			*end_status = 1;
 			return (-1);
 		}
-		else if (ft_strncmp(token->command_line[i], "<<", 3) == 0)
+		else if (ft_strncmp(per_pipe->command_line[i], "<<", 3) == 0)
 		{
-			local_status = here_doc(token->command_line[i + 1],
+			local_status = here_doc(per_pipe->command_line[i + 1],
 					env_lst, fd, end_status);
 			if (local_status == 1)
 				return (1);

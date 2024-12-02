@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:12:06 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/02 13:35:07 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:15:00 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 #include "syntax.h"
 #include "libft.h"
 
-void	clear_exit(t_env *env_lst, t_token *token, int exit_status)
+void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status)
 {
 	env_lstclear(&env_lst);
-	token_lstclear(&token);
+	command_lstclear(&per_pipe);
 	exit(exit_status);
 }
 
@@ -55,7 +55,7 @@ int	handle_quotes_env_variable(t_env *env_lst,
 	return (0);
 }
 
-int	pass_token_to_expand(t_env *env_lst, t_token *per_pipe, int end_status)
+int	expander(t_env *env_lst, t_command_lst *per_pipe, int end_status)
 {
 	while (per_pipe != NULL)
 	{

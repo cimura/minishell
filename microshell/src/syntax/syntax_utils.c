@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_util.c                                      :+:      :+:    :+:   */
+/*   syntax_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:20:02 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/27 16:23:53 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/02 14:23:17 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ int	dir_permission(char *arg)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			ft_putstr_fd(arg, 2);
-			ft_putendl_fd(": Is a directory", 2);
+			ft_putstr_fd(arg, STDERR_FILENO);
+			ft_putendl_fd(": Is a directory", STDERR_FILENO);
 			return (126);
 		}
 		else if (access(arg, X_OK) != 0)
 		{
-			ft_putstr_fd(arg, 2);
-			ft_putendl_fd(": Permission denied", 2);
+			ft_putstr_fd(arg, STDERR_FILENO);
+			ft_putendl_fd(": Permission denied", STDERR_FILENO);
 			return (126);
 		}
 	}
@@ -98,20 +98,20 @@ int	pipe_redirect_combination_error(char *arg, char *next)
 	return (0);
 }
 
-int	check_permission(t_token *token)
+int	check_permission(t_command_lst *per_pipe)
 {
 	int	dir_perm;
 
-	if (token->command_line[0] == NULL
-		|| ft_strchr(token->command_line[0], '/') == NULL)
+	if (per_pipe->command_line[0] == NULL
+		|| ft_strchr(per_pipe->command_line[0], '/') == NULL)
 		return (0);
-	dir_perm = dir_permission(token->command_line[0]);
+	dir_perm = dir_permission(per_pipe->command_line[0]);
 	if (dir_perm != 0)
 		return (dir_perm);
-	if (access(token->command_line[0], F_OK) != 0)
+	if (access(per_pipe->command_line[0], F_OK) != 0)
 	{
-		ft_putstr_fd(token->command_line[0], 2);
-		ft_putendl_fd(": No such file or directory", 2);
+		ft_putstr_fd(per_pipe->command_line[0], STDERR_FILENO);
+		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
 		return (127);
 	}
 	return (0);

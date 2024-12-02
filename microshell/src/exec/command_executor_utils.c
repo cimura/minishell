@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_executor_util.c                            :+:      :+:    :+:   */
+/*   command_executor_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:02:34 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 14:37:24 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:12:48 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,20 @@ void	initialize_fd(t_file_descripter *fd)
 	fd->now_out = STDOUT_FILENO;
 }
 
-int	token_lstsize(t_token *token)
+int	command_lstsize(t_command_lst *per_pipe)
 {
 	int	c;
 
 	c = 0;
-	while (token != NULL)
+	while (per_pipe != NULL)
 	{
 		c++;
-		token = token->next;
+		per_pipe = per_pipe->next;
 	}
 	return (c);
 }
 
-void	wait_all_commands(t_token *head, int *end_status)
+void	wait_all_commands(t_command_lst *head, int *end_status)
 {
 	while (head != NULL)
 	{
