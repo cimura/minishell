@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:53 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 15:49:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:37:54 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "utils.h"
 
 // *** check_syntax.c ***
-int		check_syntax_before_parser(char *line);
+int		check_syntax_before_parser(char *line, int *status);
 int		check_syntax(t_command_lst *per_pipe);
 
 // *** syntax_utils.c ***

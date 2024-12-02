@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 18:41:52 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:50:18 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,13 @@ int	ft_exit(char **args, int *status)
 	ft_putendl_fd("exit", STDOUT_FILENO);
 	if (args == NULL || args[0] == NULL)
 		return (0);
-	if (ex_atoi(args[0], status) == 1)
-		return (*status);
+	if (ex_atoi(args[0], status) == EXIT_FAILURE)
+		return (0);
 	if (args[1] != NULL)
 	{
 		ft_putendl_fd(" too many arguments", STDERR_FILENO);
 		*status = 1;
-		return (1);
+		return (CONTINUE);
 	}
-	return (*status);
+	return (0);
 }

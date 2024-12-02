@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_command_list.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:26:46 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/02 14:09:08 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:42:21 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ static int	add_node_from_storage(t_list **head, char *storage)
 	char	*content;
 
 	if (ft_strlen(storage) == 0)
-		return (1);
+		return (0);
 	content = ft_strdup(storage);
 	if (content == NULL)
-		return (ft_lstclear(head, free), 0);
+		return (ft_lstclear(head, free), 1);
 	new = ft_lstnew(content);
 	if (new == NULL)
-		return (ft_lstclear(head, free), free(content), content = NULL, 0);
+		return (ft_lstclear(head, free), free(content), content = NULL, 1);
 	ft_lstadd_back(head, new);
 	ft_bzero(storage, ft_strlen(storage));
-	return (1);
+	return (0);
 }
 
 static int	case_meta(char *storage, char *line)
@@ -102,7 +102,7 @@ t_list	*create_command_lst(char *line)
 			i += case_whitespace(&line[i]);
 		else
 			i += case_normal(storage, &line[i]);
-		if (!add_node_from_storage(&head, storage))
+		if (add_node_from_storage(&head, storage) == 1)
 			return (free(storage), storage = NULL, NULL);
 	}
 	free(storage);

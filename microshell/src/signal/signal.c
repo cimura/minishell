@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:16:02 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 17:41:25 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 20:15:14 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	sigint_handler_child(int signum)
 
 static void	sigquit_handler_child(int signum)
 {
-	ft_putstr_fd("Quit\n", STDOUT_FILENO);
+	ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
 	(void)signum;
 }
 

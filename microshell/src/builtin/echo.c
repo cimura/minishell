@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 17:26:27 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/26 17:58:55 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:44:31 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	echo(char **args)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		return (0);
 	}
-	while (ft_strncmp(args[i], "-n", 3) == 0)
+	while (args[i] != NULL && ft_strncmp(args[i], "-n", 3) == 0)
 	{
 		i++;
 		is_option = 1;

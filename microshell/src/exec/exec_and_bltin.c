@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/11/29 17:41:04 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 20:45:40 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	execute_external_command(t_cmd_data *until_redirection,
 void	execve_command(t_cmd_data *until_redirection,
 		int *end_status, char **envp)
 {
+	printf("*path = %s\n", until_redirection->path);
+	printf("cmd = %s\n", until_redirection->cmd[1]);
 	if (until_redirection->path == NULL)
 	{
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
@@ -71,6 +73,7 @@ void	execve_command(t_cmd_data *until_redirection,
 	else if (execve(until_redirection->path,
 			until_redirection->cmd, envp) == -1)
 	{
+		ft_putendl_fd("execve missed", 2);
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	}
@@ -89,7 +92,7 @@ void	execute_builtin_command(char **cmd, t_env *env_lst,
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 		*end_status = env(env_lst);
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
-		*end_status = ft_exit(&cmd[1], end_status);
+		ft_exit(&cmd[1], end_status);
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
 		*end_status = export(&cmd[1], env_lst);
 	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)

@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/02 15:50:00 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 19:35:02 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include "env_lst.h"
 # include "parser.h"
 # include "exec.h"
+
+#define CONTINUE 3
 
 // *** utils.c ***
 void	free_ptr_array(char **ptr);

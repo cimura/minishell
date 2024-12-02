@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 15:50:28 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/02 20:33:34 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,6 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	char	**com_sep;
 
 	*path = NULL;
-	if (access(cmd, X_OK) == 0)
-	{
-		*path = ft_strdup(cmd);
-		if (*path == NULL)
-			return (1);
-		return (0);
-	}
 	env_path = get_value_from_key(env_lst, "PATH");
 	com_sep = ft_split(env_path, ':');
 	if (com_sep == NULL)
@@ -61,6 +54,15 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	if (set_cmd_in_path(cmd, com_sep, path) == 1)
 		return (free_ptr_array(com_sep), 1);
 	free_ptr_array(com_sep);
+	if (*path == NULL && access(cmd, X_OK) == 0)
+	{
+		printf("access\n");
+		*path = ft_strdup(cmd);
+		if (*path == NULL)
+			return (1);
+	}
+	printf("*path = %s\n", *path);
+	printf("cmd = %s\n", cmd);
 	return (0);
 }
 

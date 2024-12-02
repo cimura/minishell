@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 14:17:50 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:47:52 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,12 @@
 #include "syntax.h"
 #include "libft.h"
 
-#define CONTINUE 3
-
 static int	no_pipe_exit(t_env *env_lst, t_command_lst *per_pipe, int *status)
 {
 	if (per_pipe->command_line[0] != NULL && per_pipe->next == NULL
 		&& ft_strncmp(per_pipe->command_line[0], "exit", 5) == 0)
 	{
-		if (ft_exit(&per_pipe->command_line[1], status) == 1)
+		if (ft_exit(&per_pipe->command_line[1], status) == CONTINUE)
 		{
 			command_lstclear(&per_pipe);
 			return (CONTINUE);
@@ -44,9 +42,8 @@ static int	preprocess_command(t_env *env_lst, t_command_lst **per_pipe,
 	int	syntax_result;
 
 	syntax_result = 0;
-	if (check_syntax_before_parser(line) != 0)
+	if (check_syntax_before_parser(line, status) != 0)
 	{
-		*status = 2;
 		free(line);
 		return (CONTINUE);
 	}
