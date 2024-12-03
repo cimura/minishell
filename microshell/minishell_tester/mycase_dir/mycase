@@ -62,3 +62,16 @@ echo > $A
 cat | ls
 unset A=
 cat <<""
+echo -n
+exit 1
+exit 5 6
+exit h 2
+exit 2 h
+/bin/ls
+unset PATH
+./ls
+ls
+/bin/ls
+cd ..
+ls
+./ls

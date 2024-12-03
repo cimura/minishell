@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_dollar.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 17:02:25 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/03 23:41:27 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ static char	*join_expanded_word(char *new, t_env *env_lst,
 {
 	if (line[0] == '$')
 		new = env_query(env_lst, new, &line[1], end_status);
+	else if (line[0] == '~')
+		new = ft_strdup(get_value_from_key(env_lst, "HOME"));
 	else if (line[0] == '\'')
 		new = single_quotes(new, &line[1]);
 	else if (line[0] == '\"')
@@ -76,6 +78,8 @@ static int	skip_joined_word(char *line_ptr)
 		return (count_until_char(++line_ptr, "\'") + 2);
 	else if (*line_ptr == '\"')
 		return (count_until_char(++line_ptr, "\"") + 2);
+	else if (*line_ptr == '~')
+		return (1);
 	else
 		return (count_until_char(line_ptr, "$\'\""));
 }
