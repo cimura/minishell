@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 18:32:59 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 20:59:17 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,18 +64,9 @@ void	execute_external_command(t_cmd_data *until_redirection,
 void	execve_command(t_cmd_data *until_redirection,
 		int *end_status, char **envp)
 {
-	if (ft_strchr(until_redirection->cmd[0], '/') != NULL
-		&& access(until_redirection->cmd[0], F_OK) != 0)
-	{
-		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	}
-	else if (execve(until_redirection->path,
+	if (execve(until_redirection->path,
 			until_redirection->cmd, envp) == -1)
-	{
-		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	}
+		print_error_msg(until_redirection->cmd[0], NULL, "command not found");
 	*end_status = 127;
 }
 

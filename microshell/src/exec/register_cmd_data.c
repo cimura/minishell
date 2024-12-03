@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   register_cmd_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 18:33:28 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 21:05:18 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,27 +47,27 @@ static int	set_cmd_in_path(char *cmd, char **com_sep, char **path)
 
 static int	register_path(char *cmd, char **path, t_env *env_lst)
 {
-	char	*env_path;
+	char	*path_value;
 	char	**com_sep;
 
 	*path = NULL;
-	env_path = get_value_from_key(env_lst, "PATH");
-	if (env_path[0] == '\0')
-	{
-		print_error_msg(cmd, NULL, "No such file or directory");
-		return (PATH_NOT_FOUND);
-	}
-	com_sep = ft_split(env_path, ':');
+	path_value = get_value_from_key(env_lst, "PATH");
+	com_sep = ft_split(path_value, ':');
 	if (com_sep == NULL)
 		return (1);
 	if (set_cmd_in_path(cmd, com_sep, path) == 1)
 		return (free_ptr_array(com_sep), 1);
 	free_ptr_array(com_sep);
-	if (*path == NULL && ft_strchr(cmd, '/') != NULL && access(cmd, X_OK) == 0)
+	if (*path == NULL && access(cmd, X_OK) == 0)
 	{
 		*path = ft_strdup(cmd);
 		if (*path == NULL)
 			return (1);
+	}
+	if (path_value[0] == '\0' && access(*path, F_OK) != 0)
+	{
+		print_error_msg(cmd, NULL, "No such file or directory");
+		return (127);
 	}
 	return (0);
 }
