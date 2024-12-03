@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 18:26:08 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:33:28 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	set_cmd_in_path(char *cmd, char **com_sep, char **path)
 		if (candidate == NULL)
 			return (free(segment), 1);
 		free(segment);
-		if (access(candidate, X_OK) == 0)
+		if (access(candidate, F_OK) == 0)
 		{
 			*path = candidate;
 			break ;
@@ -63,7 +63,7 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	if (set_cmd_in_path(cmd, com_sep, path) == 1)
 		return (free_ptr_array(com_sep), 1);
 	free_ptr_array(com_sep);
-	if (*path == NULL && access(cmd, X_OK) == 0)
+	if (*path == NULL && ft_strchr(cmd, '/') != NULL && access(cmd, X_OK) == 0)
 	{
 		*path = ft_strdup(cmd);
 		if (*path == NULL)

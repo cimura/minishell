@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 18:26:24 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:32:59 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	execute_external_command(t_cmd_data *until_redirection,
 void	execve_command(t_cmd_data *until_redirection,
 		int *end_status, char **envp)
 {
-	if (until_redirection->path == NULL)
+	if (ft_strchr(until_redirection->cmd[0], '/') != NULL
+		&& access(until_redirection->cmd[0], F_OK) != 0)
 	{
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);

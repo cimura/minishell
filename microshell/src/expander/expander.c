@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:24:16 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/02 15:24:30 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:40:36 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static int	handle_quotes_env_variable(t_env *env_lst,
 		if (command_line[i + 1] != NULL
 			&& ft_strncmp(command_line[i], "<<", 3) == 0)
 			expand = remove_quotes(command_line[++i]);
+		else if (ft_strncmp(command_line[i], "~", 2) == 0)
+			expand = ft_strdup(get_value_from_key(env_lst, "HOME"));
 		else
 		{
 			tmp = expand_env_variable(env_lst, command_line[i], end_status);

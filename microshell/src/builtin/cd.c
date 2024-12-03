@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/03 15:28:53 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:51:55 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	set_pwd(t_env *env_lst, char *flag)
 
 	pwd_node = get_node_from_key(env_lst, flag);
 	if (pwd_node == NULL)
-		return (1);
+		return (0);
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
 	{
@@ -34,23 +34,62 @@ static int	set_pwd(t_env *env_lst, char *flag)
 	return (0);
 }
 
+static int	rapper_chdir(char *arg)
+{
+	int	status;
+
+	status = chdir(arg);
+	if (status != 0)
+	{
+		ft_putstr_fd("cd: ", STDERR_FILENO);
+		perror(arg);
+	}
+	return (status);
+}
+
+static int	change_dir(t_env *env_lst, char *arg, char *oldpwd)
+{
+	int	status;
+
+	if (arg == NULL)
+	{
+		status = chdir(get_value_from_key(env_lst, "HOME"));
+		if (status != 0)
+			ft_putendl_fd("cd: HOME not set", STDERR_FILENO);
+	}
+	else
+	{
+		if (ft_strncmp(arg, "-", 2) == 0)
+		{
+			status = chdir(oldpwd);
+			if (status != 0)
+				ft_putendl_fd("cd: OLDPWD not set", STDERR_FILENO);
+		}
+		else
+			status = rapper_chdir(arg);
+	}
+	return (status);
+}
+
 int	cd(char **args, t_env *env_lst)
 {
-	if (args == NULL || args[0] == NULL)
-		return (0);
-	else if (args[1] != NULL)
+	char	*old;
+
+	if (args == NULL)
+		return (1);
+	if (args[0] != NULL && args[1] != NULL)
 	{
 		print_error_msg("cd", NULL, "too many arguments");
 		return (1);
 	}
+	old = ft_strdup(get_value_from_key(env_lst, OLD));
+	if (old == NULL)
+		return (1);
 	if (set_pwd(env_lst, OLD) != 0)
-		return (1);
-	if (chdir(args[0]) != 0)
-	{
-		ft_putstr_fd("cd: ", STDERR_FILENO);
-		perror(args[0]);
-		return (1);
-	}
+		return (free(old), 1);
+	if (change_dir(env_lst, args[0], old) != 0)
+		return (free(old), 1);
+	free(old);
 	if (set_pwd(env_lst, NEW) != 0)
 		return (1);
 	return (0);
