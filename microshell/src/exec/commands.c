@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:21:00 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/02 15:50:21 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:24:38 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static int	run_command_with_redirect(t_command_lst *per_pipe, t_env *env_lst,
 	if (env_array == NULL)
 		return (close_purefd(*fd), 1);
 	local_status = redirect(per_pipe, env_lst, *fd, end_status);
-	if (local_status == 1 || local_status == -1)
+	if (local_status != 0)
 		return (free_ptr_array(env_array), local_status);
-	until_redirection = register_cmd_data(per_pipe, env_lst);
+	until_redirection = register_cmd_data(per_pipe, env_lst, end_status);
 	if (until_redirection == NULL)
-		return (free_ptr_array(env_array), close_purefd(*fd), 1);
+		return (free_ptr_array(env_array), close_purefd(*fd), *end_status);
 	if (is_builtin(until_redirection->cmd))
 		execute_builtin_command(until_redirection->cmd,
 			env_lst, *fd, end_status);

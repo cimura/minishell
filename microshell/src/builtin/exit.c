@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/02 19:50:18 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:13:11 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	ex_atoi(char *arg, int *status)
 	result = 0;
 	if (!ft_isnum(&arg[i]))
 	{
-		ft_putendl_fd(" numeric argument required", STDERR_FILENO);
+		print_error_msg("exit", arg, "numeric argument required");
 		return (*status = 2, EXIT_FAILURE);
 	}
 	while (arg[i] <= '9' && arg[i] >= '0')
@@ -69,7 +69,7 @@ static int	ex_atoi(char *arg, int *status)
 		if ((result > ULONGLONG_MAX && sign == 1)
 			|| (result > (ULONGLONG_MAX + 1) && sign == -1))
 		{
-			ft_putendl_fd(" numeric argument required", STDERR_FILENO);
+			print_error_msg("exit", arg, "numeric argument required");
 			return (*status = 2, EXIT_FAILURE);
 		}
 		i++;
@@ -87,7 +87,7 @@ int	ft_exit(char **args, int *status)
 		return (0);
 	if (args[1] != NULL)
 	{
-		ft_putendl_fd(" too many arguments", STDERR_FILENO);
+		print_error_msg("exit", NULL, "too many arguments");
 		*status = 1;
 		return (CONTINUE);
 	}

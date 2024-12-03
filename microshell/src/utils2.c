@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:46:20 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/02 15:25:24 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:34:03 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,24 @@ void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status)
 	env_lstclear(&env_lst);
 	command_lstclear(&per_pipe);
 	exit(exit_status);
+}
+
+void	print_error_msg(char *cmd_name, char *arg_name, char *err_msg)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	if (cmd_name)
+	{
+		ft_putstr_fd(cmd_name, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	if (arg_name)
+	{
+		ft_putstr_fd(arg_name, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+	}
+	if (err_msg)
+	{
+		ft_putstr_fd(err_msg, STDERR_FILENO);
+	}
+	ft_putstr_fd("\n", STDERR_FILENO);
 }

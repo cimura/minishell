@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/02 15:49:14 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:27:00 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int			last_command(t_command_lst *per_pipe, t_env *env_lst,
 				t_file_descripter *fd, int *end_status);
 
 // *** register_cmd_data.c ***
-t_cmd_data	*register_cmd_data(t_command_lst *per_pipe, t_env *env_lst);
+t_cmd_data	*register_cmd_data(t_command_lst *per_pipe, t_env *env_lst,
+				int *status);
 
 // *** redirect.c ***
 int			redirect(t_command_lst *per_pipe, t_env *env_lst,

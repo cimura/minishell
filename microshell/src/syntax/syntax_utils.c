@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:20:02 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 15:50:41 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 15:36:46 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,12 @@ static int	dir_permission(char *arg)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			ft_putstr_fd(arg, STDERR_FILENO);
-			ft_putendl_fd(": Is a directory", STDERR_FILENO);
+			print_error_msg(NULL, arg, "Is a directory");
 			return (126);
 		}
 		else if (access(arg, X_OK) != 0)
 		{
-			ft_putstr_fd(arg, STDERR_FILENO);
-			ft_putendl_fd(": Permission denied", STDERR_FILENO);
+			print_error_msg(NULL, arg, "Permission denied");
 			return (126);
 		}
 	}
@@ -100,8 +98,8 @@ int	check_permission(t_command_lst *per_pipe)
 		return (dir_perm);
 	if (access(per_pipe->command_line[0], F_OK) != 0)
 	{
-		ft_putstr_fd(per_pipe->command_line[0], STDERR_FILENO);
-		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
+		print_error_msg(NULL, per_pipe->command_line[0],
+			"No such file or directory");
 		return (127);
 	}
 	return (0);

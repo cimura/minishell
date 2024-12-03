@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   register_cmd_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 01:10:01 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/03 18:26:08 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ static int	set_cmd_in_path(char *cmd, char **com_sep, char **path)
 	return (0);
 }
 
+#define PATH_NOT_FOUND 127
+
 static int	register_path(char *cmd, char **path, t_env *env_lst)
 {
 	char	*env_path;
@@ -50,6 +52,11 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 
 	*path = NULL;
 	env_path = get_value_from_key(env_lst, "PATH");
+	if (env_path[0] == '\0')
+	{
+		print_error_msg(cmd, NULL, "No such file or directory");
+		return (PATH_NOT_FOUND);
+	}
 	com_sep = ft_split(env_path, ':');
 	if (com_sep == NULL)
 		return (1);
@@ -94,18 +101,27 @@ static char	**filter_cmd_args(char **head_cmdline)
 	return (result);
 }
 
-t_cmd_data	*register_cmd_data(t_command_lst *per_pipe, t_env *env_lst)
+t_cmd_data	*register_cmd_data(t_command_lst *per_pipe,
+	t_env *env_lst, int *status)
 {
 	t_cmd_data	*cmd_data;
 
+	*status = 0;
 	cmd_data = malloc(sizeof(t_cmd_data));
 	if (cmd_data == NULL)
-		return (NULL);
-	if (register_path(per_pipe->command_line[0],
-			&(cmd_data->path), env_lst) != 0)
-		return (free(cmd_data), NULL);
+		return (*status = 1, NULL);
+	cmd_data->path = NULL;
+	if (!is_builtin(per_pipe->command_line))
+	{
+		*status = register_path(per_pipe->command_line[0],
+				&(cmd_data->path), env_lst);
+		if (*status == 1)
+			return (free(cmd_data), NULL);
+		else if (*status == PATH_NOT_FOUND)
+			return (free(cmd_data), NULL);
+	}
 	cmd_data->cmd = filter_cmd_args(&per_pipe->command_line[0]);
 	if (cmd_data->cmd == NULL)
-		return (free(cmd_data->path), free(cmd_data), NULL);
+		return (*status = 1, free(cmd_data->path), free(cmd_data), NULL);
 	return (cmd_data);
 }

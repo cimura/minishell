@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/02 19:35:02 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/03 18:27:07 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include "parser.h"
 # include "exec.h"
 
-#define CONTINUE 3
+# define CONTINUE 3
 
 // *** utils.c ***
 void	free_ptr_array(char **ptr);
@@ -34,6 +34,7 @@ bool	is_whitespace(char check_chr);
 int		count_key_size(char *line_ptr);
 void	free_cmd_data(t_cmd_data *data);
 bool	is_redirection(char *arg);
+void	print_error_msg(char *cmd_name, char *arg_name, char *err_msg);
 
 // *** main_helper.c ***
 void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status);

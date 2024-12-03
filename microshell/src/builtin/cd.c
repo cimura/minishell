@@ -6,11 +6,12 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/28 18:35:59 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/03 15:28:53 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "utils.h"
 #define OLD "OLDPWD"
 #define NEW "PWD"
 
@@ -25,7 +26,7 @@ static int	set_pwd(t_env *env_lst, char *flag)
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
 	{
-		perror("getcwd faild");
+		perror("getcwd");
 		return (1);
 	}
 	free(pwd_node->value);
@@ -39,13 +40,14 @@ int	cd(char **args, t_env *env_lst)
 		return (0);
 	else if (args[1] != NULL)
 	{
-		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
+		print_error_msg("cd", NULL, "too many arguments");
 		return (1);
 	}
 	if (set_pwd(env_lst, OLD) != 0)
 		return (1);
 	if (chdir(args[0]) != 0)
 	{
+		ft_putstr_fd("cd: ", STDERR_FILENO);
 		perror(args[0]);
 		return (1);
 	}

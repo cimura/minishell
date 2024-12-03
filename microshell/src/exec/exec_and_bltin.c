@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 01:09:01 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/03 18:26:24 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 #include "signal_handler.h"
 #include "builtin.h"
+#include "utils.h"
 
 bool	is_executable(char **cmd)
 {
@@ -66,7 +67,7 @@ void	execve_command(t_cmd_data *until_redirection,
 	if (until_redirection->path == NULL)
 	{
 		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	}
 	else if (execve(until_redirection->path,
 			until_redirection->cmd, envp) == -1)

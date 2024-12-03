@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 14:13:15 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/03 18:26:39 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static int	handle_redirect(char **command_line, int i)
 	return (0);
 }
 
+#define NO_SUCH_FILE 127
+
 int	redirect(t_command_lst *per_pipe, t_env *env_lst,
 			t_file_descripter fd, int *end_status)
 {
@@ -63,7 +65,7 @@ int	redirect(t_command_lst *per_pipe, t_env *env_lst,
 		if (handle_redirect(per_pipe->command_line, i) == -1)
 		{
 			*end_status = 1;
-			return (-1);
+			return (NO_SUCH_FILE);
 		}
 		else if (ft_strncmp(per_pipe->command_line[i], "<<", 3) == 0)
 		{
