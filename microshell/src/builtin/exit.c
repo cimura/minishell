@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/03 15:13:11 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/04 16:47:21 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static bool	ft_isnum(char *arg)
 	int	i;
 
 	i = 0;
+	if (arg[i] == '\0')
+		return (false);
 	while (arg[i] != '\0')
 	{
 		if (!ft_isdigit(arg[i]) && !is_whitespace(arg[i]))

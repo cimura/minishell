@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 19:37:35 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 15:59:10 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_syntax_before_parser(char *line, int *status)
 	return (0);
 }
 
-int	check_syntax(t_command_lst *per_pipe)
+int	check_syntax(t_command_lst *per_pipe, t_env *env_lst)
 {
 	int	i;
 	int	ret;
@@ -55,13 +55,10 @@ int	check_syntax(t_command_lst *per_pipe)
 		i = 0;
 		if (per_pipe->command_line[0] == NULL)
 			return (ft_putendl_fd("syntax error", STDERR_FILENO), 2);
-		ret = check_permission(per_pipe);
-		if (ret != 0)
-			return (ret);
 		while (per_pipe->command_line[i] != NULL)
 		{
 			ret = pipe_redirect_combination_error(per_pipe->command_line[i],
-					per_pipe->command_line[i + 1]);
+					per_pipe->command_line[i + 1], env_lst);
 			if (ret != 0)
 				return (ret);
 			i++;

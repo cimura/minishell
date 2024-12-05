@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/03 18:27:00 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 15:58:43 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdbool.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <errno.h>
 # include "parser.h"
 # include "env_lst.h"
@@ -66,8 +67,11 @@ int			redirect(t_command_lst *per_pipe, t_env *env_lst,
 int			here_doc(char *eof, t_env *env_lst,
 				t_file_descripter fd, int *end_status);
 
+// *** check_permission.c
+int			check_permission(char **command_line);
+
 // *** exec_and_bltin.c ***
-bool		is_executable(char **cmd);
+bool		is_executable(t_cmd_data *until_redirection, int *end_status);
 bool		is_builtin(char **cmd);
 void		execute_external_command(t_cmd_data *until_redirection,
 				t_file_descripter fd, int *end_status, char **envp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:27:28 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 14:46:07 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:25:49 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include "libft.h"
 
 typedef struct s_env
@@ -33,5 +34,6 @@ t_env	*create_env_lst(char *envp[]);
 
 // *** env_lst_utils.c ***
 char	*get_value_from_key(t_env *env_lst, char *key);
+bool	is_envnode_exist(t_env *env_lst, char *key);
 
 #endif

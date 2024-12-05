@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 20:59:17 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/05 16:03:00 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,26 @@
 #include "builtin.h"
 #include "utils.h"
 
-bool	is_executable(char **cmd)
+bool	is_executable(t_cmd_data *until_redirection, int *end_status)
 {
-	if (cmd == NULL || cmd[0] == NULL)
+	int	tmp_status;
+
+	if (until_redirection->cmd == NULL || until_redirection->cmd[0] == NULL)
 		return (false);
+	if (access(until_redirection->cmd[0], F_OK) != 0 &&
+		until_redirection->path == NULL)
+	{
+		ft_putstr_fd(until_redirection->cmd[0], STDERR_FILENO);
+		ft_putendl_fd(": command not found", STDERR_FILENO);
+		*end_status = 127;
+		return (false);
+	}
+	tmp_status = check_permission(until_redirection->cmd);
+	if (tmp_status != 0)
+	{
+		*end_status = tmp_status;
+		return (false);
+	}
 	return (true);
 }
 

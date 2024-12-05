@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 18:29:37 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 15:51:47 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	execute_single_command(t_command_lst *per_pipe, t_env *env_lst,
 	if (is_builtin(until_redirection->cmd))
 		execute_builtin_command(until_redirection->cmd,
 			env_lst, *fd, end_status);
-	else if (is_executable(until_redirection->cmd))
+	else if (is_executable(until_redirection, end_status))
 		execute_external_command(until_redirection,
 			*fd, end_status, env_array);
 	free_cmd_data(until_redirection);

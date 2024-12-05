@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:20:02 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/03 20:46:38 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/05 15:55:46 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,29 +41,29 @@ int	check_quotation(char *line)
 	return (0);
 }
 
-static int	dir_permission(char *arg)
+static int	check_redirection_token(char *arg, char *next, t_env *env_lst)
 {
-	struct stat	st;
-
-	if (stat(arg, &st) == 0)
+	if (is_redirection(arg))
 	{
-		if (S_ISDIR(st.st_mode))
+		if (next == NULL)
 		{
-			print_error_msg(NULL, arg, "Is a directory");
-			return (126);
+			print_error_msg(NULL, NULL,
+				"syntax error near unexpected token `newline'");
+			return (2);
 		}
-		else if (access(arg, X_OK) != 0)
+		else if (next[0] == '$' && !is_envnode_exist(env_lst, &next[1]))
 		{
-			print_error_msg(NULL, arg, "Permission denied");
-			return (126);
+			print_error_msg(NULL, next, "ambiguous redirect");
+			return (1);
 		}
 	}
 	return (0);
 }
 
-int	pipe_redirect_combination_error(char *arg, char *next)
+int	pipe_redirect_combination_error(char *arg, char *next, t_env *env_lst)
 {
 	int	i;
+	int	redirect_status;
 
 	i = 0;
 	while (arg[i] != '\0')
@@ -79,28 +79,12 @@ int	pipe_redirect_combination_error(char *arg, char *next)
 			ft_putendl_fd("syntax error", STDERR_FILENO);
 			return (2);
 		}
-		if (is_redirection(arg) && next == NULL)
-			return (ft_putendl_fd("syntax error", STDERR_FILENO), 2);
+		redirect_status = check_redirection_token(arg, next, env_lst);
+		if (redirect_status != 0)
+			return (redirect_status);
+		// if (is_redirection(arg) && next == NULL)
+		// 	return (ft_putendl_fd("syntax error", STDERR_FILENO), 2);
 		i++;
-	}
-	return (0);
-}
-
-int	check_permission(t_command_lst *per_pipe)
-{
-	int	dir_perm;
-
-	if (per_pipe->command_line[0] == NULL
-		|| ft_strchr(per_pipe->command_line[0], '/') == NULL)
-		return (0);
-	dir_perm = dir_permission(per_pipe->command_line[0]);
-	if (dir_perm != 0)
-		return (dir_perm);
-	if (access(per_pipe->command_line[0], F_OK) != 0)
-	{
-		print_error_msg(NULL, per_pipe->command_line[0],
-			"No such file or directory");
-		return (127);
 	}
 	return (0);
 }
