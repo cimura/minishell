@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:00:50 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 14:22:47 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:15:59 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	register_new_env(char *arg, t_env *env_lst)
 	return (0);
 }
 
-void	no_args(t_env *env_lst)
+static void	no_args(t_env *env_lst)
 {
 	int		i;
 	char	*now_min;
@@ -82,7 +82,7 @@ void	no_args(t_env *env_lst)
 	}
 }
 
-int	with_args(char **args, t_env *env_lst)
+static int	with_args(char **args, t_env *env_lst)
 {
 	int	i;
 	int	status;

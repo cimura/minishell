@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/05 17:22:47 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 18:45:54 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static int	process_input_line(char **line, int status)
 		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(status);
 	}
+	ft_signal();
 	if (ft_strlen(*line) == 0)
 	{
 		free(*line);
