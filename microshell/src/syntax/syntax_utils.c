@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:20:02 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/05 15:55:46 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 16:23:22 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ static int	check_redirection_token(char *arg, char *next, t_env *env_lst)
 	{
 		if (next == NULL)
 		{
-			print_error_msg(NULL, NULL,
-				"syntax error near unexpected token `newline'");
+			print_error_msg(NULL, NULL, "syntax error");
 			return (2);
 		}
 		else if (next[0] == '$' && !is_envnode_exist(env_lst, &next[1]))
@@ -82,8 +81,6 @@ int	pipe_redirect_combination_error(char *arg, char *next, t_env *env_lst)
 		redirect_status = check_redirection_token(arg, next, env_lst);
 		if (redirect_status != 0)
 			return (redirect_status);
-		// if (is_redirection(arg) && next == NULL)
-		// 	return (ft_putendl_fd("syntax error", STDERR_FILENO), 2);
 		i++;
 	}
 	return (0);

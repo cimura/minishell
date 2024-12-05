@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/02 15:18:34 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:35:08 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,6 @@
 #define BREAK 3
 
 int	g_global = 0;
-
-static void	sigint_handler_in_heredoc(int signum)
-{
-	int	pipefd[2];
-
-	(void)signum;
-	g_global = 1;
-	if (pipe(pipefd) < 0)
-		perror("pipe: ");
-	dup2(pipefd[0], STDIN_FILENO);
-	write(pipefd[1], "", 1);
-	close(pipefd[0]);
-	close(pipefd[1]);
-}
 
 static int	tmpfile_to_readfrom(char *tmp_file, int fd_tmp)
 {
@@ -73,6 +59,17 @@ static char	*expand_dollar(t_env *env_lst, char *line, int end_status)
 	return (new);
 }
 
+static void	on_sigint_received(char *line, int *end_status)
+{
+	g_global = 0;
+	*end_status = 130;
+	free(line);
+	rl_on_new_line();
+	ft_putstr_fd("\n", STDOUT_FILENO);
+	rl_replace_line("", 0);
+	signal(SIGINT, sigint_handler_non_nl);
+}
+
 static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 								int fd_tmp, int *end_status)
 {
@@ -81,12 +78,9 @@ static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 
 	signal(SIGINT, sigint_handler_in_heredoc);
 	line = readline("> ");
-	ft_signal();
 	if (g_global == 1)
 	{
-		g_global = 0;
-		*end_status = 130;
-		free(line);
+		on_sigint_received(line, end_status);
 		return (SIGINT_RECEIVED);
 	}
 	if (line == NULL || ft_strncmp(line, eof, ft_strlen(eof) + 1) == 0)

@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/04 20:12:58 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 16:43:18 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	if (set_cmd_in_path(cmd, com_sep, path) == 1)
 		return (free_ptr_array(com_sep), 1);
 	free_ptr_array(com_sep);
-	if (*path == NULL && access(cmd, X_OK) == 0)
+	if (*path == NULL && access(cmd, F_OK) == 0)
 	{
 		*path = ft_strdup(cmd);
 		if (*path == NULL)
 			return (1);
 	}
-	if (path_value[0] == '\0' && access(*path, F_OK) != 0)
+	if (path_value[0] == '\0' && access(cmd, F_OK) != 0)
 	{
 		print_error_msg(cmd, NULL, "No such file or directory");
 		return (127);

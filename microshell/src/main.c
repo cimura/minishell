@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/05 15:25:00 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 17:22:47 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ static int	preprocess_command(t_env *env_lst, t_command_lst **per_pipe,
 	free(line);
 	if (*per_pipe == NULL)
 		clear_exit(env_lst, *per_pipe, 1);
-	if (syntax_result == CONTINUE)
-		return (command_lstclear(per_pipe), CONTINUE);
 	syntax_result = check_syntax(*per_pipe, env_lst);
 	if (syntax_result != 0)
 	{

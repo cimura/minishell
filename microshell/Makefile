@@ -8,7 +8,7 @@ BUILTIN_SRCS := cd.c echo.c env.c exit.c export.c export_utils.c export_utils2.c
 BUILTIN := $(addprefix $(OBJ_DIR)builtin/, $(BUILTIN_SRCS:.c=.o))
 
 ENV_DIR := src/env/
-ENV_SRCS := create_env_lst.c env_lst_to_array.c env_lst_util.c
+ENV_SRCS := create_env_lst.c env_lst_to_array.c env_lst_utils.c
 ENV := $(addprefix $(OBJ_DIR)env/, $(ENV_SRCS:.c=.o))
 
 EXEC_DIR := src/exec/
@@ -24,7 +24,7 @@ PARSER_SRCS := create_command_list.c parser_utils.c parser.c
 PARSER := $(addprefix $(OBJ_DIR)parser/, $(PARSER_SRCS:.c=.o))
 
 SIGNAL_DIR := src/signal/
-SIGNAL_SRC := signal.c
+SIGNAL_SRC := signal.c signal_utils.c
 SIGNAL := $(addprefix $(OBJ_DIR)signal/, $(SIGNAL_SRC:.c=.o))
 
 SYNTAX_DIR := src/syntax/

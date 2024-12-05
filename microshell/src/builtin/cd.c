@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/04 16:58:52 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 16:18:03 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	change_dir(t_env *env_lst, char *arg, char *oldpwd)
 			if (status != 0)
 				ft_putendl_fd("cd: OLDPWD not set", STDERR_FILENO);
 			else
-				printf("%s\n", oldpwd);
+				ft_putendl_fd(oldpwd, STDOUT_FILENO);
 		}
 		else
 			status = rapper_chdir(arg);

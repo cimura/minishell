@@ -6,22 +6,22 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/04 17:39:49 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 18:18:57 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 #include "utils.h"
 
-static int	ft_open(char *path, int oflag, int to_dup)
+static int	ft_open(char *target, int oflag, int to_dup)
 {
 	int	redirect_fd;
 
-	redirect_fd = open(path, oflag, 0644);
+	redirect_fd = open(target, oflag, 0644);
 	if (redirect_fd == -1)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		perror(path);
+		perror(target);
 		return (-1);
 	}
 	dup2(redirect_fd, to_dup);

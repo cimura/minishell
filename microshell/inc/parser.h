@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:28:30 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/02 14:15:49 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:15:59 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include "libft.h"
+
+// typedef struct s_token
+// {
+// 	char	*str;
+// 	bool	is_expanded;
+// }	t_token;
 
 typedef struct s_command_lst
 {

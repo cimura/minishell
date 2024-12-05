@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/05 15:51:47 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/05 17:36:06 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,10 @@ static int	handle_command_branch(t_command_lst *per_pipe, t_env *env_lst,
 	if (local_status == 1)
 		return (1);
 	if (count != 1)
+	{
 		wait_all_commands(head, end_status);
-	ft_signal();
+		ft_signal();
+	}
 	return (0);
 }
 
