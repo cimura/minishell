@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/05 16:43:18 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/06 14:13:10 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	return (0);
 }
 
-static char	**filter_cmd_args(char **head_cmdline)
+static char	**filter_cmd_args(t_command_lst *per_pipe)
 {
 	int		i;
 	int		ri;
 	int		size;
 	char	**result;
 
-	size = count_char_array_words(head_cmdline);
+	size = count_char_array_words(per_pipe->command_line);
 	result = malloc((size + 1) * sizeof(char *));
 	if (result == NULL)
 		return (NULL);
@@ -87,12 +87,15 @@ static char	**filter_cmd_args(char **head_cmdline)
 	ri = 0;
 	while (i < size)
 	{
-		if (is_redirection(head_cmdline[i]))
+		fprintf(stderr, "%d\n", i);
+		fflush(stderr);
+		if (!per_pipe->is_expanded[i]
+			&& is_redirection(per_pipe->command_line[i]))
 		{
 			i += 2;
 			continue ;
 		}
-		result[ri] = ft_strdup(head_cmdline[i++]);
+		result[ri] = ft_strdup(per_pipe->command_line[i++]);
 		if (result[ri] == NULL)
 			return (free_ptr_array(result), NULL);
 		ri++;
@@ -120,7 +123,7 @@ t_cmd_data	*register_cmd_data(t_command_lst *per_pipe,
 		else if (*status == PATH_NOT_FOUND)
 			return (free(cmd_data), NULL);
 	}
-	cmd_data->cmd = filter_cmd_args(&per_pipe->command_line[0]);
+	cmd_data->cmd = filter_cmd_args(per_pipe);
 	if (cmd_data->cmd == NULL)
 		return (*status = 1, free(cmd_data->path), free(cmd_data), NULL);
 	return (cmd_data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/05 18:45:54 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:13:51 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (preprocess_command(env_lst, &per_pipe, line, &status) == CONTINUE)
 			continue ;
+		printf("create\n");
 		if (no_pipe_exit(env_lst, per_pipe, &status) == CONTINUE)
 			continue ;
 		if (executor(per_pipe, env_lst, &status) == 1)
