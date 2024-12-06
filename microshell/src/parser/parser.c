@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/06 14:17:18 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/06 15:06:44 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,43 +26,21 @@ static int	count_command_lst_until_pipe(t_list *lst)
 	return (size);
 }
 
-static char	**create_until_pipe_array(t_list *normal, int size)
+static t_command_lst	*create_command_node(int size, t_list *normal)
 {
-	int		i;
-	char	**command_line;
+	t_command_lst	*new;
 
-	command_line = malloc((size + 1) * sizeof(char *));
-	if (command_line == NULL)
+	new = malloc(sizeof(t_command_lst));
+	if (new == NULL)
 		return (NULL);
-	i = 0;
-	while (i < size)
-	{
-		command_line[i] = ft_strdup(normal->content);
-		if (command_line[i] == NULL)
-			return (free_ptr_array(command_line), NULL);
-		normal = normal->next;
-		i++;
-	}
-	command_line[i] = NULL;
-	return (command_line);
-}
-
-static bool	*create_is_expanded_array(int size)
-{
-	bool	*is_expanded;
-	int		i;
-
-	is_expanded = malloc((size + 1) * sizeof(bool));
-	if (is_expanded == NULL)
-		return (NULL);
-	i = 0;
-	while (i < size)
-	{
-		is_expanded[i] = false;
-		i++;
-	}
-	is_expanded[i] = NULL;
-	return (is_expanded);
+	new->command_line = create_until_pipe_array(normal, size);
+	if (new->command_line == NULL)
+		return (free(new), NULL);
+	new->is_expanded = create_is_expanded_array(size);
+	if (new->is_expanded == NULL)
+		return (free_ptr_array(new->command_line), free(new), NULL);
+	new->next = NULL;
+	return (new);
 }
 
 static t_command_lst	*create_pipe_lst(t_list *normal)
@@ -76,18 +54,10 @@ static t_command_lst	*create_pipe_lst(t_list *normal)
 	{
 		if (ft_strncmp(normal->content, "|", 1) == 0)
 			normal = normal->next;
-		new = malloc(sizeof(t_command_lst));
+		size = count_command_lst_until_pipe(normal);
+		new = create_command_node(size, normal);
 		if (new == NULL)
 			return (command_lstclear(&head), NULL);
-		size = count_command_lst_until_pipe(normal);
-		new->command_line = create_until_pipe_array(normal, size);
-		if (new->command_line == NULL)
-			return (command_lstclear(&head), free(new), NULL);
-		new->is_expanded = create_is_expanded_array(size);
-		if (new->is_expanded == NULL)
-			return (command_lstclear(&head), free_ptr_array(new->command_line),
-				free(new), NULL);
-		new->next = NULL;
 		command_lstadd_back(&head, new);
 		while (size > 0)
 		{
@@ -103,7 +73,7 @@ t_command_lst	*parser(char	*line)
 	t_list			*normal;
 	t_command_lst	*per_pipe;
 
-	normal = create_command_lst(line);
+	normal = create_t_lst(line);
 	if (normal == NULL)
 		return (NULL);
 	per_pipe = create_pipe_lst(normal);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_command_list.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:26:46 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/02 19:42:21 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/06 14:58:13 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	case_normal(char *storage, char *line)
 	return (i);
 }
 
-t_list	*create_command_lst(char *line)
+t_list	*create_t_lst(char *line)
 {
 	int		i;
 	char	*storage;

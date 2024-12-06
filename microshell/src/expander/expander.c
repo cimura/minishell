@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:24:16 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/06 14:09:44 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/06 15:33:22 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,17 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (0);
 }
 
+static int	set_array_argument(char *expand, t_command_lst *per_pipe, int i)
+{
+	if (expand && ft_strcmp(per_pipe->command_line[i], expand) != 0)
+		per_pipe->is_expanded[i] = true;
+	if (expand == NULL)
+		return (1);
+	free(per_pipe->command_line[i]);
+	per_pipe->command_line[i] = expand;
+	return (0);
+}
+
 static int	handle_quotes_env_variable(t_env *env_lst,
 	t_command_lst *per_pipe, int end_status)
 {
@@ -50,16 +61,13 @@ static int	handle_quotes_env_variable(t_env *env_lst,
 			expand = ft_strdup(get_value_from_key(env_lst, "HOME"));
 		else
 		{
-			tmp = expand_env_variable(env_lst, per_pipe->command_line[i], end_status);
+			tmp = expand_env_variable(env_lst,
+					per_pipe->command_line[i], end_status);
 			expand = remove_quotes(tmp);
 			free(tmp);
 		}
-		if (expand && ft_strcmp(per_pipe->command_line[i], expand) != 0)
-			per_pipe->is_expanded[i] = true;
-		if (expand == NULL)
+		if (set_array_argument(expand, per_pipe, i) == 1)
 			return (1);
-		free(per_pipe->command_line[i]);
-		per_pipe->command_line[i] = expand;
 		i++;
 	}
 	return (0);

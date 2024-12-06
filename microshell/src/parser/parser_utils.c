@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:24:44 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/06 13:52:10 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/06 15:06:53 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,45 @@ void	command_lstadd_back(t_command_lst **lst, t_command_lst *new)
 		last = last->next;
 	}
 	last->next = new;
+}
+
+char	**create_until_pipe_array(t_list *normal, int size)
+{
+	int		i;
+	char	**command_line;
+
+	command_line = malloc((size + 1) * sizeof(char *));
+	if (command_line == NULL)
+		return (NULL);
+	i = 0;
+	while (i < size)
+	{
+		command_line[i] = ft_strdup(normal->content);
+		if (command_line[i] == NULL)
+			return (free_ptr_array(command_line), NULL);
+		normal = normal->next;
+		i++;
+	}
+	command_line[i] = NULL;
+	return (command_line);
+}
+
+bool	*create_is_expanded_array(int size)
+{
+	bool	*is_expanded;
+	int		i;
+
+	is_expanded = malloc((size + 1) * sizeof(bool));
+	if (is_expanded == NULL)
+		return (NULL);
+	i = 0;
+	while (i < size)
+	{
+		is_expanded[i] = false;
+		i++;
+	}
+	is_expanded[i] = NULL;
+	return (is_expanded);
 }
 
 // debug

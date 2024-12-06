@@ -75,3 +75,13 @@ ls
 cd ..
 ls
 ./ls
+echo ">"
+echo "<"
+cat "<<"
+echo hello > out ">"
+">"
+"<"
+"<<"
+">>"
+"|"
+echo "> out"

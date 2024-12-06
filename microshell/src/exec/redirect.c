@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/06 14:08:21 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/06 15:25:11 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	redirect(t_command_lst *per_pipe, t_env *env_lst,
 			*end_status = 1;
 			return (NO_SUCH_FILE);
 		}
-		else if (ft_strncmp(per_pipe->command_line[i], "<<", 3) == 0)
+		else if (!per_pipe->is_expanded[i]
+			&& ft_strncmp(per_pipe->command_line[i], "<<", 3) == 0)
 		{
 			local_status = here_doc(per_pipe->command_line[i + 1],
 					env_lst, fd, end_status);

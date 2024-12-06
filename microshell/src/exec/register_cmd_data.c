@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/06 14:54:18 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:22:36 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,8 @@ static char	**filter_cmd_args(t_command_lst *per_pipe)
 			continue ;
 		}
 		result[ri] = ft_strdup(per_pipe->command_line[i++]);
-		if (result[ri] == NULL)
+		if (result[ri++] == NULL)
 			return (free_ptr_array(result), NULL);
-		ri++;
 	}
 	result[ri] = NULL;
 	return (result);
