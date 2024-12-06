@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:20:02 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/06 15:55:18 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:46:01 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ static int	check_redirection_token(char *arg, char *next, t_env *env_lst)
 			print_error_msg(NULL, NULL, "syntax error");
 			return (2);
 		}
-		else if (next[0] == '$' && !is_envnode_exist(env_lst, &next[1]))
+		else if (next[0] == '$' && !is_envnode_exist(env_lst, &next[1])
+			&& ft_strncmp(arg, "<<", 3) != 0)
 		{
 			print_error_msg(NULL, next, "ambiguous redirect");
 			return (1);
@@ -80,6 +81,7 @@ int	pipe_redirect_combination_error(char *arg, char *next, t_env *env_lst)
 	char	is_in_quote;
 
 	i = 0;
+	is_in_quote = '\0';
 	while (arg[i] != '\0')
 	{
 		flag_manager(arg[i], &is_in_quote);
@@ -90,10 +92,7 @@ int	pipe_redirect_combination_error(char *arg, char *next, t_env *env_lst)
 				|| ft_strncmp(&arg[i], ">>>", 3) == 0
 				|| ft_strncmp(&arg[i], "<>", 2) == 0
 				|| ft_strncmp(&arg[i], "><", 2) == 0))
-		{
-			ft_putendl_fd("syntax error", STDERR_FILENO);
-			return (2);
-		}
+			return (ft_putendl_fd("syntax error", STDERR_FILENO), 2);
 		redirect_status = check_redirection_token(arg, next, env_lst);
 		if (redirect_status != 0)
 			return (redirect_status);

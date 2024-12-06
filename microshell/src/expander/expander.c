@@ -6,13 +6,13 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:24:16 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/06 15:33:22 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:02:19 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+static int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 	size_t	n;
