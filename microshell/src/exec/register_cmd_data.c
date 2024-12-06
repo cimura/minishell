@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   register_cmd_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/06 14:13:10 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/06 14:54:18 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,6 @@ static char	**filter_cmd_args(t_command_lst *per_pipe)
 	ri = 0;
 	while (i < size)
 	{
-		fprintf(stderr, "%d\n", i);
-		fflush(stderr);
 		if (!per_pipe->is_expanded[i]
 			&& is_redirection(per_pipe->command_line[i]))
 		{
