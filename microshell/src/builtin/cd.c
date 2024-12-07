@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/07 21:15:06 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/08 00:03:24 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,29 +95,62 @@ int	cd(char **args, t_env *env_lst)
 	return (0);
 }
 
-static char	*canonical_file_path(char *path)
+static char	**val_manager(const char *path, char *pwd, char **result)
+{
+	int		i;
+	int		path_len;
+	int		pwd_len;
+	char	*ptr;
+
+	i = 0;
+	path_len = ft_strlen(path);
+	pwd_len = ft_strlen(pwd);
+	if (path[0] == '/')
+	{
+		*result = malloc(path_len + 1);
+		if (*result == NULL)
+			return (NULL);
+		ft_strlcpy(*result, path, path_len + 1);
+	}
+	else
+	{
+		*result = malloc(pwd_len + path_len + 1);
+		if (*result == NULL)
+			return (NULL);
+		ptr = *result;
+		i += ft_strlcpy(&ptr[i], pwd, pwd_len + 1);
+		i += ft_strlcpy(&ptr[i], "/", 2);
+		i += ft_strlcpy(&ptr[i], path, path_len + 1);
+	}
+	return (ft_split(*result, '/'));
+}
+
+static char	*normalize_path(const char *path, char *pwd)
 {
 	char	**sp;
 	char	*result;
 	int		i;
 	int		ri;
 
-	sp = ft_split(path, '/');
-	result = malloc(ft_strlen(path) + 1);
-	i = 0;
+	sp = val_manager(path, pwd, &result);
+	if (sp == NULL)
+		return (NULL);
 	ri = 0;
+	i = 0;
+	printf("%s\n", result);
 	while (sp[i] != NULL)
 	{
 		if (sp[i + 1] != NULL && ft_strncmp(sp[i + 1], "..", 3) == 0)
 			i += 2;
-		else if (ft_strncmp(sp[i], ".", 2) == 0)
-		{
+		else if (ft_strncmp(sp[i], ".", 2) == 0
+			|| ft_strncmp(sp[i], "..", 3) == 0)
 			i++;
-			continue ;
+		else
+		{
+			ri += ft_strlcpy(&result[ri], "/", 2);
+			ri += ft_strlcpy(&result[ri], sp[i], ft_strlen(sp[i]) + 1);
+			i++;
 		}
-		ri += ft_strlcpy(&result[ri], "/", 2);
-		ri += ft_strlcpy(&result[ri], sp[i], ft_strlen(sp[i]) + 1);
-		i++;
 	}
 	free_ptr_array(sp);
 	return (result);
@@ -125,13 +158,21 @@ static char	*canonical_file_path(char *path)
 
 // ******** test for cannonical_file_path ********
 
-//int	main() {
-//	char	*path = "/Users///cimy/./coding/../coding/42/../42/minishell/";
-//	char	*result = canonical_file_path(path);
+#include <string.h>
+#define GREEN "\x1b[32m"
+#define RED "\x1b[31m"
+#define RESET "\x1b[0m"
 
-//	printf("BEFORE: %s\n", path);
-//	printf("AFTER: %s\n", result);
-//}
+int	main() {
+	char	*path = "../../../dd/cimy/../cimy/coding/42/my_shell/";
+	char	*result = normalize_path(path, "/It's/PWD/PATH");
+
+	// expected
+	// Users/cimy/coding/42/my_shell/microshell/src/libft/srcs
+
+	printf("BEFORE: %s\n", path);
+	printf("AFTER: %s\n", result);
+}
 
 // ***********************************************
 
