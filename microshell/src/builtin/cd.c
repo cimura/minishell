@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/05 16:18:03 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/07 21:06:46 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,47 @@ int	cd(char **args, t_env *env_lst)
 		return (1);
 	return (0);
 }
+
+static char	*canonical_file_path(char *path)
+{
+	char	**sp;
+	char	*result;
+	int		i;
+	int		ri;
+
+	sp = ft_split(path, '/');
+	result = malloc(ft_strlen(path) + 1);
+	i = 0;
+	ri = 0;
+	while (sp[i] != NULL)
+	{
+		if (sp[i + 1] != NULL && ft_strncmp(sp[i + 1], "..", 3) == 0)
+			i += 2;
+		else if (ft_strncmp(sp[i], ".", 2) == 0)
+		{
+			i++;
+			continue ;
+		}
+		ri += ft_strlcpy(&result[ri], "/", 2);
+		ri += ft_strlcpy(&result[ri], sp[i], ft_strlen(sp[i]) + 1);
+		i++;
+	}
+	free_ptr_array(sp);
+	result[ri] = '\0';
+	return (result);
+}
+
+// ******** test for cannonical_file_path ********
+
+//int	main() {
+//	char	*path = "/Users///cimy/./coding/../coding/42/../42/minishell/";
+//	char	*result = canonical_file_path(path);
+
+//	printf("BEFORE: %s\n", path);
+//	printf("AFTER: %s\n", result);
+//}
+
+// ***********************************************
 
 //int	main(int argc, char **argv, char **envp)
 //{
