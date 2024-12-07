@@ -12,7 +12,7 @@
 
 #include "utils.h"
 
-int	count_key_size(char *line_ptr)
+int	count_dollar_variable_size(char *line_ptr)
 {
 	int	size;
 

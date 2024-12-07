@@ -30,7 +30,7 @@ char	*expand_env_variable(t_env *env_lst, char *lst_line, int end_status);
 char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status);
 char	*non_expandble_str(char *new, char *line_ptr, char *stopper);
 int		count_until_char(char *line, char *needle);
-int		count_key_size(char *line_ptr);
+int		count_dollar_variable_size(char *line_ptr);
 char	*get_value_from_key(t_env *env_lst, char *key);
 
 // *** expand_quotes.c ***

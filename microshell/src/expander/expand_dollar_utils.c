@@ -15,21 +15,21 @@
 char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status)
 {
 	char	*to_expand;
-	char	*env_value;
+	char	*for_join;
 
-	to_expand = ft_strndup(line_ptr, count_key_size(line_ptr));
+	to_expand = ft_strndup(line_ptr, count_dollar_variable_size(line_ptr));
 	if (to_expand == NULL)
 		return (free(new), NULL);
-	if (to_expand[0] == '?')
-		env_value = ft_itoa(end_status);
-	else if (line_ptr[0] == '\0' || is_whitespace(line_ptr[0]))
-		env_value = ft_strdup("$");
+	if (*line_ptr == '?')
+		for_join = ft_itoa(end_status);
+	else if (*to_expand == '\0')
+		for_join = ft_strdup("$");
 	else
-		env_value = ft_strdup(get_value_from_key(env_lst, to_expand));
+		for_join = ft_strdup(get_value_from_key(env_lst, to_expand));
 	free(to_expand);
-	if (env_value == NULL)
+	if (for_join == NULL)
 		return (free(new), NULL);
-	new = ft_strmerge(new, env_value);
+	new = ft_strmerge(new, for_join);
 	return (new);
 }
 

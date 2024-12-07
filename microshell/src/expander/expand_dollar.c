@@ -37,7 +37,7 @@ static char	*double_quotes(t_env *env_lst, char *new,
 		if (line_ptr[i] == '$')
 		{
 			new = env_query(env_lst, new, &line_ptr[++i], end_status);
-			i += count_key_size(&line_ptr[i]);
+			i += count_dollar_variable_size(&line_ptr[i]);
 		}
 		else
 		{
@@ -73,7 +73,7 @@ static char	*join_expanded_word(char *new, t_env *env_lst,
 static int	skip_joined_word(char *line_ptr)
 {
 	if (line_ptr[0] == '$')
-		return (count_key_size(&line_ptr[1]) + 1);
+		return (count_dollar_variable_size(&line_ptr[1]) + 1);
 	else if (line_ptr[0] == '\'')
 		return (count_until_char(&line_ptr[1], "\'") + 2);
 	else if (line_ptr[0] == '\"')
