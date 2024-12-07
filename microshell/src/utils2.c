@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:46:20 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/04 17:40:09 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/07 19:39:16 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status)
 void	print_error_msg(char *cmd_name, bool arg_decorate,
 	char *arg_name, char *err_msg)
 {
-	int	pure_stdout;
+	int		pure_stdout;
 	char	*cmd_separator;
 	char	*arg_separator;
 
@@ -77,8 +77,8 @@ void	print_error_msg(char *cmd_name, bool arg_decorate,
 	pure_stdout = dup(STDOUT_FILENO);
 	dup2(STDERR_FILENO, STDOUT_FILENO);
 	if (arg_decorate)
-			printf("minishell: %s%s`%s'%s%s\n",
-		cmd_name, cmd_separator, arg_name, arg_separator, err_msg);
+		printf("minishell: %s%s`%s'%s%s\n",
+			cmd_name, cmd_separator, arg_name, arg_separator, err_msg);
 	else
 		printf("minishell: %s%s%s%s%s\n",
 			cmd_name, cmd_separator, arg_name, arg_separator, err_msg);

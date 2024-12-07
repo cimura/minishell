@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/03 18:27:07 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/07 19:39:46 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int		count_key_size(char *line_ptr);
 void	free_cmd_data(t_cmd_data *data);
 bool	is_redirection(char *arg);
 void	print_error_msg(char *cmd_name, bool arg_decorate,
-	char *arg_name, char *err_msg);
+			char *arg_name, char *err_msg);
 
 // *** main_helper.c ***
 void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status);
