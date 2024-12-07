@@ -58,7 +58,7 @@ static int	set_key_value(t_env *new, char *line)
 	int		vlen;
 
 	value_ptr = ft_strchr(line, '=') + 1;
-	klen = count_key_size(line);
+	klen = count_dollar_variable_size(line);
 	vlen = ft_strlen(value_ptr);
 	new->key = ft_strndup(line, klen);
 	if (new->key == NULL)
@@ -81,8 +81,8 @@ t_env	*get_node_from_key(t_env *env_lst, char *key)
 {
 	while (env_lst != NULL)
 	{
-		if (ft_strncmp(key, env_lst->key, count_key_size(key)) == 0
-			&& count_key_size(key) == count_key_size(env_lst->key))
+		if (ft_strncmp(key, env_lst->key, count_dollar_variable_size(key)) == 0
+			&& count_dollar_variable_size(key) == count_dollar_variable_size(env_lst->key))
 			return (env_lst);
 		env_lst = env_lst->next;
 	}

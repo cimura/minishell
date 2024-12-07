@@ -46,7 +46,7 @@ static char	*expand_dollar(t_env *env_lst, char *line, int end_status)
 		if (line[i] == '$')
 		{
 			new = env_query(env_lst, new, &line[++i], end_status);
-			i += count_key_size(&line[i]);
+			i += count_dollar_variable_size(&line[i]);
 		}
 		else
 		{

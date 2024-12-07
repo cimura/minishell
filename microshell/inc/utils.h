@@ -31,7 +31,7 @@ char	*ft_strmerge(char *s1, char *s2);;
 bool	is_whitespace(char check_chr);
 
 // *** utils2.c ***
-int		count_key_size(char *line_ptr);
+int		count_dollar_variable_size(char *line_ptr);
 void	free_cmd_data(t_cmd_data *data);
 bool	is_redirection(char *arg);
 void	print_error_msg(char *cmd_name, bool arg_decorate,
