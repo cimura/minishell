@@ -62,7 +62,7 @@ static int	ex_atoi(char *arg, int *status)
 	result = 0;
 	if (!ft_isnum(&arg[i]))
 	{
-		print_error_msg("exit", arg, "numeric argument required");
+		print_error_msg("exit", false, arg, "numeric argument required");
 		return (*status = 2, EXIT_FAILURE);
 	}
 	while (arg[i] <= '9' && arg[i] >= '0')
@@ -71,7 +71,7 @@ static int	ex_atoi(char *arg, int *status)
 		if ((result > ULONGLONG_MAX && sign == 1)
 			|| (result > (ULONGLONG_MAX + 1) && sign == -1))
 		{
-			print_error_msg("exit", arg, "numeric argument required");
+			print_error_msg("exit", false, arg, "numeric argument required");
 			return (*status = 2, EXIT_FAILURE);
 		}
 		i++;
@@ -89,7 +89,7 @@ int	ft_exit(char **args, int *status)
 		return (0);
 	if (args[1] != NULL)
 	{
-		print_error_msg("exit", NULL, "too many arguments");
+		print_error_msg("exit", false, "", "too many arguments");
 		*status = 1;
 		return (CONTINUE);
 	}

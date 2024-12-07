@@ -20,7 +20,7 @@ static void	sigint_handler_child(int signum)
 
 static void	sigquit_handler_child(int signum)
 {
-	ft_putstr_fd("Quit (core dumped)\n", STDOUT_FILENO);
+	ft_putstr_fd("Quit\n", STDOUT_FILENO);
 	(void)signum;
 }
 

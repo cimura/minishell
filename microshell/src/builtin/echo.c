@@ -13,6 +13,24 @@
 #include "builtin.h"
 #include "utils.h"
 
+bool	is_valid_option(char *arg)
+{
+	int		i;
+
+	if (arg[0] != '-')
+		return (false);
+	i = 1;
+	if (arg[1] == '\0')
+		return (false);
+	while (arg[i] != '\0')
+	{
+		if (arg[i] != 'n')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 int	echo(char **args)
 {
 	int	is_option;
@@ -25,7 +43,7 @@ int	echo(char **args)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		return (0);
 	}
-	while (args[i] != NULL && ft_strncmp(args[i], "-n", 3) == 0)
+	while (args[i] != NULL && is_valid_option(args[i]))
 	{
 		i++;
 		is_option = 1;

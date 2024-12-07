@@ -21,12 +21,12 @@ static int	dir_permission(char *arg)
 	{
 		if (S_ISDIR(st.st_mode))
 		{
-			print_error_msg(NULL, arg, "Is a directory");
+			print_error_msg("", false, arg, "Is a directory");
 			return (126);
 		}
 		else if (access(arg, X_OK) != 0)
 		{
-			print_error_msg(NULL, arg, "Permission denied");
+			print_error_msg("", false, arg, "Permission denied");
 			return (126);
 		}
 	}
@@ -45,7 +45,7 @@ int	check_permission(char **command_line)
 		return (dir_perm);
 	if (access(command_line[0], F_OK) != 0)
 	{
-		print_error_msg(NULL, command_line[0],
+		print_error_msg("", false, command_line[0],
 			"No such file or directory");
 		return (127);
 	}

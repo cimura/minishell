@@ -58,7 +58,7 @@ static char	*join_expanded_word(char *new, t_env *env_lst,
 	if (line[0] == '$')
 		new = env_query(env_lst, new, &line[1], end_status);
 	else if (line[0] == '~' && line[1] == '/')
-		new = ft_strdup(get_value_from_key(env_lst, "HOME"));
+		new = ft_strmerge(new, ft_strdup(get_value_from_key(env_lst, "HOME")));
 	else if (line[0] == '\'')
 		new = single_quotes(new, &line[1]);
 	else if (line[0] == '\"')
@@ -72,13 +72,13 @@ static char	*join_expanded_word(char *new, t_env *env_lst,
 
 static int	skip_joined_word(char *line_ptr)
 {
-	if (*line_ptr == '$')
-		return (count_key_size(++line_ptr) + 1);
-	else if (*line_ptr == '\'')
-		return (count_until_char(++line_ptr, "\'") + 2);
-	else if (*line_ptr == '\"')
-		return (count_until_char(++line_ptr, "\"") + 2);
-	else if (*line_ptr == '~' && line_ptr[1] == '/')
+	if (line_ptr[0] == '$')
+		return (count_key_size(&line_ptr[1]) + 1);
+	else if (line_ptr[0] == '\'')
+		return (count_until_char(&line_ptr[1], "\'") + 2);
+	else if (line_ptr[0] == '\"')
+		return (count_until_char(&line_ptr[1], "\"") + 2);
+	else if (line_ptr[0] == '~' && line_ptr[1] == '/')
 		return (1);
 	else
 		return (count_until_char(line_ptr, "$\'\""));

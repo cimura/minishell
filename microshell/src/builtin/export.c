@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "utils.h"
 
 static int	parse_argument(char *arg, int *status)
 {
@@ -94,7 +95,8 @@ static int	with_args(char **args, t_env *env_lst)
 		if (parse_argument(args[i], &status) == 1)
 		{
 			if (status == 1)
-				ft_putendl_fd(" not a valid identifier", STDERR_FILENO);
+				print_error_msg("export",
+					true, args[i], "not a valid identifier");
 			i++;
 			continue ;
 		}

@@ -34,7 +34,8 @@ bool	is_whitespace(char check_chr);
 int		count_key_size(char *line_ptr);
 void	free_cmd_data(t_cmd_data *data);
 bool	is_redirection(char *arg);
-void	print_error_msg(char *cmd_name, char *arg_name, char *err_msg);
+void	print_error_msg(char *cmd_name, bool arg_decorate,
+	char *arg_name, char *err_msg);
 
 // *** main_helper.c ***
 void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status);

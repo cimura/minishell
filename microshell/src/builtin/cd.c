@@ -24,13 +24,11 @@ static int	set_pwd(t_env *env_lst, char *flag)
 	if (pwd_node == NULL)
 		return (0);
 	cwd = getcwd(NULL, 0);
-	if (cwd == NULL)
+	if (cwd)
 	{
-		perror("getcwd");
-		return (1);
+		free(pwd_node->value);
+		pwd_node->value = cwd;
 	}
-	free(pwd_node->value);
-	pwd_node->value = cwd;
 	return (0);
 }
 
@@ -55,7 +53,7 @@ static int	change_dir(t_env *env_lst, char *arg, char *oldpwd)
 	{
 		status = chdir(get_value_from_key(env_lst, "HOME"));
 		if (status != 0)
-			ft_putendl_fd("cd: HOME not set", STDERR_FILENO);
+			print_error_msg("cd", false, "", "HOME not set");
 	}
 	else
 	{
@@ -63,7 +61,7 @@ static int	change_dir(t_env *env_lst, char *arg, char *oldpwd)
 		{
 			status = chdir(oldpwd);
 			if (status != 0)
-				ft_putendl_fd("cd: OLDPWD not set", STDERR_FILENO);
+				print_error_msg("cd", false, "", "OLDPWD not set");
 			else
 				ft_putendl_fd(oldpwd, STDOUT_FILENO);
 		}
@@ -81,7 +79,7 @@ int	cd(char **args, t_env *env_lst)
 		return (1);
 	if (args[0] != NULL && args[1] != NULL)
 	{
-		print_error_msg("cd", NULL, "too many arguments");
+		print_error_msg("cd", false, "", "too many arguments");
 		return (1);
 	}
 	old = ft_strdup(get_value_from_key(env_lst, OLD));

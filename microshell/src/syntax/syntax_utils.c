@@ -49,13 +49,13 @@ static int	check_redirection_token(char *arg, char *next, t_env *env_lst)
 	{
 		if (next == NULL)
 		{
-			print_error_msg(NULL, NULL, "syntax error");
+			print_error_msg("", false, "", "syntax error");
 			return (2);
 		}
 		else if (next[0] == '$' && !is_envnode_exist(env_lst, &next[1])
 			&& ft_strncmp(arg, "<<", 3) != 0)
 		{
-			print_error_msg(NULL, next, "ambiguous redirect");
+			print_error_msg("", false, next, "ambiguous redirect");
 			return (1);
 		}
 	}

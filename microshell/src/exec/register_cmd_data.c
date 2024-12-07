@@ -43,8 +43,6 @@ static int	set_cmd_in_path(char *cmd, char **com_sep, char **path)
 	return (0);
 }
 
-#define PATH_NOT_FOUND 127
-
 static int	register_path(char *cmd, char **path, t_env *env_lst)
 {
 	char	*path_value;
@@ -66,7 +64,7 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	}
 	if (path_value[0] == '\0' && access(cmd, F_OK) != 0)
 	{
-		print_error_msg(cmd, NULL, "No such file or directory");
+		print_error_msg(cmd, false, "", "No such file or directory");
 		return (127);
 	}
 	return (0);
@@ -110,18 +108,16 @@ t_cmd_data	*register_cmd_data(t_command_lst *per_pipe,
 	cmd_data = malloc(sizeof(t_cmd_data));
 	if (cmd_data == NULL)
 		return (*status = 1, NULL);
+	cmd_data->cmd = filter_cmd_args(per_pipe);
+	if (cmd_data->cmd == NULL)
+		return (*status = 1, free(cmd_data), NULL);
 	cmd_data->path = NULL;
 	if (!is_builtin(per_pipe->command_line))
 	{
-		*status = register_path(per_pipe->command_line[0],
+		*status = register_path(cmd_data->cmd[0],
 				&(cmd_data->path), env_lst);
-		if (*status == 1)
-			return (free(cmd_data), NULL);
-		else if (*status == PATH_NOT_FOUND)
-			return (free(cmd_data), NULL);
+		if (*status != 0)
+			return (free_ptr_array(cmd_data->cmd), free(cmd_data), NULL);
 	}
-	cmd_data->cmd = filter_cmd_args(per_pipe);
-	if (cmd_data->cmd == NULL)
-		return (*status = 1, free(cmd_data->path), free(cmd_data), NULL);
 	return (cmd_data);
 }
