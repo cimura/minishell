@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/07 21:06:46 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/07 21:15:06 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ static char	*canonical_file_path(char *path)
 		i++;
 	}
 	free_ptr_array(sp);
-	result[ri] = '\0';
 	return (result);
 }
 
