@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:24:44 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/06 15:06:53 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/08 18:08:03 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,21 @@ char	**create_until_pipe_array(t_list *normal, int size)
 	return (command_line);
 }
 
-bool	*create_is_expanded_array(int size)
+int	*create_is_expanded_array(int size)
 {
-	bool	*is_expanded;
+	int	*is_expanded;
 	int		i;
 
-	is_expanded = malloc((size + 1) * sizeof(bool));
+	is_expanded = malloc((size + 1) * sizeof(int));
 	if (is_expanded == NULL)
 		return (NULL);
 	i = 0;
 	while (i < size)
 	{
-		is_expanded[i] = false;
+		is_expanded[i] = NONE;
 		i++;
 	}
-	is_expanded[i] = NULL;
+	is_expanded[i] = -1;
 	return (is_expanded);
 }
 

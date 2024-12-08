@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:41:24 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static char	*join_expanded_word(char *new, t_env *env_lst,
 {
 	if (line[0] == '$')
 		new = env_query(env_lst, new, &line[1], end_status);
-	else if (line[0] == '~' && line[1] == '/')
+	else if (line[0] == '~' && (line[1] == '/' || line[1] == '\0'))
 		new = ft_strmerge(new, ft_strdup(get_value_from_key(env_lst, "HOME")));
 	else if (line[0] == '\'')
 		new = single_quotes(new, &line[1]);
@@ -78,7 +78,7 @@ static int	skip_joined_word(char *line_ptr)
 		return (count_until_char(&line_ptr[1], "\'") + 2);
 	else if (line_ptr[0] == '\"')
 		return (count_until_char(&line_ptr[1], "\"") + 2);
-	else if (line_ptr[0] == '~' && line_ptr[1] == '/')
+	else if (line_ptr[0] == '~' && (line_ptr[1] == '/' || line_ptr[1] == '\0'))
 		return (1);
 	else
 		return (count_until_char(line_ptr, "$\'\""));

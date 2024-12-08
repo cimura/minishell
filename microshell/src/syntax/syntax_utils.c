@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:20:02 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/08 15:57:42 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 19:09:04 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,18 @@ int	check_quotation(char *line)
 	return (0);
 }
 
-static bool	is_ifs_in_env_variable(t_env *env_lst, char *key)
+bool	is_ifs_in_str(t_env *env_lst, char *str)
 {
 	char	*ifs;
-	char	*value;
 	int		i;
 
 	ifs = " \t\n";
 	if (is_envnode_exist(env_lst, "IFS"))
 		ifs = get_value_from_key(env_lst, "IFS");
-	value = get_value_from_key(env_lst, key);
 	i = 0;
-	while (value[i])
+	while (str[i])
 	{
-		if (ft_strchr(ifs, value[i]))
+		if (ft_strchr(ifs, str[i]))
 			return (true);
 		i++;
 	}
@@ -75,7 +73,7 @@ static int	check_redirection_token(char *arg, char *next, t_env *env_lst)
 		else if (next[0] == '$'
 			&& ((!is_envnode_exist(env_lst, &next[1])
 					&& ft_strncmp(arg, "<<", 3))
-				|| (is_ifs_in_env_variable(env_lst, &next[1])
+				|| (is_ifs_in_str(env_lst, get_value_from_key(env_lst, &next[1]))
 					&& ft_strncmp(arg, "<<", 2))))
 		{
 			print_error_msg("", false, next, "ambiguous redirect");

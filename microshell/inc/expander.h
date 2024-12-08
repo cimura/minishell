@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 19:28:26 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@
 # include "libft.h"
 # include "env_lst.h"
 # include "utils.h"
+
+typedef struct	s_expand_lst
+{
+	char				*str;
+	int					status;
+	struct s_expand_lst	*next;
+}	t_expand_lst;
 
 // *** expander.c ***
 int		expander(t_env *env_lst, t_command_lst *per_pipe, int end_status);
