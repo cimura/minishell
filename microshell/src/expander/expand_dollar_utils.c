@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:32:36 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/04 20:12:00 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status)
 	char	*to_expand;
 	char	*for_join;
 
-	to_expand = ft_strndup(line_ptr, count_dollar_variable_size(line_ptr));
+	to_expand = ft_strndup(line_ptr, dollar_variable_size(line_ptr));
 	if (to_expand == NULL)
 		return (free(new), NULL);
 	if (*line_ptr == '?')

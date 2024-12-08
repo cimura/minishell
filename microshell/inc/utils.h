@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/07 19:39:46 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_strmerge(char *s1, char *s2);;
 bool	is_whitespace(char check_chr);
 
 // *** utils2.c ***
-int		count_dollar_variable_size(char *line_ptr);
+int		dollar_variable_size(char *line_ptr);
 void	free_cmd_data(t_cmd_data *data);
 bool	is_redirection(char *arg);
 void	print_error_msg(char *cmd_name, bool arg_decorate,

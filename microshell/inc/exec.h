@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/05 15:58:43 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:00:32 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void		close_purefd(t_file_descripter fd);
 void		initialize_fd(t_file_descripter *fd);
 int			command_lstsize(t_command_lst *per_pipe);
 void		wait_all_commands(t_command_lst *head, int *end_status);
+void		print_error_msg_non_shellname(char *cmd_name, char *err_msg);
 
 // *** commands.c ***
 int			first_command(t_command_lst *per_pipe, t_env *env_lst,
@@ -79,11 +80,5 @@ void		execve_command(t_cmd_data *until_redirection,
 				int *end_status, char **envp);
 void		execute_builtin_command(char **cmd, t_env *env_lst,
 				t_file_descripter fd, int *end_status);
-
-// *** env_lst_to_array.c ***
-char		**env_lst_to_array(t_env *env_lst);
-
-// *** utils.c ***
-void		free_cmd_data(t_cmd_data *data);
 
 #endif

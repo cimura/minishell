@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:27:28 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/04 19:25:49 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 15:21:30 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,8 @@ t_env	*create_env_lst(char *envp[]);
 // *** env_lst_utils.c ***
 char	*get_value_from_key(t_env *env_lst, char *key);
 bool	is_envnode_exist(t_env *env_lst, char *key);
+
+// *** env_lst_to_array.c ***
+char	**env_lst_to_array(t_env *env_lst);
 
 #endif

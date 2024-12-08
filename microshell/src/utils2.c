@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:46:20 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/07 19:39:16 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-int	count_dollar_variable_size(char *line_ptr)
+int	dollar_variable_size(char *line_ptr)
 {
 	int	size;
 

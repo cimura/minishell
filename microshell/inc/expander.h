@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:49:07 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/03 18:29:27 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*expand_env_variable(t_env *env_lst, char *lst_line, int end_status);
 char	*env_query(t_env *env_lst, char *new, char *line_ptr, int end_status);
 char	*non_expandble_str(char *new, char *line_ptr, char *stopper);
 int		count_until_char(char *line, char *needle);
-int		count_dollar_variable_size(char *line_ptr);
+int		dollar_variable_size(char *line_ptr);
 char	*get_value_from_key(t_env *env_lst, char *key);
 
 // *** expand_quotes.c ***

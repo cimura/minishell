@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/05 17:35:08 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static char	*expand_dollar(t_env *env_lst, char *line, int end_status)
 		if (line[i] == '$')
 		{
 			new = env_query(env_lst, new, &line[++i], end_status);
-			i += count_dollar_variable_size(&line[i]);
+			i += dollar_variable_size(&line[i]);
 		}
 		else
 		{

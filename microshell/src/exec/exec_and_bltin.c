@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/07 19:38:57 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/08 15:18:22 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	is_executable(t_cmd_data *until_redirection, int *end_status)
 		&& until_redirection->path == NULL
 		&& ft_strchr(until_redirection->cmd[0], '/') == NULL)
 	{
-		print_error_msg("", false, until_redirection->cmd[0],
+		print_error_msg_non_shellname(until_redirection->cmd[0],
 			"command not found");
 		*end_status = 127;
 		return (false);
@@ -84,7 +84,7 @@ void	execve_command(t_cmd_data *until_redirection,
 	if (execve(until_redirection->path,
 			until_redirection->cmd, envp) == -1)
 	{
-		print_error_msg("", false, until_redirection->cmd[0],
+		print_error_msg_non_shellname(until_redirection->cmd[0],
 			"command not found");
 	}
 	*end_status = 127;

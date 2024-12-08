@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:02:34 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/02 14:12:48 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:18:58 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,15 @@ void	wait_all_commands(t_command_lst *head, int *end_status)
 			*end_status = 128 + WTERMSIG(*end_status);
 		head = head->next;
 	}
+}
+
+void	print_error_msg_non_shellname(char *cmd_name, char *err_msg)
+{
+	int	pure_stdout;
+
+	pure_stdout = dup(STDOUT_FILENO);
+	dup2(STDERR_FILENO, STDOUT_FILENO);
+	printf("%s: %s\n", cmd_name, err_msg);
+	dup2(pure_stdout, STDOUT_FILENO);
+	close(pure_stdout);
 }

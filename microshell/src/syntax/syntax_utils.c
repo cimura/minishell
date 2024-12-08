@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:20:02 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/06 16:46:01 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:57:42 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,26 @@ int	check_quotation(char *line)
 	return (0);
 }
 
+static bool	is_ifs_in_env_variable(t_env *env_lst, char *key)
+{
+	char	*ifs;
+	char	*value;
+	int		i;
+
+	ifs = " \t\n";
+	if (is_envnode_exist(env_lst, "IFS"))
+		ifs = get_value_from_key(env_lst, "IFS");
+	value = get_value_from_key(env_lst, key);
+	i = 0;
+	while (value[i])
+	{
+		if (ft_strchr(ifs, value[i]))
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 static int	check_redirection_token(char *arg, char *next, t_env *env_lst)
 {
 	if (is_redirection(arg))
@@ -52,8 +72,11 @@ static int	check_redirection_token(char *arg, char *next, t_env *env_lst)
 			print_error_msg("", false, "", "syntax error");
 			return (2);
 		}
-		else if (next[0] == '$' && !is_envnode_exist(env_lst, &next[1])
-			&& ft_strncmp(arg, "<<", 3) != 0)
+		else if (next[0] == '$'
+			&& ((!is_envnode_exist(env_lst, &next[1])
+					&& ft_strncmp(arg, "<<", 3))
+				|| (is_ifs_in_env_variable(env_lst, &next[1])
+					&& ft_strncmp(arg, "<<", 2))))
 		{
 			print_error_msg("", false, next, "ambiguous redirect");
 			return (1);

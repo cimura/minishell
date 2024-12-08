@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 17:42:54 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/05 16:10:19 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*double_quotes(t_env *env_lst, char *new,
 		if (line_ptr[i] == '$')
 		{
 			new = env_query(env_lst, new, &line_ptr[++i], end_status);
-			i += count_dollar_variable_size(&line_ptr[i]);
+			i += dollar_variable_size(&line_ptr[i]);
 		}
 		else
 		{
@@ -73,7 +73,7 @@ static char	*join_expanded_word(char *new, t_env *env_lst,
 static int	skip_joined_word(char *line_ptr)
 {
 	if (line_ptr[0] == '$')
-		return (count_dollar_variable_size(&line_ptr[1]) + 1);
+		return (dollar_variable_size(&line_ptr[1]) + 1);
 	else if (line_ptr[0] == '\'')
 		return (count_until_char(&line_ptr[1], "\'") + 2);
 	else if (line_ptr[0] == '\"')

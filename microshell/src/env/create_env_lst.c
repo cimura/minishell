@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:47:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/05 16:30:58 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/08 16:00:00 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	set_key_value(t_env *new, char *line)
 	int		vlen;
 
 	value_ptr = ft_strchr(line, '=') + 1;
-	klen = count_dollar_variable_size(line);
+	klen = dollar_variable_size(line);
 	vlen = ft_strlen(value_ptr);
 	new->key = ft_strndup(line, klen);
 	if (new->key == NULL)
@@ -81,8 +81,8 @@ t_env	*get_node_from_key(t_env *env_lst, char *key)
 {
 	while (env_lst != NULL)
 	{
-		if (ft_strncmp(key, env_lst->key, count_dollar_variable_size(key)) == 0
-			&& count_dollar_variable_size(key) == count_dollar_variable_size(env_lst->key))
+		if (ft_strncmp(key, env_lst->key, dollar_variable_size(key)) == 0
+			&& dollar_variable_size(key) == dollar_variable_size(env_lst->key))
 			return (env_lst);
 		env_lst = env_lst->next;
 	}
