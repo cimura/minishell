@@ -16,7 +16,7 @@ EXEC_SRCS := commands.c command_executor_utils.c command_executor.c register_cmd
 EXEC := $(addprefix $(OBJ_DIR)exec/, $(EXEC_SRCS:.c=.o))
 
 EXPANDER_DIR := src/expander/
-EXPANDER_SRCS := expander.c expand_dollar.c expand_dollar_utils.c expand_quotes.c
+EXPANDER_SRCS := expander.c expander_lst.c add_node_with_split_ifs.c expand_dollar.c expand_dollar_utils.c expand_quotes.c
 EXPANDER := $(addprefix $(OBJ_DIR)expander/, $(EXPANDER_SRCS:.c=.o))
 
 PARSER_DIR := src/parser/
@@ -32,7 +32,7 @@ SYNTAX_SRC := syntax_utils.c check_syntax.c
 SYNTAX := $(addprefix $(OBJ_DIR)syntax/, $(SYNTAX_SRC:.c=.o))
 
 MINISHELL_DIR := src/
-MINISHELL_SRC := main.c utils.c utils2.c
+MINISHELL_SRC := main.c utils.c utils2.c utils3.c
 MINISHELL := $(addprefix $(OBJ_DIR), $(MINISHELL_SRC:.c=.o))
 
 OBJS := $(BUILTIN) $(ENV) $(EXEC) $(EXPANDER) $(PARSER) $(SIGNAL) $(SYNTAX) $(MINISHELL)

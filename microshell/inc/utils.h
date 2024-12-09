@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/09 15:19:39 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ void	free_cmd_data(t_cmd_data *data);
 bool	is_redirection(char *arg);
 void	print_error_msg(char *cmd_name, bool arg_decorate,
 			char *arg_name, char *err_msg);
+
+// *** utils3.c ***
+bool	is_ifs_in_str(t_env *env_lst, char *str);
+int		ft_strcmp(const char *s1, const char *s2);
 
 // *** main_helper.c ***
 void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status);

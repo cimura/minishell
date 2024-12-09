@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   register_cmd_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/06 16:59:29 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:16:24 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ static int	set_cmd_in_path(char *cmd, char **com_sep, char **path)
 	char	*candidate;
 	int		i;
 
-	if (ft_strchr(cmd, '/') != NULL)
-		return (0);
 	i = 0;
 	while (com_sep[i])
 	{
@@ -48,20 +46,20 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	char	*path_value;
 	char	**com_sep;
 
-	*path = NULL;
-	path_value = get_value_from_key(env_lst, "PATH");
-	com_sep = ft_split(path_value, ':');
-	if (com_sep == NULL)
-		return (1);
-	if (set_cmd_in_path(cmd, com_sep, path) == 1)
-		return (free_ptr_array(com_sep), 1);
-	free_ptr_array(com_sep);
-	if (*path == NULL && access(cmd, F_OK) == 0)
+	if (cmd && ft_strchr(cmd, '/') != NULL && access(cmd, F_OK) == 0)
 	{
 		*path = ft_strdup(cmd);
 		if (*path == NULL)
 			return (1);
+		return (0);
 	}
+	path_value = get_value_from_key(env_lst, "PATH");
+	com_sep = ft_split(path_value, ':');
+	if (com_sep == NULL)
+		return (1);
+	if (cmd && set_cmd_in_path(cmd, com_sep, path) == 1)
+		return (free_ptr_array(com_sep), 1);
+	free_ptr_array(com_sep);
 	if (path_value[0] == '\0' && access(cmd, F_OK) != 0)
 	{
 		print_error_msg(cmd, false, "", "No such file or directory");

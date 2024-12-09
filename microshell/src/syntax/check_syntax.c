@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:32 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/05 15:59:10 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/09 18:23:03 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ int	check_syntax_before_parser(char *line, int *status)
 {
 	if (line[0] == '|' && (line[1] == '\0' || is_whitespace(line[1])))
 	{
-		ft_putendl_fd("syntax error", STDERR_FILENO);
+		print_error_msg("", false, "", "syntax error");
 		*status = 2;
 		return (CONTINUE);
 	}
 	if (check_quotation(line) == 1)
 	{
-		ft_putendl_fd("syntax error", STDERR_FILENO);
+		print_error_msg("", false, "", "syntax error");
 		*status = 2;
 		return (CONTINUE);
 	}

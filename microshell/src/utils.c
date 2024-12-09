@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:36:17 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 16:58:45 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/09 18:17:45 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,45 @@ bool	is_whitespace(char check_chr)
 	else
 		return (false);
 }
+
+// void	d_print_per_pipe(t_command_lst *lst)
+// {
+// 	int	i;
+
+// 	while (lst != NULL)
+// 	{
+// 		i = 0;
+// 		while (lst->command_line[i] != NULL)
+// 		{
+// 			printf("%s: %d\n", lst->command_line[i], lst->is_expanded[i]);
+// 			i++;
+// 		}
+// 		if (lst->next != NULL)
+// 			printf("-------------pipe-------------\n");
+// 		lst = lst->next;
+// 	}
+// }
+
+// void	d_print_until_redirection(t_cmd_data *until_redirection)
+// {
+// 	int	i;
+
+// 	if (until_redirection != NULL)
+// 		printf("-----------until_redirection-----------\n");
+// 	i = 0;
+// 	if (until_redirection->path != NULL)
+// 		printf("path = %s\n", until_redirection->path);
+// 	if (until_redirection->cmd != NULL)
+// 	{
+// 		printf("cmd = \n");
+// 		while (until_redirection->cmd[i] != NULL)
+// 		{
+// 			printf("%s\n", until_redirection->cmd[i]);
+// 			i++;
+// 		}
+// 	}
+// 	printf("------------------end-------------------\n");
+// }
 
 // void	d_print_char_array(char **array)
 // {

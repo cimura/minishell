@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:24:44 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/08 18:08:03 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/09 18:14:35 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	**create_until_pipe_array(t_list *normal, int size)
 int	*create_is_expanded_array(int size)
 {
 	int	*is_expanded;
-	int		i;
+	int	i;
 
 	is_expanded = malloc((size + 1) * sizeof(int));
 	if (is_expanded == NULL)
@@ -84,7 +84,7 @@ int	*create_is_expanded_array(int size)
 		is_expanded[i] = NONE;
 		i++;
 	}
-	is_expanded[i] = -1;
+	is_expanded[i] = END;
 	return (is_expanded);
 }
 
