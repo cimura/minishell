@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/08 23:24:54 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/09 21:47:57 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #define OLD "OLDPWD"
 #define NEW "PWD"
 
-static int	set_pwd(t_env *env_lst, char *flag)
+static int	set_pwd(t_env *env_lst, char *key)
 {
 	t_env	*pwd_node;
 	char	*cwd;
 
-	pwd_node = get_node_from_key(env_lst, flag);
+	pwd_node = get_node_from_key(env_lst, key);
 	if (pwd_node == NULL)
 		return (0);
 	cwd = getcwd(NULL, 0);
@@ -32,11 +32,11 @@ static int	set_pwd(t_env *env_lst, char *flag)
 	return (0);
 }
 
-static int	rapper_chdir(char *arg)
+static int	rapper_chdir(char *arg, char *cwd)
 {
 	int	status;
 
-	status = chdir(arg);
+	status = chdir(normalize_path(arg, cwd));
 	if (status != 0)
 	{
 		ft_putstr_fd("cd: ", STDERR_FILENO);
@@ -59,14 +59,14 @@ static int	change_dir(t_env *env_lst, char *arg, char *oldpwd)
 	{
 		if (ft_strncmp(arg, "-", 2) == 0)
 		{
-			status = chdir(oldpwd);
+			status = chdir(normalize_path(arg, env_lst->cwd));
 			if (status != 0)
 				print_error_msg("cd", false, "", "OLDPWD not set");
 			else
 				ft_putendl_fd(oldpwd, STDOUT_FILENO);
 		}
 		else
-			status = rapper_chdir(arg);
+			status = rapper_chdir(arg, env_lst->cwd);
 	}
 	return (status);
 }
@@ -77,11 +77,6 @@ int	cd(char **args, t_env *env_lst)
 
 	if (args == NULL)
 		return (1);
-	if (args[0] != NULL && args[1] != NULL)
-	{
-		print_error_msg("cd", false, "", "too many arguments");
-		return (1);
-	}
 	old = ft_strdup(get_value_from_key(env_lst, OLD));
 	if (old == NULL)
 		return (1);
@@ -92,6 +87,11 @@ int	cd(char **args, t_env *env_lst)
 	free(old);
 	if (set_pwd(env_lst, NEW) != 0)
 		return (1);
+	if (args[0] != NULL && args[1] != NULL)
+	{
+		print_error_msg("cd", false, "", "too many arguments");
+		return (1);
+	}
 	return (0);
 }
 

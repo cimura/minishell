@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 18:17:12 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/09 21:38:05 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ static int	preprocess_command(t_env *env_lst, t_command_lst **per_pipe,
 	}
 	if (expander(env_lst, *per_pipe, *status) != 0)
 		clear_exit(env_lst, *per_pipe, EXIT_FAILURE);
+	env_lst->cwd = ft_strdup(get_value_from_key(env_lst, "PWD"));
+	if (env_lst->cwd == NULL)
+		return (1);
 	return (0);
 }
 

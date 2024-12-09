@@ -6,48 +6,12 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 23:24:08 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 12:55:28 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/09 21:49:44 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "utils.h"
-
-typedef struct	s_stack
-{
-	int		tail;
-	int		max;
-	char	**ptr;
-}	t_stack;
-
-static int	init_stack(t_stack **stack, char **sp)
-{
-	*stack = malloc(sizeof(t_stack));
-	if (*stack == NULL)
-		return (1);
-	(*stack)->tail = -1;
-	(*stack)->max = count_char_array_words(sp) + 1;
-	(*stack)->ptr = sp;
-	if ((*stack)->ptr == NULL)
-		return (1);
-	return (0);
-}
-
-static void	push(t_stack **stack, char *arg)
-{
-	if ((*stack)->tail > (*stack)->max)
-		return ;
-	(*stack)->tail++;
-	(*stack)->ptr[(*stack)->tail] = arg;
-}
-
-static void	pop(t_stack **stack)
-{
-	if ((*stack)->tail == -1)
-		return ;
-	(*stack)->ptr[(*stack)->tail] = NULL;
-	(*stack)->tail--;
-}
 
 static char	**val_manager(const char *path, char *pwd)
 {
@@ -131,28 +95,25 @@ char	*normalize_path(const char *path, char *pwd)
 
 // ******** test for normalize_path ********
 
-#include <string.h>
-#define GREEN "\x1b[32m"
-#define RED "\x1b[31m"
-#define RESET "\x1b[0m"
+//#include <string.h>
+//#define GREEN "\x1b[32m"
+//#define RED "\x1b[31m"
+//#define RESET "\x1b[0m"
 
-int	main() {
-	char	*path = "./A/B/C/../D/E////F/..///././.";
-	char	*result = normalize_path(path, "/It's/PWD/PATH");
+//int	main() {
+//	char	*path = "./A/B/C/../D/E////F/..///././.";
+//	char	*result = normalize_path(path, "/It's/PWD/PATH");
 
-	/*
-	 	expected
-		/It's/PWD/PATH/A/B/D/E
-	*/
+//	/*
+//	 	expected
+//		/It's/PWD/PATH/A/B/D/E
+//	*/
 
-	printf("BEFORE	:%s\n", path);
-	printf("AFTER	:%s\n", result);
-}
+//	printf("BEFORE	:%s\n", path);
+//	printf("AFTER	:%s\n", result);
+//}
 
 // **********************************************
-
-
-
 //static char	*normalize_path(const char *path, char *pwd)
 //{
 //	char	**sp;

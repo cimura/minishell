@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 18:17:32 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/09 21:10:02 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	execute_builtin_command(char **cmd, t_env *env_lst,
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
 		*end_status = export(&cmd[1], env_lst);
 	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
-		*end_status = pwd();
+		*end_status = pwd(env_lst->cwd);
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		*end_status = unset(&cmd[1], env_lst);
 	dup2(fd.pure_stdout, STDOUT_FILENO);

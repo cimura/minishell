@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:24:16 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/09 18:16:20 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/09 21:33:50 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static int	handle_quotes_env_variable(t_env *env_lst,
 			local_status = add_node_with_split_ifs(env_lst, &head, expanded);
 		else if (per_pipe->is_expanded[i] != ENV || *expanded != '\0'
 			|| is_envnode_exist(env_lst, &per_pipe->command_line[i][1]))
-				local_status = add_new_node_expand_lst(&head,
+			local_status = add_new_node_expand_lst(&head,
 					expanded, per_pipe->is_expanded[i]);
 		if (local_status != 0)
 			return (expand_lstclear(&head), free(expanded), 1);

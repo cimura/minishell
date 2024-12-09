@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/29 14:00:03 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:52:26 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,29 @@
 # include <fcntl.h>
 # include "env_lst.h"
 
+typedef struct s_stack
+{
+	int		tail;
+	int		max;
+	char	**ptr;
+}	t_stack;
+
 // *** builtin ***
 int		cd(char **args, t_env *env_lst);
 int		echo(char **args);
 int		env(t_env *env_lst);
 int		ft_exit(char **args, int *status);
 int		export(char **args, t_env *env_lst);
-int		pwd(void);
+int		pwd(char *cwd);
 int		unset(char **args, t_env *env_lst);
+
+// *** cd_stack.c ***
+int		init_stack(t_stack **stack, char **sp);
+void	push(t_stack **stack, char *arg);
+void	pop(t_stack **stack);
+
+// *** normalize_path.c ***
+char	*normalize_path(const char *path, char *pwd);
 
 // *** export_util.c ***
 int		generate_new_value(t_env *old_node, char *arg);
