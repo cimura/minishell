@@ -6,29 +6,28 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 23:24:08 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 00:28:26 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/09 12:55:28 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "utils.h"
 
-#define MAX_LEN 1024
-#define MAX_PATH_NUM 4096
-
 typedef struct	s_stack
 {
 	int		tail;
+	int		max;
 	char	**ptr;
 }	t_stack;
 
-static int	init_stack(t_stack **stack)
+static int	init_stack(t_stack **stack, char **sp)
 {
 	*stack = malloc(sizeof(t_stack));
 	if (*stack == NULL)
 		return (1);
 	(*stack)->tail = -1;
-	(*stack)->ptr = malloc(sizeof(char *) * MAX_PATH_NUM);
+	(*stack)->max = count_char_array_words(sp) + 1;
+	(*stack)->ptr = sp;
 	if ((*stack)->ptr == NULL)
 		return (1);
 	return (0);
@@ -36,7 +35,7 @@ static int	init_stack(t_stack **stack)
 
 static void	push(t_stack **stack, char *arg)
 {
-	if ((*stack)->tail > MAX_LEN)
+	if ((*stack)->tail > (*stack)->max)
 		return ;
 	(*stack)->tail++;
 	(*stack)->ptr[(*stack)->tail] = arg;
@@ -84,10 +83,10 @@ static int	create_stack(const char *path, char *pwd, t_stack **stack)
 	int		i;
 	char	**sp;
 
-	if (init_stack(stack) == 1)
-		return (1);
 	sp = val_manager(path, pwd);
 	if (sp == NULL)
+		return (1);
+	if (init_stack(stack, sp) == 1)
 		return (1);
 	i = 0;
 	while (sp[i] != NULL)
@@ -100,6 +99,7 @@ static int	create_stack(const char *path, char *pwd, t_stack **stack)
 			push(stack, sp[i]);
 		i++;
 	}
+	(*stack)->ptr[(*stack)->tail + 1] = NULL;
 	return (0);
 }
 
@@ -117,7 +117,7 @@ char	*normalize_path(const char *path, char *pwd)
 		return (NULL);
 	if (create_stack(path, pwd, &stack) == 1)
 		return (NULL);
-	if (stack->ptr[i] == NULL)
+	if (stack->ptr[0] == NULL)
 		return ("/");
 	while (stack->ptr[i] != NULL)
 	{
@@ -137,11 +137,13 @@ char	*normalize_path(const char *path, char *pwd)
 #define RESET "\x1b[0m"
 
 int	main() {
-	char	*path = "../../../../../";
+	char	*path = "./A/B/C/../D/E////F/..///././.";
 	char	*result = normalize_path(path, "/It's/PWD/PATH");
 
-	// expected
-	// Users/cimy/coding/42/my_shell/microshell/src/libft/srcs
+	/*
+	 	expected
+		/It's/PWD/PATH/A/B/D/E
+	*/
 
 	printf("BEFORE	:%s\n", path);
 	printf("AFTER	:%s\n", result);
