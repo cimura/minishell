@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 21:38:05 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 00:24:22 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	no_pipe_exit(t_env *env_lst, t_command_lst *per_pipe, int *status)
 	if (per_pipe->command_line[0] != NULL && per_pipe->next == NULL
 		&& ft_strncmp(per_pipe->command_line[0], "exit", 5) == 0)
 	{
-		if (ft_exit(&per_pipe->command_line[1], status) == CONTINUE)
+		if (ft_exit(&per_pipe->command_line[1], status, NOPIPE) == CONTINUE)
 		{
 			command_lstclear(&per_pipe);
 			return (CONTINUE);

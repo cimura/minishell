@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/04 16:47:21 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 00:22:38 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,10 @@ static int	ex_atoi(char *arg, int *status)
 	return (EXIT_SUCCESS);
 }
 
-int	ft_exit(char **args, int *status)
+int	ft_exit(char **args, int *status, int print)
 {
-	ft_putendl_fd("exit", STDOUT_FILENO);
+	if (print == NOPIPE)
+		ft_putendl_fd("exit", STDOUT_FILENO);
 	if (args == NULL || args[0] == NULL)
 		return (0);
 	if (ex_atoi(args[0], status) == EXIT_FAILURE)

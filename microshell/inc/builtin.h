@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/09 21:52:26 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 00:23:57 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,17 @@ typedef struct s_stack
 	char	**ptr;
 }	t_stack;
 
+enum
+{
+	NOPIPE,
+	WITHPIPE
+};
+
 // *** builtin ***
 int		cd(char **args, t_env *env_lst);
 int		echo(char **args);
 int		env(t_env *env_lst);
-int		ft_exit(char **args, int *status);
+int		ft_exit(char **args, int *status, int print);
 int		export(char **args, t_env *env_lst);
 int		pwd(char *cwd);
 int		unset(char **args, t_env *env_lst);

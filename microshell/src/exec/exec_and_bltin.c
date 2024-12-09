@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 21:10:02 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 00:26:02 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	execute_builtin_command(char **cmd, t_env *env_lst,
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
 		*end_status = env(env_lst);
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
-		ft_exit(&cmd[1], end_status);
+		ft_exit(&cmd[1], end_status, WITHPIPE);
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
 		*end_status = export(&cmd[1], env_lst);
 	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
