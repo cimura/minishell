@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 16:16:24 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 15:40:00 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,20 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	char	*path_value;
 	char	**com_sep;
 
-	if (cmd && ft_strchr(cmd, '/') != NULL && access(cmd, F_OK) == 0)
-	{
-		*path = ft_strdup(cmd);
-		if (*path == NULL)
-			return (1);
-		return (0);
-	}
 	path_value = get_value_from_key(env_lst, "PATH");
 	com_sep = ft_split(path_value, ':');
 	if (com_sep == NULL)
 		return (1);
-	if (cmd && set_cmd_in_path(cmd, com_sep, path) == 1)
+	if (cmd && ft_strchr(cmd, '/') == NULL
+		&& set_cmd_in_path(cmd, com_sep, path) == 1)
 		return (free_ptr_array(com_sep), 1);
 	free_ptr_array(com_sep);
+	if (*path == NULL && cmd && access(cmd, F_OK) == 0)
+	{
+		*path = ft_strdup(cmd);
+		if (*path == NULL)
+			return (1);
+	}
 	if (path_value[0] == '\0' && access(cmd, F_OK) != 0)
 	{
 		print_error_msg(cmd, false, "", "No such file or directory");
