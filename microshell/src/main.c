@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/10 18:24:45 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:28:03 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	preprocess_command(t_env *env_lst, t_command_lst **per_pipe,
 static int	process_input_line(t_env *env_lst, char **line, t_mobile *mobile)
 {
 	if (mobile->status == 0)
-		*line = readline("mini"GREEN"('u') "RESET" $ ");
+		*line = readline("mini"GREEN"('u')"RESET" $ ");
 	else
 		*line = readline("mini"RED"(`n`)"RESET" $ ");
 	if (*line == NULL)
