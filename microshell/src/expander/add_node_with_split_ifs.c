@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_node_with_split_ifs.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 15:12:52 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/09 18:14:45 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 19:02:59 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static int	count_words(char *str, char *delimiters)
 		}
 		else if (!is_next_count && ft_strchr(delimiters, str[i]))
 			is_next_count = true;
+		else if (ft_strchr(" \t\n", *str) == NULL && ft_strchr(delimiters, *str))
+			c++;
 		i++;
 	}
 	return (c);
@@ -72,6 +74,13 @@ static char	**ft_split_multi_delimiters(char *str, char *delimiters)
 		}
 		else if (!is_word_head && ft_strchr(delimiters, *str))
 			is_word_head = true;
+		else if (ft_strchr(" \t\n", *str) == NULL && ft_strchr(delimiters, *str))
+		{
+			split[i] = ft_strdup("");
+			if (split[i] == NULL)
+				return (free_ptr_array(split), NULL);
+			i++;
+		}
 		str++;
 	}
 	split[i] = NULL;
