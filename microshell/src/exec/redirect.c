@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/06 15:25:11 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:02:24 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int	ft_open(char *target, int oflag, int to_dup)
 		perror(target);
 		return (-1);
 	}
-	dup2(redirect_fd, to_dup);
+	if (dup2(redirect_fd, to_dup) == -1)
+		perror("dup2");
 	close(redirect_fd);
 	return (0);
 }

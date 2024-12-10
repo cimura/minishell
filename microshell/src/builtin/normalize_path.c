@@ -3,46 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   normalize_path.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 23:24:08 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 21:49:44 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 17:17:25 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "utils.h"
 
-static char	**val_manager(const char *path, char *pwd)
+static char	*create_base_sp(char *pwd, char *path)
 {
 	int		i;
-	int		path_len;
 	int		pwd_len;
+	int		path_len;
 	char	*sp_src;
 
-	i = 0;
-	path_len = ft_strlen(path);
 	pwd_len = ft_strlen(pwd);
+	path_len = ft_strlen(path);
+	i = 0;
 	if (path[0] == '/')
 	{
 		sp_src = malloc(path_len + 1);
 		if (sp_src == NULL)
 			return (NULL);
-		ft_strlcpy(sp_src, path, path_len + 1);
+		ft_strcpy(sp_src, path, path_len + 1);
 	}
 	else
 	{
-		sp_src = malloc(pwd_len + path_len + 1);
+		sp_src = malloc(pwd_len + path_len + 2);
 		if (sp_src == NULL)
 			return (NULL);
-		i += ft_strlcpy(&sp_src[i], pwd, pwd_len + 1);
-		i += ft_strlcpy(&sp_src[i], "/", 2);
-		i += ft_strlcpy(&sp_src[i], path, path_len + 1);
+		i += ft_strcpy(&sp_src[i], pwd, pwd_len);
+		i += ft_strcpy(&sp_src[i], "/", 1);
+		i += ft_strcpy(&sp_src[i], path, path_len);
 	}
-	return (ft_split(sp_src, '/'));
+	return (sp_src);
 }
 
-static int	create_stack(const char *path, char *pwd, t_stack **stack)
+static char	**val_manager(char *path, char *pwd)
+{
+	char	*sp_src;
+	char	**sp;
+
+	sp_src = create_base_sp(pwd, path);
+	if (sp_src == NULL)
+		return (NULL);
+	sp = ft_split(sp_src, '/');
+	free(sp_src);
+	return (sp);
+}
+
+static int	create_stack(char *path, char *pwd, t_stack *stack)
 {
 	int		i;
 	char	**sp;
@@ -51,7 +64,7 @@ static int	create_stack(const char *path, char *pwd, t_stack **stack)
 	if (sp == NULL)
 		return (1);
 	if (init_stack(stack, sp) == 1)
-		return (1);
+		return (free_ptr_array(sp), 1);
 	i = 0;
 	while (sp[i] != NULL)
 	{
@@ -63,55 +76,57 @@ static int	create_stack(const char *path, char *pwd, t_stack **stack)
 			push(stack, sp[i]);
 		i++;
 	}
-	(*stack)->ptr[(*stack)->tail + 1] = NULL;
+	free_ptr_array(sp);
+	stack->ptr[stack->tail + 1] = NULL;
 	return (0);
 }
 
-char	*normalize_path(const char *path, char *pwd)
+char	*normalize_path(char *path, char *pwd)
 {
 	int		i;
 	int		ri;
 	char	*result;
-	t_stack	*stack;
+	t_stack	stack;
 
 	i = 0;
 	ri = 0;
-	result = malloc(ft_strlen(path) + ft_strlen(pwd) + 1);
+	result = malloc(ft_strlen(path) + ft_strlen(pwd) + 2);
 	if (result == NULL)
 		return (NULL);
 	if (create_stack(path, pwd, &stack) == 1)
-		return (NULL);
-	if (stack->ptr[0] == NULL)
-		return ("/");
-	while (stack->ptr[i] != NULL)
+		return (free_stack(&stack), NULL);
+	if (stack.ptr[0] == NULL)
+		return (free_stack(&stack), "/");
+	while (stack.ptr[i] != NULL)
 	{
-		ri += ft_strlcpy(&result[ri], "/", 2);
-		ri += ft_strlcpy(&result[ri], stack->ptr[i],
-				ft_strlen(stack->ptr[i]) + 1);
+		ri += ft_strcpy(&result[ri], "/", 1);
+		ri += ft_strcpy(&result[ri], stack.ptr[i],
+				ft_strlen(stack.ptr[i]));
 		i++;
 	}
+	free_stack(&stack);
 	return (result);
 }
 
 // ******** test for normalize_path ********
 
-//#include <string.h>
-//#define GREEN "\x1b[32m"
-//#define RED "\x1b[31m"
-//#define RESET "\x1b[0m"
+// #include <string.h>
+// #define GREEN "\x1b[32m"
+// #define RED "\x1b[31m"
+// #define RESET "\x1b[0m"
 
-//int	main() {
-//	char	*path = "./A/B/C/../D/E////F/..///././.";
-//	char	*result = normalize_path(path, "/It's/PWD/PATH");
+// int	main() {
+// 	char	*path = "./A/B/C/../D/E////F/..///././.";
+// 	char	*result = normalize_path(path, "/It's/PWD/PATH");
 
-//	/*
-//	 	expected
-//		/It's/PWD/PATH/A/B/D/E
-//	*/
+// 	/*
+// 	 	expected
+// 		/It's/PWD/PATH/A/B/D/E
+// 	*/
 
-//	printf("BEFORE	:%s\n", path);
-//	printf("AFTER	:%s\n", result);
-//}
+// 	printf("BEFORE	:%s\n", path);
+// 	printf("AFTER	:%s\n", result);
+// }
 
 // **********************************************
 //static char	*normalize_path(const char *path, char *pwd)
@@ -136,8 +151,8 @@ char	*normalize_path(const char *path, char *pwd)
 //			i++;
 //		else
 //		{
-//			ri += ft_strlcpy(&result[ri], "/", 2);
-//			ri += ft_strlcpy(&result[ri], sp[i], ft_strlen(sp[i]) + 1);
+//			ri += ft_strcpy(&result[ri], "/", 2);
+//			ri += ft_strcpy(&result[ri], sp[i], ft_strlen(sp[i]) + 1);
 //			i++;
 //		}
 //	}

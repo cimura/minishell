@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:27:28 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/09 21:06:03 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 16:09:45 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ typedef struct s_env
 	char			*key;
 	char			*value;
 	struct s_env	*next;
-	char			*cwd;
 }	t_env;
 
 // *** create_env_lst.c ***

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:28:30 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/09 15:49:32 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 14:16:45 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@
 # include <stdbool.h>
 # include "libft.h"
 
-// is_expandedのステータス
-# define END -1
-# define NONE 0
-# define ENV 1
-# define QUOTE 2
-# define BOTH 3
+enum
+{
+	END = -1,
+	NONE,
+	ENV,
+	QUOTE,
+	BOTH
+};
 
 typedef struct s_command_lst
 {

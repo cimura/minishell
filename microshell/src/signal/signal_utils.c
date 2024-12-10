@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 17:32:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/05 17:33:01 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 18:02:34 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	sigint_handler_in_heredoc(int signum)
 	g_global = 1;
 	if (pipe(pipefd) < 0)
 		perror("pipe: ");
-	dup2(pipefd[0], STDIN_FILENO);
+	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		perror("dup2");
 	write(pipefd[1], "", 1);
 	close(pipefd[0]);
 	close(pipefd[1]);

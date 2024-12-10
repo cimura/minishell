@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:02:34 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/08 15:18:58 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 17:56:48 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ void	print_error_msg_non_shellname(char *cmd_name, char *err_msg)
 	int	pure_stdout;
 
 	pure_stdout = dup(STDOUT_FILENO);
-	dup2(STDERR_FILENO, STDOUT_FILENO);
+	if (dup2(STDERR_FILENO, STDOUT_FILENO) == -1)
+		perror("dup2");
 	printf("%s: %s\n", cmd_name, err_msg);
-	dup2(pure_stdout, STDOUT_FILENO);
+	if (dup2(pure_stdout, STDOUT_FILENO) == -1)
+		perror("dup2");
 	close(pure_stdout);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 17:28:31 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/08 16:00:32 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 15:43:32 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,14 @@ typedef struct s_file_descripter
 	int	now_out;
 }	t_file_descripter;
 
+typedef struct s_mobile
+{
+	int		status;
+	char	*cwd;
+}	t_mobile;
+
 // *** command_executor.c ***
-int			executor(t_command_lst *per_pipe, t_env *env_lst, int *end_status);
+int			executor(t_command_lst *per_pipe, t_env *env_lst, t_mobile *mobile);
 
 // *** command_executor_util.c ***
 void		close_purefd(t_file_descripter fd);
@@ -50,11 +56,11 @@ void		print_error_msg_non_shellname(char *cmd_name, char *err_msg);
 
 // *** commands.c ***
 int			first_command(t_command_lst *per_pipe, t_env *env_lst,
-				t_file_descripter *fd, int *end_status);
+				t_file_descripter *fd, t_mobile *mobile);
 int			middle_command(t_command_lst *per_pipe, t_env *env_lst,
-				t_file_descripter *fd, int *end_status);
+				t_file_descripter *fd, t_mobile *mobile);
 int			last_command(t_command_lst *per_pipe, t_env *env_lst,
-				t_file_descripter *fd, int *end_status);
+				t_file_descripter *fd, t_mobile *mobile);
 
 // *** register_cmd_data.c ***
 t_cmd_data	*register_cmd_data(t_command_lst *per_pipe, t_env *env_lst,
@@ -79,6 +85,6 @@ void		execute_external_command(t_cmd_data *until_redirection,
 void		execve_command(t_cmd_data *until_redirection,
 				int *end_status, char **envp);
 void		execute_builtin_command(char **cmd, t_env *env_lst,
-				t_file_descripter fd, int *end_status);
+				t_file_descripter fd, t_mobile *mobile);
 
 #endif

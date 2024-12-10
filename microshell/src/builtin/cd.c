@@ -3,49 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/09 21:47:57 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 17:12:03 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "utils.h"
+#include "exec.h"
+
 #define OLD "OLDPWD"
 #define NEW "PWD"
 
-static int	set_pwd(t_env *env_lst, char *key)
+static int	set_pwd(t_env *env_lst, char *cwd, char *key)
 {
 	t_env	*pwd_node;
-	char	*cwd;
+	char	*new_value;
 
 	pwd_node = get_node_from_key(env_lst, key);
 	if (pwd_node == NULL)
 		return (0);
-	cwd = getcwd(NULL, 0);
-	if (cwd)
-	{
-		free(pwd_node->value);
-		pwd_node->value = cwd;
-	}
+	new_value = ft_strdup(cwd);
+	if (new_value == NULL)
+		return (1);
+	free(pwd_node->value);
+	pwd_node->value = new_value;
 	return (0);
 }
 
-static int	rapper_chdir(char *arg, char *cwd)
+static int	rapper_chdir(char *path)
 {
 	int	status;
 
-	status = chdir(normalize_path(arg, cwd));
+	status = chdir(path);
 	if (status != 0)
 	{
-		ft_putstr_fd("cd: ", STDERR_FILENO);
-		perror(arg);
+		print_error_msg("cd", false, path, "No such file or directory");
 	}
 	return (status);
 }
 
-static int	change_dir(t_env *env_lst, char *arg, char *oldpwd)
+static int	cd_with_arg(t_env *env_lst, char *arg, char *old, char *path)
 {
 	int	status;
 
@@ -55,43 +55,61 @@ static int	change_dir(t_env *env_lst, char *arg, char *oldpwd)
 		if (status != 0)
 			print_error_msg("cd", false, "", "HOME not set");
 	}
-	else
+	else if (ft_strncmp(arg, "-", 2) == 0
+		&& !is_envnode_exist(env_lst, "OLDPWD"))
 	{
-		if (ft_strncmp(arg, "-", 2) == 0)
-		{
-			status = chdir(normalize_path(arg, env_lst->cwd));
-			if (status != 0)
-				print_error_msg("cd", false, "", "OLDPWD not set");
-			else
-				ft_putendl_fd(oldpwd, STDOUT_FILENO);
-		}
-		else
-			status = rapper_chdir(arg, env_lst->cwd);
+		print_error_msg("cd", false, "", "OLDPWD not set");
+		status = 1;
 	}
+	else if (ft_strncmp(arg, "-", 2) == 0)
+	{
+		status = rapper_chdir(old);
+		if (status == 0)
+			ft_putendl_fd(old, STDOUT_FILENO);
+	}
+	else
+		status = rapper_chdir(path);
 	return (status);
 }
 
-int	cd(char **args, t_env *env_lst)
+static int	change_dir(t_env *env_lst, char *arg, char *old, char **cwd)
+{
+	int		status;
+	char	*path;
+
+	if (ft_strcmp(arg, "-") == 0)
+		path = ft_strdup(old);
+	else
+		path = normalize_path(arg, *cwd);
+	if (path == NULL)
+		return (1);
+	status = cd_with_arg(env_lst, arg, old, path);
+	free(*cwd);
+	*cwd = path;
+	return (status);
+}
+
+int	cd(char **args, t_env *env_lst, t_mobile *mobile)
 {
 	char	*old;
 
 	if (args == NULL)
-		return (1);
-	old = ft_strdup(get_value_from_key(env_lst, OLD));
-	if (old == NULL)
-		return (1);
-	if (set_pwd(env_lst, OLD) != 0)
-		return (free(old), 1);
-	if (change_dir(env_lst, args[0], old) != 0)
-		return (free(old), 1);
-	free(old);
-	if (set_pwd(env_lst, NEW) != 0)
 		return (1);
 	if (args[0] != NULL && args[1] != NULL)
 	{
 		print_error_msg("cd", false, "", "too many arguments");
 		return (1);
 	}
+	old = ft_strdup(get_value_from_key(env_lst, OLD));
+	if (old == NULL)
+		return (1);
+	if (set_pwd(env_lst, mobile->cwd, OLD) != 0)
+		return (free(old), 1);
+	if (change_dir(env_lst, args[0], old, &mobile->cwd) != 0)
+		return (free(old), 1);
+	free(old);
+	if (set_pwd(env_lst, mobile->cwd, NEW) != 0)
+		return (1);
 	return (0);
 }
 

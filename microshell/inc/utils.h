@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/09 15:19:39 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 17:20:28 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void	free_cmd_data(t_cmd_data *data);
 bool	is_redirection(char *arg);
 void	print_error_msg(char *cmd_name, bool arg_decorate,
 			char *arg_name, char *err_msg);
+void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status);
 
 // *** utils3.c ***
 bool	is_ifs_in_str(t_env *env_lst, char *str);
 int		ft_strcmp(const char *s1, const char *s2);
-
-// *** main_helper.c ***
-void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status);
+int		ft_strcpy(char *dst, char *src, int size);
+int		init_mobile(t_env *env_lst, t_mobile *mobile);
 
 #endif

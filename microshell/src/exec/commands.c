@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 15:21:00 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/08 15:21:54 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 17:58:18 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "utils.h"
 
 static int	run_command_with_redirect(t_command_lst *per_pipe, t_env *env_lst,
-						t_file_descripter *fd, int *end_status)
+						t_file_descripter *fd, t_mobile *mobile)
 {
 	t_cmd_data	*until_redirection;
 	char		**env_array;
@@ -24,17 +24,17 @@ static int	run_command_with_redirect(t_command_lst *per_pipe, t_env *env_lst,
 	env_array = env_lst_to_array(env_lst);
 	if (env_array == NULL)
 		return (close_purefd(*fd), 1);
-	local_status = redirect(per_pipe, env_lst, *fd, end_status);
+	local_status = redirect(per_pipe, env_lst, *fd, &mobile->status);
 	if (local_status != 0)
 		return (free_ptr_array(env_array), local_status);
-	until_redirection = register_cmd_data(per_pipe, env_lst, end_status);
+	until_redirection = register_cmd_data(per_pipe, env_lst, &mobile->status);
 	if (until_redirection == NULL)
-		return (free_ptr_array(env_array), close_purefd(*fd), *end_status);
+		return (free_ptr_array(env_array), close_purefd(*fd), mobile->status);
 	if (is_builtin(until_redirection->cmd))
 		execute_builtin_command(until_redirection->cmd,
-			env_lst, *fd, end_status);
-	else if (is_executable(until_redirection, end_status))
-		execve_command(until_redirection, end_status, env_array);
+			env_lst, *fd, mobile);
+	else if (is_executable(until_redirection, &mobile->status))
+		execve_command(until_redirection, &mobile->status, env_array);
 	free_cmd_data(until_redirection);
 	free_ptr_array(env_array);
 	return (0);
@@ -42,16 +42,18 @@ static int	run_command_with_redirect(t_command_lst *per_pipe, t_env *env_lst,
 
 static void	connect_pipe_middle_command(t_file_descripter *fd)
 {
-	dup2(fd->prev_in, STDIN_FILENO);
+	if (dup2(fd->prev_in, STDIN_FILENO) == -1)
+		perror("dup2");
 	close(fd->prev_in);
 	close(fd->now_in);
-	dup2(fd->now_out, STDOUT_FILENO);
+	if (dup2(fd->now_out, STDOUT_FILENO) == -1)
+		perror("dup2");
 	close(fd->now_out);
 }
 
 int	first_command(t_command_lst *per_pipe,
 	t_env *env_lst, t_file_descripter *fd,
-	int *end_status)
+	t_mobile *mobile)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
@@ -68,19 +70,20 @@ int	first_command(t_command_lst *per_pipe,
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
-		dup2(pipe_fd[1], STDOUT_FILENO);
+		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+			perror("dup2");
 		close(pipe_fd[1]);
 		close_purefd(*fd);
-		if (run_command_with_redirect(per_pipe, env_lst, fd, end_status) == 1)
+		if (run_command_with_redirect(per_pipe, env_lst, fd, mobile) == 1)
 			return (1);
-		exit(*end_status);
+		exit(mobile->status);
 	}
 	return (0);
 }
 
 int	middle_command(t_command_lst *per_pipe,
 	t_env *env_lst, t_file_descripter *fd,
-	int *end_status)
+	t_mobile *mobile)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
@@ -98,9 +101,9 @@ int	middle_command(t_command_lst *per_pipe,
 	{
 		connect_pipe_middle_command(fd);
 		close_purefd(*fd);
-		if (run_command_with_redirect(per_pipe, env_lst, fd, end_status) == 1)
+		if (run_command_with_redirect(per_pipe, env_lst, fd, mobile) == 1)
 			return (1);
-		exit(*end_status);
+		exit(mobile->status);
 	}
 	close(fd->prev_in);
 	fd->prev_in = pipe_fd[0];
@@ -109,7 +112,7 @@ int	middle_command(t_command_lst *per_pipe,
 }
 
 int	last_command(t_command_lst *per_pipe, t_env *env_lst, t_file_descripter *fd,
-	int *end_status)
+	t_mobile *mobile)
 {
 	int		status;
 	pid_t	pid;
@@ -122,13 +125,15 @@ int	last_command(t_command_lst *per_pipe, t_env *env_lst, t_file_descripter *fd,
 		perror("fork");
 	if (pid == 0)
 	{
-		dup2(fd->prev_in, STDIN_FILENO);
+		if (dup2(fd->prev_in, STDIN_FILENO) == -1)
+			perror("dup2");
 		close(fd->prev_in);
-		dup2(fd->pure_stdout, STDOUT_FILENO);
+		if (dup2(fd->pure_stdout, STDOUT_FILENO) == -1)
+			perror("dup2");
 		close_purefd(*fd);
-		if (run_command_with_redirect(per_pipe, env_lst, fd, end_status) == 1)
+		if (run_command_with_redirect(per_pipe, env_lst, fd, mobile) == 1)
 			return (1);
-		exit(*end_status);
+		exit(mobile->status);
 	}
 	close(fd->prev_in);
 	return (status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 23:53:33 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 18:02:13 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static int	tmpfile_to_readfrom(char *tmp_file, int fd_tmp)
 		perror("open");
 		return (1);
 	}
-	dup2(fd_tmp, STDIN_FILENO);
+	if (dup2(fd_tmp, STDIN_FILENO) == -1)
+		perror("dup2");
 	close(fd_tmp);
 	return (0);
 }
@@ -102,7 +103,8 @@ int	here_doc(char *eof, t_env *env_lst,
 	char	*tmp_file;
 	int		local_status;
 
-	dup2(fd.pure_stdin, STDIN_FILENO);
+	if (dup2(fd.pure_stdin, STDIN_FILENO) == -1)
+		perror("dup2");
 	tmp_file = "/tmp/.heredoc_tmp";
 	fd_tmp = open(tmp_file, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd_tmp == -1)

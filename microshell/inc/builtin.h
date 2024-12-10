@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/10 00:23:57 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 15:55:35 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <limits.h>
 # include <fcntl.h>
 # include "env_lst.h"
+# include "utils.h"
 
 typedef struct s_stack
 {
@@ -36,7 +37,7 @@ enum
 };
 
 // *** builtin ***
-int		cd(char **args, t_env *env_lst);
+int		cd(char **args, t_env *env_lst, t_mobile *mobile);
 int		echo(char **args);
 int		env(t_env *env_lst);
 int		ft_exit(char **args, int *status, int print);
@@ -45,12 +46,13 @@ int		pwd(char *cwd);
 int		unset(char **args, t_env *env_lst);
 
 // *** cd_stack.c ***
-int		init_stack(t_stack **stack, char **sp);
-void	push(t_stack **stack, char *arg);
-void	pop(t_stack **stack);
+int		init_stack(t_stack *stack, char **sp);
+void	push(t_stack *stack, char *arg);
+void	pop(t_stack *stack);
+void	free_stack(t_stack *stack);
 
 // *** normalize_path.c ***
-char	*normalize_path(const char *path, char *pwd);
+char	*normalize_path(char *path, char *pwd);
 
 // *** export_util.c ***
 int		generate_new_value(t_env *old_node, char *arg);

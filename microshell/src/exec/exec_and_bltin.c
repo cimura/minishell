@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_and_bltin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/10 00:26:02 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 17:59:42 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,23 +91,25 @@ void	execve_command(t_cmd_data *until_redirection,
 }
 
 void	execute_builtin_command(char **cmd, t_env *env_lst,
-				t_file_descripter fd, int *end_status)
+				t_file_descripter fd, t_mobile *mobile)
 {
-	if (fd.now_out != STDOUT_FILENO)
-		dup2(fd.now_out, STDOUT_FILENO);
+	if (fd.now_out != STDOUT_FILENO
+		&& dup2(fd.now_out, STDOUT_FILENO) == -1)
+		perror("dup2");
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
-		*end_status = cd(&cmd[1], env_lst);
+		mobile->status = cd(&cmd[1], env_lst, mobile);
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
-		*end_status = echo(&cmd[1]);
+		mobile->status = echo(&cmd[1]);
 	else if (ft_strncmp(cmd[0], "env", 4) == 0)
-		*end_status = env(env_lst);
+		mobile->status = env(env_lst);
 	else if (ft_strncmp(cmd[0], "exit", 5) == 0)
-		ft_exit(&cmd[1], end_status, WITHPIPE);
+		ft_exit(&cmd[1], &mobile->status, WITHPIPE);
 	else if (ft_strncmp(cmd[0], "export", 7) == 0)
-		*end_status = export(&cmd[1], env_lst);
+		mobile->status = export(&cmd[1], env_lst);
 	else if (ft_strncmp(cmd[0], "pwd", 4) == 0)
-		*end_status = pwd(env_lst->cwd);
+		mobile->status = pwd(mobile->cwd);
 	else if (ft_strncmp(cmd[0], "unset", 6) == 0)
-		*end_status = unset(&cmd[1], env_lst);
-	dup2(fd.pure_stdout, STDOUT_FILENO);
+		mobile->status = unset(&cmd[1], env_lst);
+	if (dup2(fd.pure_stdout, STDOUT_FILENO) == -1)
+		perror("dup2");
 }

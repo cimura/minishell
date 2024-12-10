@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:46:20 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/08 16:00:01 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 18:06:28 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,15 @@ void	print_error_msg(char *cmd_name, bool arg_decorate,
 	if (arg_name[0] == '\0')
 		arg_separator = "";
 	pure_stdout = dup(STDOUT_FILENO);
-	dup2(STDERR_FILENO, STDOUT_FILENO);
+	if (dup2(STDERR_FILENO, STDOUT_FILENO) == -1)
+		perror("dup2");
 	if (arg_decorate)
 		printf("minishell: %s%s`%s'%s%s\n",
 			cmd_name, cmd_separator, arg_name, arg_separator, err_msg);
 	else
 		printf("minishell: %s%s%s%s%s\n",
 			cmd_name, cmd_separator, arg_name, arg_separator, err_msg);
-	dup2(pure_stdout, STDOUT_FILENO);
+	if (dup2(pure_stdout, STDOUT_FILENO) == -1)
+		perror("dup2");
 	close(pure_stdout);
 }

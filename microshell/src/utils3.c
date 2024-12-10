@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 15:17:18 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/09 15:19:26 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 17:32:29 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,44 @@ int	ft_strcmp(const char *s1, const char *s2)
 			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 		i++;
 	}
+	return (0);
+}
+
+int	ft_strcpy(char *dst, char *src, int size)
+{
+	int	i;
+
+	i = 0;
+	if (size <= 0)
+		return (0);
+	while (src[i] != '\0' && i < size)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (ft_strlen(src));
+}
+
+int	init_mobile(t_env *env_lst, t_mobile *mobile)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+	{
+		ft_putendl_fd("shell-init: error retrieving current directory: "
+			"getcwd: cannot access parent directories: "
+			"No such file or directory", STDERR_FILENO);
+		env_lstclear(&env_lst);
+		exit(EXIT_FAILURE);
+	}
+	mobile->cwd = cwd;
+	if (mobile->cwd == NULL)
+	{
+		env_lstclear(&env_lst);
+		exit(EXIT_FAILURE);
+	}
+	mobile->status = 0;
 	return (0);
 }

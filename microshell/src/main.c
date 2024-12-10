@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/10 00:24:22 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 18:24:45 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 #include "utils.h"
 #include "syntax.h"
 #include "libft.h"
+
+#define GREEN "\x1b[32m"
+#define RED "\x1b[31m"
+#define RESET "\x1b[0m"
 
 static int	no_pipe_exit(t_env *env_lst, t_command_lst *per_pipe, int *status)
 {
@@ -60,19 +64,21 @@ static int	preprocess_command(t_env *env_lst, t_command_lst **per_pipe,
 	}
 	if (expander(env_lst, *per_pipe, *status) != 0)
 		clear_exit(env_lst, *per_pipe, EXIT_FAILURE);
-	env_lst->cwd = ft_strdup(get_value_from_key(env_lst, "PWD"));
-	if (env_lst->cwd == NULL)
-		return (1);
 	return (0);
 }
 
-static int	process_input_line(char **line, int status)
+static int	process_input_line(t_env *env_lst, char **line, t_mobile *mobile)
 {
-	*line = readline("minishell> ");
+	if (mobile->status == 0)
+		*line = readline("mini"GREEN"('u') "RESET" $ ");
+	else
+		*line = readline("mini"RED"(`n`)"RESET" $ ");
 	if (*line == NULL)
 	{
+		free(mobile->cwd);
+		env_lstclear(&env_lst);
 		ft_putendl_fd("exit", STDOUT_FILENO);
-		exit(status);
+		exit(mobile->status);
 	}
 	ft_signal();
 	if (ft_strlen(*line) == 0)
@@ -89,26 +95,27 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_env			*env_lst;
 	t_command_lst	*per_pipe;
+	t_mobile		mobile;
 	char			*line;
-	int				status;
 
 	(void)argv;
 	(void)argc;
 	ft_signal();
-	status = 0;
 	env_lst = create_env_lst(envp);
+	init_mobile(env_lst, &mobile);
 	while (1)
 	{
-		if (process_input_line(&line, status) == CONTINUE)
+		if (process_input_line(env_lst, &line, &mobile) == CONTINUE)
 			continue ;
-		if (preprocess_command(env_lst, &per_pipe, line, &status) == CONTINUE)
+		if (preprocess_command(env_lst, &per_pipe, line,
+				&mobile.status) == CONTINUE)
 			continue ;
-		if (no_pipe_exit(env_lst, per_pipe, &status) == CONTINUE)
+		if (no_pipe_exit(env_lst, per_pipe, &mobile.status) == CONTINUE)
 			continue ;
-		if (executor(per_pipe, env_lst, &status) == 1)
+		if (executor(per_pipe, env_lst, &mobile) == 1)
 			clear_exit(env_lst, per_pipe, EXIT_FAILURE);
 		command_lstclear(&per_pipe);
 	}
 	env_lstclear(&env_lst);
-	return (status);
+	return (mobile.status);
 }

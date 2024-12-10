@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_util2.c                                     :+:      :+:    :+:   */
+/*   export_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:34:41 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 22:50:10 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 17:40:52 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_max_key(t_env *env_lst)
 	max = "";
 	while (env_lst != NULL)
 	{
-		if (ft_strncmp(env_lst->key, max, 4096) > 0)
+		if (ft_strcmp(env_lst->key, max) > 0)
 		{
 			max = env_lst->key;
 		}

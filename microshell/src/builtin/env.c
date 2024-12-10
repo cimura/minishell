@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 17:32:43 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/28 17:40:33 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/10 17:39:40 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,7 @@ int	env(t_env *env_lst)
 	while (env_lst != NULL)
 	{
 		if (env_lst->value)
-		{
-			ft_putstr_fd(env_lst->key, STDOUT_FILENO);
-			ft_putstr_fd("=", STDOUT_FILENO);
-			ft_putstr_fd(env_lst->value, STDOUT_FILENO);
-			ft_putstr_fd("\n", STDOUT_FILENO);
-		}
+			printf("%s=%s\n", env_lst->key, env_lst->value);
 		env_lst = env_lst->next;
 	}
 	return (0);
