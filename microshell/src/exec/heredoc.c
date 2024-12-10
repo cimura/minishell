@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 23:53:33 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/10 14:37:26 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,15 @@ static void	on_sigint_received(char *line, int *end_status)
 {
 	g_global = 0;
 	*end_status = 130;
-	free(line);
+	if (line)
+		ft_signal();
+	else
+		signal(SIGINT, sigint_handler_non_nl);
 	rl_on_new_line();
-	ft_putstr_fd("\n", STDOUT_FILENO);
+	if (line == NULL)
+		ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_replace_line("", 0);
-	signal(SIGINT, sigint_handler_non_nl);
+	free(line);
 }
 
 static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
