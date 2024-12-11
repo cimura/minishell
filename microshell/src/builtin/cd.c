@@ -44,7 +44,7 @@ static int	rapper_chdir(char *path)
 
 static int	cd_with_arg(t_env *env_lst, char *arg, char *old, char *path)
 {
-	int	status;
+	int		status;
 
 	if (arg == NULL)
 	{
@@ -69,11 +69,13 @@ static int	cd_with_arg(t_env *env_lst, char *arg, char *old, char *path)
 	return (status);
 }
 
-static int	change_dir(t_env *env_lst, char *arg, char *old, char **cwd)
+static int	change_dir(t_env *env_lst, char *arg, char **cwd)
 {
 	int		status;
 	char	*path;
+	char	*old;
 
+	old = get_value_from_key(env_lst, "OLDPWD");
 	if (arg == NULL)
 		path = ft_strdup(get_value_from_key(env_lst, "HOME"));
 	else if (ft_strcmp(arg, "-") == 0)
@@ -83,14 +85,19 @@ static int	change_dir(t_env *env_lst, char *arg, char *old, char **cwd)
 	if (path == NULL)
 		return (1);
 	status = cd_with_arg(env_lst, arg, old, path);
-	free(*cwd);
-	*cwd = path;
+	if (status == 0)
+	{
+		free(*cwd);
+		*cwd = path;
+	}
+	else
+		free(path);
 	return (status);
 }
 
 int	cd(char **args, t_env *env_lst, t_mobile *mobile)
 {
-	char	*old;
+	char	*old_pwd;
 
 	if (args == NULL)
 		return (1);
@@ -99,16 +106,16 @@ int	cd(char **args, t_env *env_lst, t_mobile *mobile)
 		print_error_msg("cd", false, "", "too many arguments");
 		return (1);
 	}
-	old = ft_strdup(get_value_from_key(env_lst, OLD));
-	if (old == NULL)
+	old_pwd = ft_strdup(mobile->cwd);
+	if (old_pwd == NULL)
 		return (1);
-	if (set_pwd(env_lst, mobile->cwd, OLD) != 0)
-		return (free(old), 1);
-	if (change_dir(env_lst, args[0], old, &mobile->cwd) != 0)
-		return (free(old), 1);
-	free(old);
+	if (change_dir(env_lst, args[0], &mobile->cwd) != 0)
+		return (free(old_pwd), 1);
+	if (set_pwd(env_lst, old_pwd, OLD) != 0)
+		return (free(old_pwd), 1);
 	if (set_pwd(env_lst, mobile->cwd, NEW) != 0)
-		return (1);
+		return (free(old_pwd), 1);
+	free(old_pwd);
 	return (0);
 }
 

@@ -65,8 +65,7 @@ void	execute_external_command(t_cmd_data *until_redirection,
 		perror("fork");
 	else if (pid == 0)
 	{
-		close_purefd(fd);
-		execve_command(until_redirection, end_status, envp);
+		execve_command(until_redirection, fd, end_status, envp);
 		exit(*end_status);
 	}
 	else
@@ -81,10 +80,11 @@ void	execute_external_command(t_cmd_data *until_redirection,
 }
 
 void	execve_command(t_cmd_data *until_redirection,
-		int *end_status, char **envp)
+		t_file_descripter fd, int *end_status, char **envp)
 {
 	char	*err_msg;
 
+	close_purefd(fd);
 	if (execve(until_redirection->path,
 			until_redirection->cmd, envp) == -1)
 	{

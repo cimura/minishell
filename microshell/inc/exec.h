@@ -84,7 +84,7 @@ bool		is_builtin(char **cmd);
 void		execute_external_command(t_cmd_data *until_redirection,
 				t_file_descripter fd, int *end_status, char **envp);
 void		execve_command(t_cmd_data *until_redirection,
-				int *end_status, char **envp);
+				t_file_descripter fd, int *end_status, char **envp);
 void		execute_builtin_command(char **cmd, t_env *env_lst,
 				t_file_descripter fd, t_mobile *mobile);
 

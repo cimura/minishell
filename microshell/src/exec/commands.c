@@ -34,7 +34,7 @@ static int	run_command_with_redirect(t_command_lst *per_pipe, t_env *env_lst,
 		execute_builtin_command(until_redirection->cmd,
 			env_lst, *fd, mobile);
 	else if (is_executable(until_redirection, env_lst, &mobile->status))
-		execve_command(until_redirection, &mobile->status, env_array);
+		execve_command(until_redirection, *fd, &mobile->status, env_array);
 	free_cmd_data(until_redirection);
 	free_ptr_array(env_array);
 	return (0);
