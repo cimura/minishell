@@ -78,7 +78,8 @@ int			here_doc(char *eof, t_env *env_lst,
 int			check_permission(char **command_line);
 
 // *** exec_and_bltin.c ***
-bool		is_executable(t_cmd_data *until_redirection, int *end_status);
+bool		is_executable(t_cmd_data *until_redirection, t_env *env_lst,
+				int *end_status);
 bool		is_builtin(char **cmd);
 void		execute_external_command(t_cmd_data *until_redirection,
 				t_file_descripter fd, int *end_status, char **envp);

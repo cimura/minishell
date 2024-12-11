@@ -15,13 +15,15 @@
 #include "builtin.h"
 #include "utils.h"
 
-bool	is_executable(t_cmd_data *until_redirection, int *end_status)
+bool	is_executable(t_cmd_data *until_redirection, t_env *env_lst,
+			int *end_status)
 {
 	int	tmp_status;
 
 	if (until_redirection->cmd == NULL || until_redirection->cmd[0] == NULL)
 		return (false);
-	if (access(until_redirection->cmd[0], F_OK) != 0
+	if (is_envnode_exist(env_lst, "PATH")
+		&& access(until_redirection->cmd[0], F_OK) != 0
 		&& until_redirection->path == NULL
 		&& ft_strchr(until_redirection->cmd[0], '/') == NULL)
 	{
@@ -81,11 +83,17 @@ void	execute_external_command(t_cmd_data *until_redirection,
 void	execve_command(t_cmd_data *until_redirection,
 		int *end_status, char **envp)
 {
+	char	*err_msg;
+
 	if (execve(until_redirection->path,
 			until_redirection->cmd, envp) == -1)
 	{
-		print_error_msg_non_shellname(until_redirection->cmd[0],
-			"command not found");
+		err_msg = ft_strjoin("minishell: ", until_redirection->cmd[0]);
+		if (err_msg == NULL)
+			*end_status = 1;
+		else
+			perror(err_msg);
+		free(err_msg);
 	}
 	*end_status = 127;
 }

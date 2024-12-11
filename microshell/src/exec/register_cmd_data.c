@@ -50,11 +50,11 @@ static int	register_path(char *cmd, char **path, t_env *env_lst)
 	com_sep = ft_split(path_value, ':');
 	if (com_sep == NULL)
 		return (1);
-	if (cmd && ft_strchr(cmd, '/') == NULL
+	if (ft_strchr(cmd, '/') == NULL
 		&& set_cmd_in_path(cmd, com_sep, path) == 1)
 		return (free_ptr_array(com_sep), 1);
 	free_ptr_array(com_sep);
-	if (*path == NULL && cmd && access(cmd, F_OK) == 0)
+	if (*path == NULL && access(cmd, F_OK) == 0)
 	{
 		*path = ft_strdup(cmd);
 		if (*path == NULL)
@@ -110,7 +110,7 @@ t_cmd_data	*register_cmd_data(t_command_lst *per_pipe,
 	if (cmd_data->cmd == NULL)
 		return (*status = 1, free(cmd_data), NULL);
 	cmd_data->path = NULL;
-	if (!is_builtin(per_pipe->command_line))
+	if (cmd_data->cmd[0] && !is_builtin(per_pipe->command_line))
 	{
 		*status = register_path(cmd_data->cmd[0],
 				&(cmd_data->path), env_lst);
