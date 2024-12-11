@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:42 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/11 12:14:31 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/11 13:13:51 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	execute_single_command(t_command_lst *per_pipe, t_env *env_lst,
 		return (free_ptr_array(env_array), local_status);
 	until_redirection = register_cmd_data(per_pipe, env_lst, &mobile->status);
 	if (until_redirection == NULL)
-		return (free_ptr_array(env_array), close_purefd(*fd), mobile->status);
+		return (free_ptr_array(env_array), mobile->status);
 	if (is_builtin(until_redirection->cmd))
 		execute_builtin_command(until_redirection->cmd,
 			env_lst, *fd, mobile);
@@ -89,11 +89,8 @@ static int	handle_command_branch(t_command_lst *per_pipe, t_env *env_lst,
 			= execute_multi_commands(per_pipe, env_lst, fd, mobile);
 	if (local_status == 1)
 		return (1);
-	if (count != 1)
-	{
-		wait_all_commands(head, &mobile->status);
-		ft_signal();
-	}
+	wait_all_commands(head, &mobile->status);
+	ft_signal();
 	return (0);
 }
 
