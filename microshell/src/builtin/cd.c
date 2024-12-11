@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:54:04 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/10 17:12:03 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/10  by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	cd_with_arg(t_env *env_lst, char *arg, char *old, char *path)
 
 	if (arg == NULL)
 	{
-		status = chdir(get_value_from_key(env_lst, "HOME"));
+		status = chdir(path);
 		if (status != 0)
 			print_error_msg("cd", false, "", "HOME not set");
 	}
@@ -77,7 +77,9 @@ static int	change_dir(t_env *env_lst, char *arg, char *old, char **cwd)
 	int		status;
 	char	*path;
 
-	if (ft_strcmp(arg, "-") == 0)
+	if (arg == NULL)
+		path = ft_strdup(get_value_from_key(env_lst, "HOME"));
+	else if (ft_strcmp(arg, "-") == 0)
 		path = ft_strdup(old);
 	else
 		path = normalize_path(arg, *cwd);
