@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:22:41 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/11 12:25:32 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/11 12:28:38 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # include <signal.h>
 # include "libft.h"
 
-# define SIGINT_RECEIVED 2
-# define BREAK 3
+# define SIGINT_RECEIVED	2
+# define BREAK				3
 
 void	ft_signal(void);
 void	ft_child_signal(void);

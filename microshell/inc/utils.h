@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/11 12:23:59 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/11 12:28:57 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # include "parser.h"
 # include "exec.h"
 
-# define CONTINUE 3
-# define GREEN "\x1b[32m"
-# define RED "\x1b[31m"
-# define RESET "\x1b[0m"
+# define CONTINUE	3
+# define GREEN		"\x1b[32m"
+# define RED		"\x1b[31m"
+# define RESET		"\x1b[0m"
 
 // *** utils.c ***
 void	free_ptr_array(char **ptr);

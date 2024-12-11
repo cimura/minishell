@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:53 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/11 12:25:41 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/11 12:28:46 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include "parser.h"
 # include "utils.h"
 
-# define SINGLE '\''
-# define DOUBLE '\"'
+# define SINGLE	'\''
+# define DOUBLE	'\"'
 # define OUT	'\0'
 
 // *** check_syntax.c ***

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:28:30 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/10 14:16:45 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:29:08 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,11 @@
 # include <stdbool.h>
 # include "libft.h"
 
-enum
-{
-	END = -1,
-	NONE,
-	ENV,
-	QUOTE,
-	BOTH
-};
+# define END	-1
+# define NONE	0
+# define ENV	1
+# define QUOTE	2
+# define BOTH	3
 
 typedef struct s_command_lst
 {
