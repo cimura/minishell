@@ -30,7 +30,7 @@ static int	count_words(char *str, char *delimiters)
 		}
 		else if (!is_next_count && ft_strchr(delimiters, str[i]))
 			is_next_count = true;
-		else if (ft_strchr(" \t\n", *str) == NULL && ft_strchr(delimiters, *str))
+		else if (!ft_strchr(" \t\n", *str) && ft_strchr(delimiters, *str))
 			c++;
 		i++;
 	}
@@ -51,39 +51,44 @@ static char	*pick_out_word(char *str, char *delimiters)
 	return (new);
 }
 
-static char	**ft_split_multi_delimiters(char *str, char *delimiters)
+static int	register_split_ptr_array(char *str, char *delimiters, char **split)
 {
-	char	**split;
-	int		i;
 	bool	is_word_head;
 
-	split = malloc((count_words(str, delimiters) + 1) * sizeof(char *));
-	if (split == NULL)
-		return (NULL);
 	is_word_head = true;
-	i = 0;
 	while (*str)
 	{
 		if (is_word_head && ft_strchr(delimiters, *str) == NULL)
 		{
-			split[i] = pick_out_word(str, delimiters);
-			if (split[i] == NULL)
-				return (free_ptr_array(split), NULL);
+			*split = pick_out_word(str, delimiters);
+			if (*split == NULL)
+				return (1);
 			is_word_head = false;
-			i++;
+			split++;
 		}
 		else if (!is_word_head && ft_strchr(delimiters, *str))
 			is_word_head = true;
-		else if (ft_strchr(" \t\n", *str) == NULL && ft_strchr(delimiters, *str))
+		else if (!ft_strchr(" \t\n", *str) && ft_strchr(delimiters, *str))
 		{
-			split[i] = ft_strdup("");
-			if (split[i] == NULL)
-				return (free_ptr_array(split), NULL);
-			i++;
+			*split = ft_strdup("");
+			if (*split == NULL)
+				return (1);
+			split++;
 		}
 		str++;
 	}
-	split[i] = NULL;
+	return (*split = NULL, 0);
+}
+
+static char	**ft_split_multi_delimiters(char *str, char *delimiters)
+{
+	char	**split;
+
+	split = malloc((count_words(str, delimiters) + 1) * sizeof(char *));
+	if (split == NULL)
+		return (NULL);
+	if (register_split_ptr_array(str, delimiters, split) != 0)
+		return (free_ptr_array(split), NULL);
 	return (split);
 }
 

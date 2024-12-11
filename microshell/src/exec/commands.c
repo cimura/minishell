@@ -26,7 +26,7 @@ static int	run_command_with_redirect(t_command_lst *per_pipe, t_env *env_lst,
 		return (close_purefd(*fd), 1);
 	local_status = redirect(per_pipe, env_lst, *fd, &mobile->status);
 	if (local_status != 0)
-		return (free_ptr_array(env_array), local_status);
+		return (free_ptr_array(env_array), close_purefd(*fd), local_status);
 	until_redirection = register_cmd_data(per_pipe, env_lst, &mobile->status);
 	if (until_redirection == NULL)
 		return (free_ptr_array(env_array), close_purefd(*fd), mobile->status);
@@ -73,9 +73,9 @@ int	first_command(t_command_lst *per_pipe,
 		if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 			perror("dup2");
 		close(pipe_fd[1]);
-		close_purefd(*fd);
 		if (run_command_with_redirect(per_pipe, env_lst, fd, mobile) == 1)
 			return (1);
+		close_purefd(*fd);
 		exit(mobile->status);
 	}
 	return (0);
@@ -100,9 +100,9 @@ int	middle_command(t_command_lst *per_pipe,
 	if (pid == 0)
 	{
 		connect_pipe_middle_command(fd);
-		close_purefd(*fd);
 		if (run_command_with_redirect(per_pipe, env_lst, fd, mobile) == 1)
 			return (1);
+		close_purefd(*fd);
 		exit(mobile->status);
 	}
 	close(fd->prev_in);
@@ -130,9 +130,9 @@ int	last_command(t_command_lst *per_pipe, t_env *env_lst, t_file_descripter *fd,
 		close(fd->prev_in);
 		if (dup2(fd->pure_stdout, STDOUT_FILENO) == -1)
 			perror("dup2");
-		close_purefd(*fd);
 		if (run_command_with_redirect(per_pipe, env_lst, fd, mobile) == 1)
 			return (1);
+		close_purefd(*fd);
 		exit(mobile->status);
 	}
 	close(fd->prev_in);

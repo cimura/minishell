@@ -65,10 +65,6 @@ static void	on_sigint_received(char *line, int *end_status)
 		ft_signal();
 	else
 		signal(SIGINT, sigint_handler_non_nl);
-	rl_on_new_line();
-	if (line == NULL)
-		ft_putstr_fd("\n", STDOUT_FILENO);
-	rl_replace_line("", 0);
 	free(line);
 }
 
@@ -97,30 +93,33 @@ static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 	return (0);
 }
 
+#define TMP_FILE "/tmp/.heredoc_tmp"
+
 int	here_doc(char *eof, t_env *env_lst,
 	t_file_descripter fd, int *end_status)
 {
-	int		fd_tmp;
-	char	*tmp_file;
-	int		local_status;
+	int	pipe_stdout;
+	int	fd_tmp;
+	int	local_status;
 
 	if (dup2(fd.pure_stdin, STDIN_FILENO) == -1)
 		perror("dup2");
-	tmp_file = "/tmp/.heredoc_tmp";
-	fd_tmp = open(tmp_file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	pipe_stdout = dup(STDOUT_FILENO);
+	if (dup2(fd.pure_stdout, STDOUT_FILENO) == -1)
+		perror("dup2");
+	fd_tmp = open(TMP_FILE, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (fd_tmp == -1)
 		return (perror("open"), 1);
-	while (1)
+	while (local_status == 0)
 	{
 		local_status = append_readline_to_tmpfile(eof, env_lst,
 				fd_tmp, end_status);
-		if (local_status == SIGINT_RECEIVED)
-			return (close(fd_tmp), -1);
-		else if (local_status == 1)
-			return (close(fd_tmp), 1);
-		else if (local_status == BREAK)
-			break ;
 	}
 	close(fd_tmp);
-	return (tmpfile_to_readfrom(tmp_file, fd_tmp));
+	if (dup2(pipe_stdout, STDOUT_FILENO) == -1)
+		perror("dup2");
+	close(pipe_stdout);
+	if (local_status == BREAK)
+		local_status = tmpfile_to_readfrom(TMP_FILE, fd_tmp);
+	return (local_status);
 }

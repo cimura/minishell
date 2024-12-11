@@ -22,7 +22,7 @@
 # include <signal.h>
 # include "libft.h"
 
-# define SIGINT_RECEIVED	2
+# define SIGINT_RECEIVED	-1
 # define BREAK				3
 
 void	ft_signal(void);

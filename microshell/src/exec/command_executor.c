@@ -23,7 +23,7 @@ static int	execute_single_command(t_command_lst *per_pipe, t_env *env_lst,
 
 	env_array = env_lst_to_array(env_lst);
 	if (env_array == NULL)
-		return (close_purefd(*fd), 1);
+		return (1);
 	local_status = redirect(per_pipe, env_lst, *fd, &mobile->status);
 	if (local_status != 0)
 		return (free_ptr_array(env_array), local_status);
@@ -89,8 +89,11 @@ static int	handle_command_branch(t_command_lst *per_pipe, t_env *env_lst,
 			= execute_multi_commands(per_pipe, env_lst, fd, mobile);
 	if (local_status == 1)
 		return (1);
-	wait_all_commands(head, &mobile->status);
-	ft_signal();
+	if (count > 1)
+	{
+		wait_all_commands(head, &mobile->status);
+		ft_signal();
+	}
 	return (0);
 }
 
