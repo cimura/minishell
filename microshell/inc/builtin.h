@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:05:10 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/10 15:55:35 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:25:51 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ enum
 	NOPIPE,
 	WITHPIPE
 };
+
+# define ULONGLONG_MAX (unsigned long long)__LONG_LONG_MAX__
+# define NOPIPE	0
+# define WITHPIPE 1
+# define OLD "OLDPWD"
+# define NEW "PWD"
 
 // *** builtin ***
 int		cd(char **args, t_env *env_lst, t_mobile *mobile);

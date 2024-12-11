@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 00:01:53 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 15:19:02 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/11 12:25:41 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include "env_lst.h"
 # include "parser.h"
 # include "utils.h"
+
+# define SINGLE '\''
+# define DOUBLE '\"'
+# define OUT	'\0'
 
 // *** check_syntax.c ***
 int		check_syntax_before_parser(char *line, int *status);

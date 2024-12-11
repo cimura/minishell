@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:20:02 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/09 18:14:20 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/11 12:22:29 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "syntax.h"
 #include "utils.h"
-
-#define SINGLE '\''
-#define DOUBLE '\"'
-#define OUT	'\0'
 
 int	check_quotation(char *line)
 {

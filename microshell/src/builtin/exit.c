@@ -6,14 +6,12 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 12:53:50 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/10 00:22:38 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/11 12:23:09 by cimy             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "utils.h"
-
-#define ULONGLONG_MAX (unsigned long long)__LONG_LONG_MAX__ 
 
 static int	decide_sign(const char *str, int *indx)
 {

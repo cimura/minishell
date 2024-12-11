@@ -14,9 +14,6 @@
 #include "utils.h"
 #include "exec.h"
 
-#define OLD "OLDPWD"
-#define NEW "PWD"
-
 static int	set_pwd(t_env *env_lst, char *cwd, char *key)
 {
 	t_env	*pwd_node;
