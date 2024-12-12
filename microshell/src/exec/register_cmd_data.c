@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/10 15:40:00 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/12 18:25:42 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ t_cmd_data	*register_cmd_data(t_command_lst *per_pipe,
 	if (cmd_data->cmd == NULL)
 		return (*status = 1, free(cmd_data), NULL);
 	cmd_data->path = NULL;
-	if (cmd_data->cmd[0] && !is_builtin(per_pipe->command_line))
+	if (cmd_data->cmd[0] && ft_strlen(cmd_data->cmd[0]) > 0
+		&& !is_builtin(per_pipe->command_line))
 	{
 		*status = register_path(cmd_data->cmd[0],
 				&(cmd_data->path), env_lst);
