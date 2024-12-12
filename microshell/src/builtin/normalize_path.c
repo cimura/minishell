@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   normalize_path.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 23:24:08 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/10 17:17:25 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:30:53 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ char	*normalize_path(char *path, char *pwd)
 	if (result == NULL)
 		return (NULL);
 	if (create_stack(path, pwd, &stack) == 1)
-		return (free_stack(&stack), NULL);
+		return (free(result), NULL);
 	if (stack.ptr[0] == NULL)
-		return (free_stack(&stack), "/");
+		return (free_stack(&stack), free(result), ft_strdup("/"));
 	while (stack.ptr[i] != NULL)
 	{
 		ri += ft_strcpy(&result[ri], "/", 1);
