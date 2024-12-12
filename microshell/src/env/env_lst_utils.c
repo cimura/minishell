@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 14:45:02 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/05 16:45:35 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/12 16:09:10 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,21 @@ bool	is_envnode_exist(t_env *env_lst, char *key)
 		env_lst = env_lst->next;
 	}
 	return (false);
+}
+
+t_env	*env_lstnew(char *key, char *value)
+{
+	t_env	*new;
+
+	new = malloc(sizeof(t_env));
+	if (new == NULL)
+		return (NULL);
+	new->key = ft_strdup(key);
+	if (new->key == NULL)
+		return (free(new), NULL);
+	new->value = ft_strdup(value);
+	if (new->value == NULL)
+		return (free(new->key), free(new), NULL);
+	new->next = NULL;
+	return (new);
 }

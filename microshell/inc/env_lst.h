@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lst.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 19:27:28 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/10 16:09:45 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:09:24 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_env	*get_node_from_key(t_env *env_lst, char *key);
 t_env	*create_env_lst(char *envp[]);
 
 // *** env_lst_utils.c ***
+t_env	*env_lstnew(char *key, char *value);
 char	*get_value_from_key(t_env *env_lst, char *key);
 bool	is_envnode_exist(t_env *env_lst, char *key);
 

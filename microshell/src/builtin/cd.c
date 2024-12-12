@@ -21,12 +21,20 @@ static int	set_pwd(t_env *env_lst, char *cwd, char *key)
 
 	pwd_node = get_node_from_key(env_lst, key);
 	if (pwd_node == NULL)
-		return (0);
-	new_value = ft_strdup(cwd);
-	if (new_value == NULL)
-		return (1);
-	free(pwd_node->value);
-	pwd_node->value = new_value;
+	{
+		pwd_node = env_lstnew(key, cwd);
+		if (pwd_node == NULL)
+			return (1);
+		env_lstadd_back(&env_lst, pwd_node);
+	}
+	else
+	{
+		new_value = ft_strdup(cwd);
+		if (new_value == NULL)
+			return (1);
+		free(pwd_node->value);
+		pwd_node->value = new_value;
+	}
 	return (0);
 }
 
