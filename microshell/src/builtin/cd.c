@@ -30,15 +30,13 @@ static int	set_pwd(t_env *env_lst, char *cwd, char *key)
 	return (0);
 }
 
-static int	rapper_chdir(char *path)
+static int	rapper_chdir(char *path, char *arg)
 {
 	int	status;
 
 	status = chdir(path);
 	if (status != 0)
-	{
-		print_error_msg("cd", false, path, "No such file or directory");
-	}
+		print_error_msg("cd", false, arg, "No such file or directory");
 	return (status);
 }
 
@@ -60,12 +58,12 @@ static int	cd_with_arg(t_env *env_lst, char *arg, char *old, char *path)
 	}
 	else if (ft_strncmp(arg, "-", 2) == 0)
 	{
-		status = rapper_chdir(old);
+		status = rapper_chdir(old, arg);
 		if (status == 0)
 			ft_putendl_fd(old, STDOUT_FILENO);
 	}
 	else
-		status = rapper_chdir(path);
+		status = rapper_chdir(path, arg);
 	return (status);
 }
 
@@ -111,9 +109,9 @@ int	cd(char **args, t_env *env_lst, t_mobile *mobile)
 		return (1);
 	if (change_dir(env_lst, args[0], &mobile->cwd) != 0)
 		return (free(old_pwd), 1);
-	if (set_pwd(env_lst, old_pwd, OLD) != 0)
+	if (set_pwd(env_lst, old_pwd, "OLDPWD") != 0)
 		return (free(old_pwd), 1);
-	if (set_pwd(env_lst, mobile->cwd, NEW) != 0)
+	if (set_pwd(env_lst, mobile->cwd, "PWD") != 0)
 		return (free(old_pwd), 1);
 	free(old_pwd);
 	return (0);

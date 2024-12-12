@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/11 12:22:55 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/12 13:22:24 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	here_doc(char *eof, t_env *env_lst,
 	int	fd_tmp;
 	int	local_status;
 
+	local_status = 0;
 	if (dup2(fd.pure_stdin, STDIN_FILENO) == -1)
 		perror("dup2");
 	pipe_stdout = dup(STDOUT_FILENO);
