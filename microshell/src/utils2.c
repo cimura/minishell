@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:46:20 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/10 21:54:45 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/12 16:23:46 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,11 @@ bool	is_redirection(char *arg)
 		return (false);
 }
 
-void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status)
+void	clear_exit(char *cwd, t_env *env_lst,
+	t_command_lst *per_pipe, int exit_status)
 {
+	if (cwd != NULL)
+		free(cwd);
 	env_lstclear(&env_lst);
 	command_lstclear(&per_pipe);
 	exit(exit_status);

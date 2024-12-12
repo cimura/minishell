@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:24:28 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/11 12:28:57 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/12 16:23:58 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	free_cmd_data(t_cmd_data *data);
 bool	is_redirection(char *arg);
 void	print_error_msg(char *cmd_name, bool arg_decorate,
 			char *arg_name, char *err_msg);
-void	clear_exit(t_env *env_lst, t_command_lst *per_pipe, int exit_status);
+void	clear_exit(char *cwd, t_env *env_lst,
+			t_command_lst *per_pipe, int exit_status);
 
 // *** utils3.c ***
 bool	is_ifs_in_str(t_env *env_lst, char *str);

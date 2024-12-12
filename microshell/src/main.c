@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/12 15:51:43 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/12 16:27:48 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,31 @@
 
 extern int	g_global;
 
-static int	no_pipe_exit(t_env *env_lst, t_command_lst *per_pipe, int *status)
+static int	no_pipe_exit(t_mobile *mobile,
+	t_env *env_lst, t_command_lst *per_pipe)
 {
 	if (per_pipe->command_line[0] != NULL && per_pipe->next == NULL
 		&& ft_strncmp(per_pipe->command_line[0], "exit", 5) == 0)
 	{
-		if (ft_exit(&per_pipe->command_line[1], status, NOPIPE) == CONTINUE)
+		if (ft_exit(&per_pipe->command_line[1],
+				&mobile->status, NOPIPE) == CONTINUE)
 		{
 			command_lstclear(&per_pipe);
 			return (CONTINUE);
 		}
 		else
-			clear_exit(env_lst, per_pipe, *status);
+			clear_exit(mobile->cwd, env_lst, per_pipe, mobile->status);
 	}
 	return (0);
 }
 
 static int	preprocess_command(t_env *env_lst, t_command_lst **per_pipe,
-	char *line, int *status)
+	char *line, t_mobile *mobile)
 {
 	int	syntax_result;
 
 	syntax_result = 0;
-	if (check_syntax_before_parser(line, status) != 0)
+	if (check_syntax_before_parser(line, &mobile->status) != 0)
 	{
 		free(line);
 		return (CONTINUE);
@@ -52,16 +54,16 @@ static int	preprocess_command(t_env *env_lst, t_command_lst **per_pipe,
 	*per_pipe = parser(line);
 	free(line);
 	if (*per_pipe == NULL)
-		clear_exit(env_lst, *per_pipe, 1);
+		clear_exit(mobile->cwd, env_lst, *per_pipe, 1);
 	syntax_result = check_syntax(*per_pipe, env_lst);
 	if (syntax_result != 0)
 	{
-		*status = syntax_result;
+		mobile->status = syntax_result;
 		command_lstclear(per_pipe);
 		return (CONTINUE);
 	}
-	if (expander(env_lst, *per_pipe, *status) != 0)
-		clear_exit(env_lst, *per_pipe, EXIT_FAILURE);
+	if (expander(env_lst, *per_pipe, mobile->status) != 0)
+		clear_exit(mobile->cwd, env_lst, *per_pipe, EXIT_FAILURE);
 	return (0);
 }
 
@@ -111,12 +113,12 @@ int	main(int argc, char **argv, char **envp)
 		if (process_input_line(env_lst, &line, &mobile) == CONTINUE)
 			continue ;
 		if (preprocess_command(env_lst, &per_pipe, line,
-				&mobile.status) == CONTINUE)
+				&mobile) == CONTINUE)
 			continue ;
-		if (no_pipe_exit(env_lst, per_pipe, &mobile.status) == CONTINUE)
+		if (no_pipe_exit(&mobile, env_lst, per_pipe) == CONTINUE)
 			continue ;
 		if (executor(per_pipe, env_lst, &mobile) == 1)
-			clear_exit(env_lst, per_pipe, EXIT_FAILURE);
+			clear_exit(mobile.cwd, env_lst, per_pipe, EXIT_FAILURE);
 		command_lstclear(&per_pipe);
 	}
 	env_lstclear(&env_lst);
