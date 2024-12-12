@@ -6,7 +6,7 @@
 /*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:06:34 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/06 17:03:18 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:35:22 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static t_command_lst	*create_pipe_lst(t_list *normal)
 	return (head);
 }
 
-t_command_lst	*parser(char	*line)
+t_command_lst	*parser(char *line)
 {
 	t_list			*normal;
 	t_command_lst	*per_pipe;

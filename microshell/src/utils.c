@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:36:17 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/09 18:17:45 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/12 16:36:19 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,7 @@ int	count_char_array_words(char **ptr)
 
 	c = 0;
 	while (ptr[c] != NULL)
-	{
 		c++;
-	}
 	return (c);
 }
 

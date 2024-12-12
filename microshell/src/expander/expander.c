@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:24:16 by sshimura          #+#    #+#             */
-/*   Updated: 2024/12/09 21:33:50 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/12 16:35:02 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static int	store_cmddata_to_newlst(t_expand_lst *current,
 	return (0);
 }
 
-// This function frees the expand_list
 static int	apply_new_command_lst(t_command_lst *per_pipe, t_expand_lst **head)
 {
 	char			**new_cmdline;

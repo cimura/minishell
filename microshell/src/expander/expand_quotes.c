@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   expand_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 17:08:10 by sshimura          #+#    #+#             */
-/*   Updated: 2024/11/29 16:58:41 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/12 16:38:14 by sshimura         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expander.h"
-
-#define SINGLE '\''
-#define DOUBLE '\"'
-#define OUT 0
+#include "syntax.h"
 
 static bool	is_skip_quote(char line_chr, char *quote_flag)
 {
