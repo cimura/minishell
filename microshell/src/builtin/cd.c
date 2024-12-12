@@ -32,11 +32,16 @@ static int	set_pwd(t_env *env_lst, char *cwd, char *key)
 
 static int	rapper_chdir(char *path, char *arg)
 {
-	int	status;
+	int		status;
+	char	*err_path;
 
+	if (ft_strcmp(arg, "-") == 0)
+		err_path = path;
+	else
+		err_path = arg;
 	status = chdir(path);
 	if (status != 0)
-		print_error_msg("cd", false, arg, "No such file or directory");
+		print_error_msg("cd", false, err_path, "No such file or directory");
 	return (status);
 }
 

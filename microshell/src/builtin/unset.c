@@ -6,7 +6,7 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:05:59 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/12 13:51:06 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/12 16:04:38 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,12 @@
 
 static int	case_unset_head_node(t_env *env_lst)
 {
-	t_env	*next_node;
-	t_env	*current;
-	char	*key;
-	char	*value;
-
-	current = env_lst;
-	next_node = current->next;
-	key = ft_strdup(next_node->key);
-	if (key == NULL)
+	free(env_lst->key);
+	free(env_lst->value);
+	env_lst->key = ft_strdup("");
+	if (env_lst->key == NULL)
 		return (1);
-	value = ft_strdup(next_node->value);
-	if (value == NULL)
-		return (free(key), 1);
-	free(current->key);
-	free(current->value);
-	current->key = key;
-	current->value = value;
-	current->next = next_node->next;
-	free(next_node->key);
-	free(next_node->value);
-	free(next_node);
+	env_lst->value = NULL;
 	return (0);
 }
 
@@ -45,7 +30,8 @@ static int	delete_env_from_lst(char *arg, t_env *env_lst)
 	prev = NULL;
 	while (env_lst != NULL)
 	{
-		if (ft_strncmp(env_lst->key, arg, ft_strlen(env_lst->key) + 1) == 0)
+		if (ft_strcmp("_", arg) != 0
+			&& ft_strncmp(env_lst->key, arg, ft_strlen(env_lst->key) + 1) == 0)
 		{
 			if (prev)
 				prev->next = env_lst->next;

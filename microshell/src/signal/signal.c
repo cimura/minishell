@@ -6,11 +6,13 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:16:02 by ttakino           #+#    #+#             */
-/*   Updated: 2024/12/10 14:37:47 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/12 15:48:00 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signal_handler.h"
+
+extern int	g_global;
 
 static void	sigint_handler_child(int signum)
 {
@@ -24,8 +26,15 @@ static void	sigquit_handler_child(int signum)
 	(void)signum;
 }
 
+void	ft_child_signal(void)
+{
+	signal(SIGINT, sigint_handler_child);
+	signal(SIGQUIT, sigquit_handler_child);
+}
+
 static void	sigint_handler(int signum)
 {
+	g_global = 130;
 	rl_on_new_line();
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_replace_line("", 0);
@@ -37,12 +46,6 @@ void	ft_signal(void)
 {
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
-}
-
-void	ft_child_signal(void)
-{
-	signal(SIGINT, sigint_handler_child);
-	signal(SIGQUIT, sigquit_handler_child);
 }
 
 //int main(int argc, char **argv, char **envp)

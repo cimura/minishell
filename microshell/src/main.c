@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:02:58 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/11 12:23:34 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/12 15:51:43 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include "utils.h"
 #include "syntax.h"
 #include "libft.h"
+
+extern int	g_global;
 
 static int	no_pipe_exit(t_env *env_lst, t_command_lst *per_pipe, int *status)
 {
@@ -75,6 +77,11 @@ static int	process_input_line(t_env *env_lst, char **line, t_mobile *mobile)
 		env_lstclear(&env_lst);
 		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(mobile->status);
+	}
+	if (g_global != 0)
+	{
+		mobile->status = g_global;
+		g_global = 0;
 	}
 	ft_signal();
 	if (ft_strlen(*line) == 0)

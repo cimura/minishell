@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sshimura <sshimura@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/12 14:17:34 by sshimura         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:38:02 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	append_readline_to_tmpfile(char *eof, t_env *env_lst,
 
 	signal(SIGINT, sigint_handler_in_heredoc);
 	line = readline("> ");
-	if (g_global == 1)
+	if (g_global == 130)
 	{
 		on_sigint_received(line, end_status);
 		return (SIGINT_RECEIVED);
