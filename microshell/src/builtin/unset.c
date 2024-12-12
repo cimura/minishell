@@ -6,13 +6,39 @@
 /*   By: ttakino <ttakino@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 15:05:59 by ttakino           #+#    #+#             */
-/*   Updated: 2024/11/26 15:07:24 by ttakino          ###   ########.fr       */
+/*   Updated: 2024/12/12 13:51:06 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-static void	delete_env_from_lst(char *arg, t_env *env_lst)
+static int	case_unset_head_node(t_env *env_lst)
+{
+	t_env	*next_node;
+	t_env	*current;
+	char	*key;
+	char	*value;
+
+	current = env_lst;
+	next_node = current->next;
+	key = ft_strdup(next_node->key);
+	if (key == NULL)
+		return (1);
+	value = ft_strdup(next_node->value);
+	if (value == NULL)
+		return (free(key), 1);
+	free(current->key);
+	free(current->value);
+	current->key = key;
+	current->value = value;
+	current->next = next_node->next;
+	free(next_node->key);
+	free(next_node->value);
+	free(next_node);
+	return (0);
+}
+
+static int	delete_env_from_lst(char *arg, t_env *env_lst)
 {
 	t_env	*prev;
 
@@ -21,18 +47,19 @@ static void	delete_env_from_lst(char *arg, t_env *env_lst)
 	{
 		if (ft_strncmp(env_lst->key, arg, ft_strlen(env_lst->key) + 1) == 0)
 		{
-			prev->next = env_lst->next;
+			if (prev)
+				prev->next = env_lst->next;
+			else
+				return (case_unset_head_node(env_lst));
 			free(env_lst->key);
-			env_lst->key = NULL;
 			free(env_lst->value);
-			env_lst->value = NULL;
 			free(env_lst);
-			env_lst = NULL;
-			return ;
+			return (0);
 		}
 		prev = env_lst;
 		env_lst = env_lst->next;
 	}
+	return (0);
 }
 
 int	unset(char **args, t_env *env_lst)
@@ -42,7 +69,8 @@ int	unset(char **args, t_env *env_lst)
 	i = 0;
 	while (args[i] != NULL)
 	{
-		delete_env_from_lst(args[i], env_lst);
+		if (delete_env_from_lst(args[i], env_lst) != 0)
+			return (1);
 		i++;
 	}
 	return (0);
