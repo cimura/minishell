@@ -6,7 +6,7 @@
 /*   By: cimy <cimy@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:04:16 by cimy              #+#    #+#             */
-/*   Updated: 2024/12/12 20:56:29 by cimy             ###   ########.fr       */
+/*   Updated: 2024/12/13 12:45:17 by ttakino          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,6 @@ void	execve_command(t_cmd_data *until_redirection,
 void	execute_builtin_command(char **cmd, t_env *env_lst,
 				t_file_descripter fd, t_mobile *mobile)
 {
-	//if (fd.now_out != STDOUT_FILENO
-	//	&& dup2(fd.now_out, STDOUT_FILENO) == -1)
-	//	perror("1dup2");
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		mobile->status = cd(&cmd[1], env_lst, mobile);
 	else if (ft_strncmp(cmd[0], "echo", 5) == 0)
